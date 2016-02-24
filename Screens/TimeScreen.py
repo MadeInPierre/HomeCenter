@@ -13,7 +13,7 @@ class TimeScreen():
 
 		self.CurrentSection_dic = ["ALARMS", "WORLDCLOCK", "TIMER"]
 		self.CurrentSection = 1
-		
+
 		self.show_swipe_info = True
 		self.swipe_color = 0
 		self.swipe_animation = AnimationManager()
@@ -66,7 +66,7 @@ class TimeScreen():
 		if self.ScreenStatus == "FADING_IN":
 			animTime = self.swipe_animation.elapsed_time()
 			self.swipe_color = 255 / (1 + math.exp(-(2.5 -self.swipe_animation.elapsed_time()) / 0.1))
-			if animTime >= 3: 
+			if animTime >= 3:
 				self.ScreenStatus = "RUNNING"
 				self.swipe_color = 0
 
@@ -82,9 +82,9 @@ class TimeScreen():
 					self.swipe_color = 255 / (1 + math.exp(-(0.5 -self.swipe_animation.elapsed_time()) / 0.1))
 
 			'''
-			
+
 			GENERAL UPDATES ACCORDING TO CURRENT SECTION.
-			
+
 			'''
 			if self.CurrentSection_dic[self.CurrentSection] is "ALARMS":
 				pass
@@ -122,7 +122,7 @@ class TimeScreen():
 		self.swipearrow.Draw(gameDisplay, (393 + WTSwipeSurface.get_rect().width / 2 + 20, self.WindowRes[1] - 30), "DOWN", opacity=self.swipe_color)
 		self.swipearrow.Draw(gameDisplay, (self.WindowRes[0] - 30, 218 - HomeSwipeSurface.get_rect().height / 2 - 20), "RIGHT", opacity=self.swipe_color)
 		self.swipearrow.Draw(gameDisplay, (self.WindowRes[0] - 30, 218 + HomeSwipeSurface.get_rect().height / 2 + 20), "RIGHT", opacity=self.swipe_color)
-		
+
 		if self.CurrentSection_dic[self.CurrentSection] is "WORLDCLOCK":
 			'''
 			Show vertical and horizontal separator
@@ -183,6 +183,3 @@ class TimeScreen():
 
 	def __str__(self):
 		return "TIMESCREEN"
-		
-
-	

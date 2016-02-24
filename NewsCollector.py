@@ -29,7 +29,7 @@ class NewsCollector():
 		posts = []
 		for post in d.entries:
 			'''
-			Parse the date in the form of 09/03/2015
+			Parse the date in the form of 09/03/2016
 			'''
 			fulldate = post.published_parsed
 
@@ -52,7 +52,7 @@ class NewsCollector():
 
 			'''
 			Add the post to the main list with a list
-			Order : title, 
+			Order : title,
 			'''
 			# posts.append([self.format(post.title), self.format(date), self.format(post_time), self.format(post.link)])
 			posts.append([post.title, date, post_time, post.link])

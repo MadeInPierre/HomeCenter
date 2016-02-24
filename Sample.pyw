@@ -51,7 +51,7 @@ class SampleListener(Leap.Listener):
               frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
         '''
         # Get hands
-        
+
         for hand in frame.hands:
 
             handType = "Left hand" if hand.is_left else "Right hand"
@@ -68,10 +68,10 @@ class SampleListener(Leap.Listener):
             #    direction.pitch * Leap.RAD_TO_DEG,
             #    normal.roll * Leap.RAD_TO_DEG,
             #    direction.yaw * Leap.RAD_TO_DEG)
-        
+
         # Get gestures
         for gesture in frame.gestures():
-            
+
             if gesture.type == Leap.Gesture.TYPE_CIRCLE:
                 circle = CircleGesture(gesture)
 
@@ -144,7 +144,7 @@ def main():
     controller.add_listener(listener)
     while True:
         pass
-    
+
     # Remove the sample listener when done
     controller.remove_listener(listener)
 

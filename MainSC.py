@@ -1,5 +1,5 @@
 ﻿'''
-This is the entry point to the SmartClock interface. 
+This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.
 
@@ -34,10 +34,10 @@ Input initialize : Lets the program prepare to catch inputs (keyboard, mouse, le
 Input = InputManager(use_leapmotion = False, mouse_visible = True)
 
 '''
-Uses 
+Creates two slots for filling them with screens, and creates the initializes the startup screen (StartScreen)
 '''
 global currentScreen
-currentScreen = StartScreen(WindowRes)
+currentScreen = TestScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True
@@ -48,11 +48,8 @@ while gameRunning:
         Input.Update(pygame.event.get())
         if "QUIT" in Input.events:
             gameRunning = False
-
-        
-
         '''
-        Updates the screens (current for the main screen and fading for the 
+        Updates the screens (current for the main screen and fading for the
         fading out animation still occuring)
         '''
         currentScreen.Update(Input.events)
@@ -66,7 +63,7 @@ while gameRunning:
         status = currentScreen.ScreenStatus
         if "FADING_OUT" in status :
             fadingScreen = currentScreen
-            currentScreen = Screen(WindowRes)        
+            currentScreen = Screen(WindowRes)
 
         status = fadingScreen.ScreenStatus
         if status is not "RUNNING":
@@ -84,7 +81,7 @@ while gameRunning:
                     print "killing " + str(fadingScreen)
                     fadingScreen.Quit()
                     fadingScreen = Screen(WindowRes)
-                else: 
+                else:
                     fadingScreen.ScreenStatus = "FADING_OUT"
 
         if "DEAD" in fadingScreen.ScreenStatus:

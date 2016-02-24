@@ -1,7 +1,7 @@
 import math, pygame
 
 class TouchGesturesManager():
-	
+
 	def __init__(self):
 		'''
 		This variable stores the gestures found with the mouse (e.g. when a mousePress happened but not
@@ -26,7 +26,7 @@ class TouchGesturesManager():
 				print frame_events
 				self.current_gesture = None
 
-		
+
 		return frame_events
 
 class MouseGesture():
@@ -39,7 +39,7 @@ class MouseGesture():
 
 	def mouseReleased(self, mousePos):
 		end_mouse_pos = mousePos
-		
+
 		direction = (end_mouse_pos[0] - self.mouse_pos[0], (end_mouse_pos[1] - self.mouse_pos[1]) * -1)
 
 		'''
@@ -51,11 +51,11 @@ class MouseGesture():
 			'''
 			on calcule l'angle et on prend une approximation entre 0 et PI (le signe n'apparait pas encore)
 			'''
-			angle = math.acos(direction[0] / r) 
+			angle = math.acos(direction[0] / r)
 			'''
 			On prend le sinus pour voir si l'angle est negatif ou pas
 			'''
-			sin_angle = direction[1] / r # on prend 
+			sin_angle = direction[1] / r # on prend
 
 			'''
 			On le convertit en degres pour questions de simplicite d'ecriture

@@ -36,8 +36,8 @@ class StartScreen():
 			if "DOWN" in InputEvents:
 				self.ScreenStatus = "FADING_OUT"
 				self.animation.reset()
-			
-			
+
+
 
 
 		if self.ScreenStatus is "FADING_IN":
@@ -62,7 +62,7 @@ class StartScreen():
 				- 0.2 : the animation lasts 2sec
 		'''
 
-		
+
 
 
 
@@ -123,7 +123,7 @@ class StartScreen():
 			self.time_color = 255 / (1 + math.exp(-(0.75 - animTime) / 0.05))
 			self.time_offset = -30 / (1 + math.exp(-(animTime - 0.75) / 0.05))
 
-		if animTime > 0.9 and self.goto_sent == False: # when the animation of the next screen starts 
+		if animTime > 0.9 and self.goto_sent == False: # when the animation of the next screen starts
 			self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("STARTSCREEN", "DOWN")
 			print "direction" + ScreenRedirector().next_screen("STARTSCREEN", "DOWN")
 			self.goto_sent = True

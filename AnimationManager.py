@@ -1,7 +1,7 @@
 ﻿import time
 
 class AnimationManager():
-	
+
 	def __init__(self):
 		self.start_time = time.time()
 

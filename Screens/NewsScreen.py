@@ -19,13 +19,13 @@ class NewsScreen():
 		self.WaitFont  = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 22)
 		self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 12, bold=False)
 
-		
+
 		self.animation = AnimationManager()
 		self.python_fetched = False
 		self.fb_fetched = False
 		self.lemonde_fetched = False
 
-		
+
 
 	def Update(self, InputEvents):
 		if "LEFT" in InputEvents:

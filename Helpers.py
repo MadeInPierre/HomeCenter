@@ -3,7 +3,7 @@ from time import strftime
 from AnimationManager import *
 
 class SwipeArrow():
-    
+
     def __init__(self, orientation, is_animated, size = 40):
         self.orientation = orientation
         self.is_animated = is_animated
@@ -22,7 +22,7 @@ class SwipeArrow():
             pass
 
     def Draw(self, gameDisplay, position, angle, opacity=255):
-        
+
         if angle is "LEFT":
             Helpers.blit_alpha(gameDisplay, self.left_image, position, opacity)
             # gameDisplay.blit(self.left_image, position)
@@ -59,7 +59,7 @@ class Helpers():
         temp = pygame.Surface((image.get_width(), image.get_height())).convert()
         temp.blit(gameDisplay, (-x, -y))
         temp.blit(image, (0, 0))
-        temp.set_alpha(opacity)        
+        temp.set_alpha(opacity)
         gameDisplay.blit(temp, position)
 
     @staticmethod
