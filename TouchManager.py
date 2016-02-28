@@ -9,29 +9,52 @@ class TouchGesturesManager():
 		'''
 		self.current_gesture = None
 
+		'''
+		Variables
+		'''
+		self.mouse_pressed = False
+		self.previous_mousepos = [0, 0]
+		self.previous_frame_events = []
+
 	def Update(self, pygame_events):
-		frame_events = None
+		frame_events = []
+
+		mx, my = pygame.mouse.get_pos()
+		mousepos = [mx, my]
+
 
 		for event in pygame_events:
 			if event.type == pygame.MOUSEBUTTONDOWN:
-				mousepos = pygame.mouse.get_pos()
-				self.current_gesture = MouseGesture("LEFT", mousepos)
+				self.mouse_pressed = True
+				self.current_gesture = MouseGesture(mousepos)
+
 			if event.type == pygame.MOUSEBUTTONUP:
-				mousepos = pygame.mouse.get_pos()
+				self.mouse_pressed = False
+
 				self.current_gesture.mouseReleased(mousepos)
 				result = self.current_gesture.result_direction
 
 				if result is not None:
-					frame_events = result
-				print frame_events
+					frame_events.append(result)
+				frame_events.append("ENDSCROLL")
 				self.current_gesture = None
 
 
+
+		if self.mouse_pressed == True:
+			frame_movement = [self.previous_mousepos[0] - mousepos[0], self.previous_mousepos[1] - mousepos[1]]
+			if not (frame_movement[0] == 0 and frame_movement[1] == 0):
+				frame_events.append("SCROLL " + str(frame_movement[0]) + " " + str(frame_movement[1]))
+
+
+
+		self.previous_mousepos = mousepos
+		self.previous_frame_events = frame_events
+		if len(frame_events) > 0: print frame_events
 		return frame_events
 
 class MouseGesture():
-	def __init__(self, button_ID, mousePos):
-		self.button = button_ID
+	def __init__(self, mousePos):
 		self.mouse_pos = mousePos
 
 		self.result_direction = ""
@@ -49,7 +72,7 @@ class MouseGesture():
 
 		if r > 40:
 			'''
-			on calcule l'angle et on prend une approximation entre 0 et PI (le signe n'apparait pas encore)
+			On calcule l'angle et on prend une approximation entre 0 et PI (le signe n'apparait pas encore)
 			'''
 			angle = math.acos(direction[0] / r)
 			'''
@@ -71,17 +94,18 @@ class MouseGesture():
 			'''
 			Finalement, on en deduit la direction du swipe.
 
-			swiping in oner direction causes the program to open the screen in the opposite direction.
+			swiping in one direction causes the program to open the screen in the opposite direction (logique).
 			'''
 			if angle > 315 or angle < 45:
 				self.result_direction = "RIGHT"
-				print "swipe LEFT"
 			elif angle > 45 and angle < 135:
-				self.result_direction = "DOWN"
-				print "swipe UP"
+				self.result_direction = "UP"
 			elif angle > 135 and angle < 225:
 				self.result_direction = "LEFT"
-				print "swipe RIGHT"
 			elif angle > 225 and angle < 315:
-				self.result_direction = "UP"
-				print "swipe DOWN"
+				self.result_direction = "DOWN"
+
+		elif r < 20:
+			x, y = pygame.mouse.get_pos()
+			#DEBUG print "mouse touch : " + str(x) + " " + str(y)
+			self.result_direction = "TOUCH " + str(x) + " " + str(y)

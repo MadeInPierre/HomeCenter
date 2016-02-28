@@ -29,9 +29,10 @@ class InputManager():
 		'''
 		Touch gestures (swipes)
 		'''
-		touch_gesture = self.TGM.Update(pyevents)
-		if touch_gesture is not None:
-			self.events.append(touch_gesture)
+		touch_gestures = self.TGM.Update(pyevents)
+		if len(touch_gestures) > 0:
+			for gesture in touch_gestures:
+				self.events.append(gesture)
 
 		for event in pyevents:
 			if event.type == pygame.QUIT:
@@ -43,13 +44,13 @@ class InputManager():
 					self.events.append("QUIT")
 
 				if event.key == pygame.K_LEFT:
-					self.events.append("RIGHT")
-				if event.key == pygame.K_RIGHT:
 					self.events.append("LEFT")
+				if event.key == pygame.K_RIGHT:
+					self.events.append("RIGHT")
 				if event.key == pygame.K_UP:
-					self.events.append("DOWN")
-				if event.key == pygame.K_DOWN:
 					self.events.append("UP")
+				if event.key == pygame.K_DOWN:
+					self.events.append("DOWN")
 			if event.type == pygame.MOUSEBUTTONUP:
 				mousepos = pygame.mouse.get_pos()
 				# if touch_gesture is None: #TODO  touch points aren't recognized anymor because of the touch gestures

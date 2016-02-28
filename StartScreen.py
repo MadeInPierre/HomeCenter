@@ -2,10 +2,13 @@ import pygame, time, math
 from time import strftime
 from AnimationManager import *
 from ScreenRedirector import *
+from Helpers import Helpers
 
 class StartScreen():
 
 	def __init__(self, windowres, fade_direction=""):
+		self.bg_img = pygame.image.load("Images/landscape1.png")
+
 		self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 180)
 		self.SwipeFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
 		self.TimeFont  = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 60 )
@@ -33,7 +36,7 @@ class StartScreen():
 			'''
 			Handle Gestures in order to go to the next screen
 			'''
-			if "DOWN" in InputEvents:
+			if "UP" in InputEvents:
 				self.ScreenStatus = "FADING_OUT"
 				self.animation.reset()
 
@@ -67,20 +70,46 @@ class StartScreen():
 
 
 	def Draw(self, gameDisplay):
-		titleSurface = self.TitleFont.render("Bonjour !", True, (self.bonjour_color, self.bonjour_color, self.bonjour_color))
-		swipeSurface = self.SwipeFont.render("Balayez vers le haut pour continuer", \
-														  True, (self.swipe_color,   self.swipe_color,   self.swipe_color))
-		timeSurface  = self.TimeFont.render( strftime("%H:%M:%S"), True, (self.time_color, self.time_color, self.time_color))
+		'''
+		On dessine le fond d'ecran
+		'''
+		Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0), 150)
 
+		'''
+		On cree les textes
+		'''
+		titleSurface = self.TitleFont.render("Bonjour !",                           True, (255, 255, 255))
+		swipeSurface = self.SwipeFont.render("Balayez vers le haut pour continuer", True, (255, 255, 255))
+		timeSurface  = self.TimeFont.render( strftime("%H:%M:%S"),                  True, (255, 255, 255))
+
+		'''
+		Calculs de positions pour simplifier les blit() en bas
+		'''
 		secondsWidth = self.TimeFont.render(strftime("00:00:00"), True, (250, 250, 250)).get_rect().width
-		gameDisplay.blit(timeSurface, (self.WindowRes[0] / 2 - secondsWidth / 2, \
-			self.WindowRes[1] * 6.4/8 - timeSurface.get_rect().height / 2 + self.time_offset))
 
-		gameDisplay.blit(swipeSurface, (self.WindowRes[0] / 2 - swipeSurface.get_rect().width / 2, \
-			self.WindowRes[1] / 2 - swipeSurface.get_rect().height / 2 + 50  + self.swipe_offset))
+		'''
+		On dessine tout, avec transparence pour les animations
+		'''
+		# on dessine l'heure situee en bas
+		Helpers.blit_alpha(	gameDisplay,
+		 					timeSurface,
+							(self.WindowRes[0] / 2 - secondsWidth / 2,
+							self.WindowRes[1] * 6.4/8 - timeSurface.get_rect().height / 2 + self.time_offset),
+							self.time_color)
 
-		gameDisplay.blit(titleSurface, (self.WindowRes[0] / 2 - titleSurface.get_rect().width / 2, \
-			self.WindowRes[1] / 2 - titleSurface.get_rect().height / 2 - 25 + self.bonjour_offset))
+		# on dessine la ligne qui demande de glisser vers le haut
+		Helpers.blit_alpha( gameDisplay,
+							swipeSurface,
+							(self.WindowRes[0] / 2 - swipeSurface.get_rect().width / 2,
+							self.WindowRes[1] / 2 - swipeSurface.get_rect().height / 2 + 50  + self.swipe_offset),
+							self.swipe_color)
+
+		# on dessine le Bonjour au centre
+		Helpers.blit_alpha( gameDisplay,
+							titleSurface,
+							(self.WindowRes[0] / 2 - titleSurface.get_rect().width / 2,
+							self.WindowRes[1] / 2 - titleSurface.get_rect().height / 2 - 25 + self.bonjour_offset),
+							self.bonjour_color)
 
 	def fade_in(self):
 		animTime = self.animation.elapsed_time()

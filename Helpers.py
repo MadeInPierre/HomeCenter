@@ -41,7 +41,10 @@ class Helpers():
 
     @staticmethod
     def rotate(image, angle):
-        """rotate an image while keeping its center and size"""
+        '''
+        Redonne une image tournee selon l'angle donne.
+        L'image reste centree, pas besoin de toucher a la position.
+        '''
         # orig_rect = image.get_rect()
         # rot_image = pygame.transform.rotate(image, angle)
         # rot_rect = orig_rect.copy()
@@ -54,6 +57,18 @@ class Helpers():
 
     @staticmethod
     def blit_alpha(gameDisplay, image, position, opacity):
+        '''
+        Fonction qui permet de changer l'opacite des images (par exemple, rendre un texte plus ou moins visible
+        pour des animations)
+
+        MODE D'EMPLOI :
+            - Importer la classe Helpers en debut de fichier avec "from Helpers import Helpers"
+
+            - Au moment de dessiner, au lieu d'utiliser "gameDisplay.blit(<image>, (<positionX>, <positionY>))",
+            utiliser "Helpers.blit_alpha(gameDisplay, <image>, (<positionX>, <positionY>), <opacite 0 a 255>)"
+
+            - Regler l'opacite entre 0 et 255, 0 etant totalement transparent et 255 totalement visible.
+        '''
         x = position[0]
         y = position[1]
         temp = pygame.Surface((image.get_width(), image.get_height())).convert()
@@ -64,6 +79,12 @@ class Helpers():
 
     @staticmethod
     def is_in_rect(pos_to_check, rect):
+        '''
+        On donne une position et une zone (rect).
+        La fonction redonne True si la position est dans la zone, et False si c'est le contraire.
+
+        C'est utile pour savoir si, quand l'utilisateur clique quelque part, a bien clique sur tel ou tel bouton/icone.
+        '''
         px, py = pos_to_check
 
         x, y, width, height = rect
@@ -72,3 +93,13 @@ class Helpers():
                 return True
 
         return False
+
+    @staticmethod
+    def get_message_x_y(message):
+        args = message.split()
+        return [int(args[1]), int(args[2])]
+
+    @staticmethod
+    def mathlerp(origine, destination, speed):
+        value = (speed * origine) + ((1 - speed) * destination)
+        return value

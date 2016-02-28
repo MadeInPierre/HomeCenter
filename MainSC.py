@@ -24,7 +24,7 @@ clock = pygame.time.Clock()
 '''
 Window initialize : prepares the window (resolution, fullscreen)
 '''
-WindowRes = (800, 450)
+WindowRes = (800, 480)
 gameDisplay = pygame.display.set_mode(WindowRes)#, pygame.FULLSCREEN)
 pygame.display.set_caption('HomeCenter')
 
@@ -34,10 +34,10 @@ Input initialize : Lets the program prepare to catch inputs (keyboard, mouse, le
 Input = InputManager(use_leapmotion = False, mouse_visible = True)
 
 '''
-Creates two slots for filling them with screens, and creates the initializes the startup screen (StartScreen)
+Creates two slots for filling them with screens, and initializes the startup screen (StartScreen)
 '''
 global currentScreen
-currentScreen = TestScreen(WindowRes)
+currentScreen = StartScreen(WindowRes, "UP")
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True
@@ -54,7 +54,7 @@ while gameRunning:
         '''
         currentScreen.Update(Input.events)
         fadingScreen.Update(Input.events)
-
+        #if len(Input.events) > 0: print Input.events
 
 
         '''
@@ -105,7 +105,7 @@ while gameRunning:
 
         pygame.display.update()
         # print str(currentScreen) + "  " + str(fadingScreen)
-        clock.tick(30)
+        clock.tick(60)
 
 '''
 Exit : Unloads everything and closes the window.
