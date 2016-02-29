@@ -105,7 +105,7 @@ while gameRunning:
 
         pygame.display.update()
         # print str(currentScreen) + "  " + str(fadingScreen)
-        clock.tick(60)
+        clock.tick(30)
 
 '''
 Exit : Unloads everything and closes the window.

@@ -46,22 +46,45 @@ class HomeScreen():
 		Variables pour gerer le swipe entre ecran d'acceuil et menu d'applications
 		'''
 		self.ancrage = 0
+		self.scrolling = False
 
 
 	def Update(self, InputEvents):
+		'''-------------------------------------------------------------------------------------------------------------
+		------------------------------------------------PARTIE SCROLL---------------------------------------------------
+		-------------------------------------------------------------------------------------------------------------'''
+		'''
+		Partie qui recupere les entrees tactiles pour voir s'il y a un scroll, et ajuste le scroll de maniere generale :
+			- Quand il y a scroll, bouge tous les panels dans la direction du scroll
+			- Limite ce scroll entre la zone des deux panels pour eviter qu'on depasse et aille trop loin
+			- Enregistre quand l'utilisateur a fini de scroller pour permettre a la partie suivante de code de se mettre
+			 	a recentrer les panels dans le cas ou l'utilisateur a arrete son scroll en plein milieu
+		'''
 		for event in InputEvents:
 			if "SCROLL " in event:
+				self.scrolling = True
 				scroll_distanceY = Helpers.get_message_x_y(event)[1]
 				self.ancrage -= scroll_distanceY
-				if self.ancrage < 0   : self.ancrage = 0   	# on limite l'ancrage entre 0 et 450
-				if self.ancrage > self.WindowRes[1] : self.ancrage = self.WindowRes[1]	# pour limiter le scroll
+				if self.ancrage < 0   : self.ancrage = 0
+				if self.ancrage > self.WindowRes[1] : self.ancrage = self.WindowRes[1]
 			if "ENDSCROLL" in event:
-				if self.ancrage < self.WindowRes[1] / 2:
-					self.ancrage = 0
-				if self.ancrage >= self.WindowRes[1] / 2:
-					self.ancrage = self.WindowRes[1]
+				self.scrolling = False
 
+		'''
+		Partie qui s'occupe de l'animation du retour de scrolling (quand on lache le doigt et que l'ecran se recentre
+		automatiquement)
+		'''
+		if self.ancrage != 0 and self.ancrage != self.WindowRes[1] and self.scrolling == False:
+			if self.ancrage >  self.WindowRes[1] / 2:
+				self.ancrage = Helpers.mathlerp(self.ancrage, self.WindowRes[1], 0.45)
+				if self.ancrage > self.WindowRes[1] - 2: self.ancrage = self.WindowRes[1]
+			if self.ancrage <= self.WindowRes[1] / 2:
+				self.ancrage = Helpers.mathlerp(self.ancrage, 0                , 0.45)
+				if self.ancrage < 2                    : self.ancrage = 0
 
+		'''-------------------------------------------------------------------------------------------------------------
+		----------------------------------------------PARTIE ANIMATIONS-------------------------------------------------
+		-------------------------------------------------------------------------------------------------------------'''
 		if "LEFT" in InputEvents:
 			self.ScreenStatus = "FADING_OUT"
 			self.fade_direction = "LEFT"
@@ -77,11 +100,14 @@ class HomeScreen():
 		if self.ScreenStatus is "FADING_OUT":
 			self.fade_out()
 
-		#print self.ScreenStatus + self.fade_direction
+
+
+
+
 
 	def Draw(self, gameDisplay):
 		'''
-		On affiche le fond d'ecran en fond (en premiere position dans le Draw())
+		On affiche le fond d'ecran en fond (cad en premiere position dans le Draw())
 		'''
 		Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  -0.229166667 * self.ancrage + 180)
 
@@ -105,19 +131,19 @@ class HomeScreen():
 		'''
 		On dessine tout, avec transparence
 		'''
-		#on dessine l'heure
+		# on dessine l'heure
 		Helpers.blit_alpha(gameDisplay, timeSurface,    (timePos,
 														 self.WindowRes[1] * 2/5 - timeSurface.get_rect().height/2 - 60
 														 											+ self.ancrage),
 														 self.time_color)
 
-		#on dessine les secondes
+		# on dessine les secondes
 		Helpers.blit_alpha(gameDisplay, secondsSurface, (timePos + timeSurface.get_rect().width,
 														 timeSurface.get_rect().bottom - timeSurface.get_rect().height * 1/5 - 45
 														 											+ self.ancrage),
 														 self.time_color)
 
-		#on dessine la date situee sous l'heure
+		# on dessine la date situee sous l'heure
 		Helpers.blit_alpha(gameDisplay, dateSurface,    (self.WindowRes[0] / 2 - dateSurface.get_rect().width/2,
 														 self.WindowRes[1] * 3/5 - dateSurface.get_rect().height/2 - 60
 														 											+ self.ancrage),
