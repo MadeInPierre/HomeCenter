@@ -86,11 +86,16 @@ class HomeScreen():
 		'''-------------------------------------------------------------------------------------------------------------
 		----------------------------------------------PARTIE ANIMATIONS-------------------------------------------------
 		-------------------------------------------------------------------------------------------------------------'''
-		if "LEFT" in InputEvents:
+		'''
+		Si l'utilisateur a fait un swype (et uniquement pendant qu'il est sur le panel ecran d'acceuil),
+		On envoie un texto comme quoi on commence a disparaitre et on enregistre la direction de l'utilisateur
+		pour plus tard (voir fade_out()).
+		'''
+		if "LEFT" in InputEvents and self.ancrage < 40:
 			self.ScreenStatus = "FADING_OUT"
 			self.fade_direction = "LEFT"
 			self.animation.reset()
-		if "RIGHT" in InputEvents:
+		if "RIGHT" in InputEvents and self.ancrage < 40:
 			self.ScreenStatus = "FADING_OUT"
 			self.fade_direction = "RIGHT"
 			self.animation.reset()

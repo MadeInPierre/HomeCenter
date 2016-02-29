@@ -37,7 +37,7 @@ Input = InputManager(use_leapmotion = False, mouse_visible = True)
 Creates two slots for filling them with screens, and initializes the startup screen (StartScreen)
 '''
 global currentScreen
-currentScreen = NewsScreen(WindowRes)
+currentScreen = StartScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True

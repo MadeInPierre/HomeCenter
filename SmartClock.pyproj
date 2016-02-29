@@ -31,8 +31,6 @@
     <Compile Include="MainSC.py" />
     <Compile Include="NewsCollector.py" />
     <Compile Include="Screens\NewsScreen.py" />
-    <Compile Include="Sample.pyw" />
-    <Compile Include="SampleInit.pyw" />
     <Compile Include="Screen.py" />
     <Compile Include="ScreenRedirector.py" />
     <Compile Include="Screens\StartScreen.py" />

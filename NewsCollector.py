@@ -27,7 +27,6 @@ class NewsCollector():
 
 	def parse(self, d):
 		posts = []
-		print d.entries[0]
 		for post in d.entries:
 			'''
 			Certains sites ne donnent pas l'heure de publication des articles, ce qui fait crasher notre systeme si on
