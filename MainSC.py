@@ -37,7 +37,7 @@ Input = InputManager(use_leapmotion = False, mouse_visible = True)
 Creates two slots for filling them with screens, and initializes the startup screen (StartScreen)
 '''
 global currentScreen
-currentScreen = StartScreen(WindowRes, "UP")
+currentScreen = NewsScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True
@@ -69,7 +69,7 @@ while gameRunning:
         if status is not "RUNNING":
             if "GOTO" in status:
                 if "GOTO_HOMESCREEN" in status:
-                    currentScreen = HomeScreen(WindowRes, "UP")
+                    currentScreen = HomeScreen(WindowRes, str(fadingScreen))
                 if "GOTO_STARTSCREEN" in status:
                     currentScreen = StartScreen(WindowRes)
                 if "GOTO_NEWSSCREEN" in status:

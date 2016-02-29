@@ -73,7 +73,7 @@ class StartScreen():
 		'''
 		On dessine le fond d'ecran
 		'''
-		Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0), 150)
+		Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0), 180)
 
 		'''
 		On cree les textes
@@ -153,11 +153,10 @@ class StartScreen():
 			self.time_offset = -30 / (1 + math.exp(-(animTime - 0.75) / 0.05))
 
 		if animTime > 0.9 and self.goto_sent == False: # when the animation of the next screen starts
-			self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("STARTSCREEN", "DOWN")
-			print "direction" + ScreenRedirector().next_screen("STARTSCREEN", "DOWN")
+			self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("STARTSCREEN", "DOWN") + "_AND_DEAD"
 			self.goto_sent = True
-		if animTime > 1.5: # when the animation is finished and the screen can be killed.
-			self.ScreenStatus = "DEAD"
+		'''if animTime > 1.5: # when the animation is finished, the screen can be killed.
+			self.ScreenStatus = "DEAD"'''
 
 	def Reset(self):
 		pass

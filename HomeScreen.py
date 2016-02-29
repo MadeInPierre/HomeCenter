@@ -15,7 +15,7 @@ from Helpers import Helpers
 
 class HomeScreen():
 
-	def __init__(self, windowres, fade_direction=""):
+	def __init__(self, windowres, fadeorigin="APP"):
 		'''
 		On charge le fond d'ecran
 		'''
@@ -27,12 +27,12 @@ class HomeScreen():
 		'''
 		self.TimeFont      = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 180)
 		self.SecondsFont   = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 80 )
-		self.AppsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 22 )
+		self.AppsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
 		self.DateFont      = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
 
 		self.WindowRes = windowres
 		self.ScreenStatus = "FADING_IN"
-		self.fade_direction = fade_direction
+		self.fade_origin = fadeorigin
 
 		'''
 		On cree un chronometre qui nous permet de faire avancer des animations
@@ -41,6 +41,7 @@ class HomeScreen():
 		self.animation = AnimationManager()
 		self.time_color = 0
 		self.date_color = 0
+		self.bg_transp = 20.0
 
 		'''
 		Variables pour gerer le swipe entre ecran d'acceuil et menu d'applications
@@ -76,10 +77,10 @@ class HomeScreen():
 		'''
 		if self.ancrage != 0 and self.ancrage != self.WindowRes[1] and self.scrolling == False:
 			if self.ancrage >  self.WindowRes[1] / 2:
-				self.ancrage = Helpers.mathlerp(self.ancrage, self.WindowRes[1], 0.45)
+				self.ancrage = Helpers.mathlerp(self.ancrage, self.WindowRes[1], 0.55)
 				if self.ancrage > self.WindowRes[1] - 2: self.ancrage = self.WindowRes[1]
 			if self.ancrage <= self.WindowRes[1] / 2:
-				self.ancrage = Helpers.mathlerp(self.ancrage, 0                , 0.45)
+				self.ancrage = Helpers.mathlerp(self.ancrage, 0                , 0.55)
 				if self.ancrage < 2                    : self.ancrage = 0
 
 		'''-------------------------------------------------------------------------------------------------------------
@@ -109,7 +110,11 @@ class HomeScreen():
 		'''
 		On affiche le fond d'ecran en fond (cad en premiere position dans le Draw())
 		'''
-		Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  -0.229166667 * self.ancrage + 180)
+		affine = -0.229166667 * self.ancrage + 180
+		if self.ScreenStatus == "RUNNING":
+			Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  affine)
+		if "FADING" in self.ScreenStatus:
+			Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  self.bg_transp)
 
 
 		'''-------------------------------------------------------------------------------------------------------------
@@ -188,6 +193,18 @@ class HomeScreen():
 	def fade_in(self):
 		animTime = self.animation.elapsed_time()
 
+		'''
+		Animation du fond d'ecran. Si l'ecran precedent est STARTSCREEN, on ne fait pas d'animation (pour une transition
+		plus jolie). Sinon, on fait apparaitre progressivement le fond d'ecran.
+
+		TEMPORAIRE : Choisir l'animation ensemble, l'apparition progressive n'est que temporaire.
+		'''
+		if self.fade_origin is "STARTSCREEN":
+			self.bg_transp = 180
+		else:
+			if animTime > 0 and animTime < 2:                                       # TEMPORAIRE
+				self.bg_transp  = 160 / (1 + math.exp(-(animTime - 1) / 0.2)) + 20  # TEMPORAIRE
+
 		if animTime > 0 and animTime < 1:
 			self.time_color = 255 / (1 + math.exp(-(animTime - 0.5) / 0.1))
 
@@ -198,7 +215,7 @@ class HomeScreen():
 		Envoie un texto qui signale au MainSC que la transition est finie, et donc qu'il peut supprimer
 		l'ecran occupe precedemment.
 		'''
-		if animTime > 2:
+		if animTime > 3:
 			self.ScreenStatus = "RUNNING"
 
 	def fade_out(self):

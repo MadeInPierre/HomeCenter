@@ -27,37 +27,45 @@ class NewsCollector():
 
 	def parse(self, d):
 		posts = []
+		print d.entries[0]
 		for post in d.entries:
 			'''
-			Parse the date in the form of 09/03/2016
+			Certains sites ne donnent pas l'heure de publication des articles, ce qui fait crasher notre systeme si on
+			essaye directement de la recuperer.
+			Pour contourner le probleme, on met un try sur la partie qui recupere l'heure, et si cette partie echoue,
+			le code execute le except qui met une simple heure fictive a la place.
 			'''
-			fulldate = post.published_parsed
+			try:
+				fulldate = post.published_parsed
 
-			day = str(fulldate[2])
-			if fulldate < 10: day = "0" + fulldate[2]
-			month = str(fulldate[1])
-			if month < 10: month = '0' + fulldate[1]
+				'''
+				On transforme les infos de feedparser en date lisible, de la forme "15/10/2015"
+				'''
+				day = str(fulldate[2])
+				if fulldate < 10: day = "0" + fulldate[2]
+				month = str(fulldate[1])
+				if month < 10: month = '0' + fulldate[1]
 
-			date = day+"/"+month+"/"+str(fulldate[0])
+
+				date = day+"/"+month+"/"+str(fulldate[0])
+
+				'''
+				Meme chose pour recuperer une heure de la forme "17:35"
+				'''
+				hour = str(fulldate[3])
+				if int(hour) < 10: hour = '0' + str(fulldate[3])
+				minute = str(fulldate[4])
+				if int(minute) < 10: minute = '0' + str(fulldate[4])
+
+				post_time = hour + ':' + minute
+			except:
+				date = "99/99/99"
+				post_time = "99:99"
 
 			'''
-			Parse the hour in the form of 09:45
+			On ajoute l'article avec nos modifications d'heure et de date dans la liste principale.
 			'''
-			hour = str(fulldate[3])
-			if hour < 10: hour = '0' + str(fulldate[3])
-			minute = str(fulldate[3])
-			if minute < 10: minute = '0' + str(fulldate[3])
-
-			post_time = hour + ':' + minute
-
-			'''
-			Add the post to the main list with a list
-			Order : title,
-			'''
-			# posts.append([self.format(post.title), self.format(date), self.format(post_time), self.format(post.link)])
 			posts.append([post.title, date, post_time, post.link])
-		# for post in posts:
-		# 	print post[0] + post[1] + post[2] + post[3]
 
 		return posts
 

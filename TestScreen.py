@@ -72,3 +72,6 @@ class TestScreen():
 
     def Quit(self):
         pass
+
+    def __str__(self):
+        return "TESTSCREEN"
