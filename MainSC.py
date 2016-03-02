@@ -16,25 +16,27 @@ from Screen import *
 from TestScreen import *
 
 '''
-Initialize : starts the important stuff (pygame, timer)
+Initialisations principales : demarrage de pygame et du chrono qui limite le systeme a 30 FPS.
 '''
 pygame.init()
 clock = pygame.time.Clock()
 
 '''
-Window initialize : prepares the window (resolution, fullscreen)
+Initialisation de la fenetre : definit la resolution, mode plein ecran, et titre du logiciel.
 '''
 WindowRes = (800, 480)
 gameDisplay = pygame.display.set_mode(WindowRes)#, pygame.FULLSCREEN)
 pygame.display.set_caption('HomeCenter')
 
 '''
-Input initialize : Lets the program prepare to catch inputs (keyboard, mouse, leap motion, pygame events)
+Initialisation de l'ecouteur d'entrees : prepare la classe a capturer les entrees utilisateur
+(clavier, souris, leap motion, evenements pygame)
 '''
 Input = InputManager(use_leapmotion = False, mouse_visible = True)
 
 '''
-Creates two slots for filling them with screens, and initializes the startup screen (StartScreen)
+Creation de deux slots qui contiendront les ecrans a afficher.
+Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
 currentScreen = StartScreen(WindowRes)
@@ -49,16 +51,15 @@ while gameRunning:
         if "QUIT" in Input.events:
             gameRunning = False
         '''
-        Updates the screens (current for the main screen and fading for the
-        fading out animation still occuring)
+        Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
+        train de faire sa transition sortante).
         '''
         currentScreen.Update(Input.events)
         fadingScreen.Update(Input.events)
-        #if len(Input.events) > 0: print Input.events
 
 
         '''
-        ScreenManager : Handles the loading and unloading of screens, and gives them to the Render Zone.
+        ScreenManager : Gere la creation, destruction et organisation des ecrans, et les prepare pour la Render Zone.
         '''
         status = currentScreen.ScreenStatus
         if "FADING_OUT" in status :
@@ -94,21 +95,23 @@ while gameRunning:
 
 
         '''
-        Render Zone : renders the active screens.
+        Render Zone : dessine tous les ecrans actifs.
         '''
         gameDisplay.fill((0, 0, 0))
 
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
-
         currentScreen.Draw(gameDisplay)
 
+        '''
+        Envoie les dessins a pygame qui les affiche.
+        Limite le systeme a 30 FPS pour economiser les ressources de l'ordinateur.
+        '''
         pygame.display.update()
-        # print str(currentScreen) + "  " + str(fadingScreen)
         clock.tick(30)
 
 '''
-Exit : Unloads everything and closes the window.
+Sortie du systeme : desinitialise pygame, les ecrans actifs et l'ecouteur d'entrees avant de quitter totalement.
 '''
 pygame.quit()
 Input.quit()

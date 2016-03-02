@@ -1,9 +1,11 @@
 '''
-The homescreen displays the time, date and invites the user to go to other Screens
-	- LEFT : Alarms
-	- RIGHT : Calendar
-	- DOWN : Notifications
-	- UP : Applications
+L'ecran d'accueil affiche l'heure et la date, l'heure et les widgets,
+et est le centre du systeme pour redigirer l'utilisateur vers les applications
+disponibles :
+	- LEFT  : Application favorie 1
+	- RIGHT : Application favorie 2
+	- DOWN  : Notifications
+	- UP    : Applications
 '''
 
 import pygame, math
@@ -12,6 +14,7 @@ import Screen
 from AnimationManager import *
 from ScreenRedirector import *
 from Helpers import Helpers
+from WidgetManager import *
 
 class HomeScreen():
 
@@ -48,6 +51,8 @@ class HomeScreen():
 		'''
 		self.ancrage = 0
 		self.scrolling = False
+
+		self.widget_manager = WidgetManager(self.WindowRes)
 
 
 	def Update(self, InputEvents):
@@ -105,6 +110,15 @@ class HomeScreen():
 			self.fade_in()
 		if self.ScreenStatus is "FADING_OUT":
 			self.fade_out()
+
+
+		'''-------------------------------------------------------------------------------------------------------------
+		-------------------------------------------PARTIE FONCTIONNALITES-----------------------------------------------
+		-------------------------------------------------------------------------------------------------------------'''
+		'''
+		On laisse le manager de widgets updater les widgets
+		'''
+		self.widget_manager.Update(InputEvents)
 
 
 
@@ -194,6 +208,10 @@ class HomeScreen():
 		AppsTitleSurface    = self.DateFont.render("No apps here yet. Download them in the store !", True, (255, 255, 255))
 		gameDisplay.blit(AppsTitleSurface, (self.WindowRes[0] / 2 - AppsTitleSurface.get_rect().width / 2,
 											230 + self.ancrage - self.WindowRes[1]))
+
+
+
+		self.widget_manager.Draw(gameDisplay, self.ancrage)
 
 	def fade_in(self):
 		animTime = self.animation.elapsed_time()
