@@ -116,7 +116,8 @@ class HomeScreen():
 		-------------------------------------------PARTIE FONCTIONNALITES-----------------------------------------------
 		-------------------------------------------------------------------------------------------------------------'''
 		'''
-		On laisse le manager de widgets updater les widgets
+		On laisse le manager de widgets updater les widgets.
+		HomeScreen ne s'occupe pas des widgets, seul WidgetManager dessine, update et distribue les inputs.
 		'''
 		self.widget_manager.Update(InputEvents)
 
