@@ -4,8 +4,7 @@ from AnimationManager import *
 
 class SwipeArrow():
 
-    def __init__(self, orientation, is_animated, size = 40):
-        self.orientation = orientation
+    def __init__(self, is_animated, size = 40):
         self.is_animated = is_animated
 
         self.arrow_img = pygame.image.load("Images/arrow-UltraLight.png").convert_alpha()
