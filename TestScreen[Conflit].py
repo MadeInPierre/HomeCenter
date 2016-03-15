@@ -4,7 +4,6 @@ import math
 from InputManager import *
 from AnimationManager import *
 from GifManager import *
-from Helpers import *
 
 
 class TestScreen():
@@ -18,7 +17,7 @@ class TestScreen():
         self.sunny_positionY = 100  # direction : 200
         # texto
         self.ScreenStatus = "RUNNING"
-        # police du texte( la rappeler qaund on ecrit le txt) -> temperature/humidite...
+        # police du texte( la rappeler qaund on ecrit le txt)
         self.TitleFont     = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 55)
         self.TitleFont2    = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 100)
         self.WaitFont      = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 22)
@@ -31,18 +30,6 @@ class TestScreen():
         self.chrono = AnimationManager()
 
     def Update(self, InputEvents):
-        '''
-        Partie qui regarde si on a clique sur l'ecran :
-        '''
-        for event in InputEvents:
-            if "TOUCH" in event:
-                mousepos = Helpers.get_message_x_y(event) # recupere la position ou la personne a clique
-                if Helpers.is_in_rect(mousepos, [50, 290, 25, 130]):
-                    self.ecranaafficher = 3 # (exemple pour Julien)
-                    pass # fait ce que tu veux :)
-
-
-
         if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1:
             self.Aujourdhui_color=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1)))
 
@@ -61,15 +48,17 @@ class TestScreen():
 # Afficher une image (ici soleil)
 
         gameDisplay.blit(self.sunny_icon, (self.sunny_positionX, self.sunny_positionY))
-#1er self = "nom" du texte; 2e self = police; 
-        self.AujourdhuiText = self.TitleFont.render("Aujourd'hui", True, (255, 255, 255))
+
+        # MODE DEMPLOI POUR AFFICHER UN TEXTE
+        # 1 - charger la police dans le init (ci-dessus)
+        # 2 - self.NOMDELIMAGE = self.NOMDELAPOLICE.render(str(self.onfos.current), True, (255, 255, 255))
+        # 3 - gameDisplay.blit(self.NOMDELIMAGE, (POSITIONX, POSITIONY))
+
+        self.AujourdhuiText=self.TitleFont.render(str(self.chrono.elapsed_time()),True,
+                            (self.Aujourdhui_color, self.Aujourdhui_color, self.Aujourdhui_color))
         gameDisplay.blit(self.AujourdhuiText, (55, 30))  # pos initiale : 55, 30
 
         gameDisplay.blit(self.TemperatureText, (550, 100))
-
-        # 1 - creer la police dans le init ci-dessus
-        # self.NOMDELIMAGE = self.NOMDELAPOLICE.render("Bonjour", True, (255, 255, 255))
-        # gameDisplay.blit(self.NOMDELIMAGE, (POSITIONX, POSITIONY))
         '''
         for i in range (0, 7):
             temps = WeatherManager.icone[i]

@@ -1,11 +1,11 @@
-import pygame
+﻿import pygame
 from Helpers import Helpers
 
 class WeatherWidget():
     def __init__(self):
         self.WidgetSurface = pygame.Surface((650, 130)).convert_alpha()
 
-        self.Font = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
+        self.Font = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 22)
 
     def Update(self, InputEvents):
         pass

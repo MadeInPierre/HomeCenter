@@ -1,10 +1,11 @@
-'''
+﻿'''
 This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.
 
 Interface developped by Julien REBOUL, Priscille Valla and Pierre LACLAU.
 '''
+
 import pygame
 from InputManager import InputManager
 from HomeScreen import *
@@ -13,7 +14,7 @@ from NewsScreen import *
 from TimeScreenOld import *
 from Screen import *
 from TestScreen import *
-from WeatherScreen import *
+from WeatherScreen import * 
 from TimeScreen import *
 from CalendarScreen import *
 

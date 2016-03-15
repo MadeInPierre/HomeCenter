@@ -21,27 +21,6 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AnimationManager.py" />
-    <Compile Include="GifManager.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Helpers.py" />
-    <Compile Include="Screens\HomeScreen.py" />
-    <Compile Include="InputManager.py" />
-    <Compile Include="MainSC.py" />
-    <Compile Include="NewsCollector.py" />
-    <Compile Include="Screens\NewsScreen.py" />
-    <Compile Include="Screen.py" />
-    <Compile Include="ScreenRedirector.py" />
-    <Compile Include="Screens\StartScreen.py" />
-    <Compile Include="Screens\TestScreen.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Screens\TimeScreen.py" />
-    <Compile Include="TouchManager.py" />
-    <Compile Include="WeatherCollector.py" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Images\arrow-UltraLight.png" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\arrow1.png" />
@@ -58,11 +37,40 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images" />
-    <Folder Include="Screens\" />
     <Folder Include="ScreenMaps" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimationManager.py" />
+    <Compile Include="CalendarCollector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CalendarScreen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GifManager.py" />
+    <Compile Include="Helpers.py" />
+    <Compile Include="HomeScreen.py" />
+    <Compile Include="InputManager.py" />
+    <Compile Include="MainSC.py" />
+    <Compile Include="NewsCollector.py" />
+    <Compile Include="NewsScreen.py" />
+    <Compile Include="NewsWidget.py" />
+    <Compile Include="Screen.py" />
+    <Compile Include="ScreenRedirector.py" />
+    <Compile Include="StartScreen.py" />
+    <Compile Include="TestScreen.py" />
+    <Compile Include="TimeScreen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TimeScreenOld.py" />
+    <Compile Include="TouchManager.py" />
+    <Compile Include="WeatherCollector.py" />
+    <Compile Include="WeatherScreen.py" />
+    <Compile Include="WeatherWidget.py" />
+    <Compile Include="WidgetManager.py" />
   </ItemGroup>
   <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />

@@ -1,0 +1,14 @@
+Ce fichier contiendra les préférences de chaque utilisateur (le code, l'image de fond).
+structure d'exemple :
+
+PIERRE
+pin=1234
+bg=Images/landscape1.png
+
+JULIEN
+pin=2345
+bg=Images/landscape2.png
+
+PRISCILLE
+pin=3456
+bg=Images/landscape3.png

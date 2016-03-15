@@ -1,4 +1,4 @@
-import pygame, time, math
+﻿import pygame, time, math
 from time import strftime
 from AnimationManager import *
 
@@ -87,9 +87,8 @@ class Helpers():
         px, py = pos_to_check
 
         x, y, width, height = rect
-        if (px >= x and px <= x + width) and \
-           (py >= y and py <= y + height):
-                return True
+        if (px >= x and px <= x + width) and (py >= y and py <= y + height):
+            return True
 
         return False
 

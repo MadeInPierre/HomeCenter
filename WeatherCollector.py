@@ -33,7 +33,7 @@ class WeatherCollector():
         Imaginons qu'on a les infos. On les range ensuite dans les classes respectives pour organiser et rendre l'acces plus facile plus tard.
         A FAIRE : INFORMATIONS ALEATOIRES TEMPORAIRES
         '''
-        self.CurrentWeather = current_weather("sun",   # Icone
+        self.CurrentWeather = current_weather("heavy_rain",   # Icone
                                               19,      # Temperature
                                               68,      # Humidite
                                               12)      # Chances de pleuvoir
@@ -47,6 +47,7 @@ class WeatherCollector():
                                               [19   , 19   , 18         , 17         , 17     , 15          , 12          , 8           , 4           , 2      , -1    , -4    ],
                                               [9    , 17   , 32         , 43         , 57     , 68          , 76          , 85          , 100         , 100    , 100   , 100   ],
                                               [0    , 0    , 5          , 13         , 39     , 60          , 70          , 78          , 90          , 100    , 90    , 80    ])
+
 
 class current_weather():
     def __init__(self, icon, temp, hum, rain_prob):
@@ -64,10 +65,10 @@ class hourly_weather():
 
 
 class daily_weather():
-    def __init_(self, icons, temps, hums, rain_probs, sunrises, sunsets):
+    def __init__(self, icons, temps, hums, rain_probs):
         self.Icons        = icons
         self.Temperatures = temps
         self.Humidities   = hums
         self.RainProbs    = rain_probs
-        self.Sunrises     = sunrises
-        self.Sunsets      = sunsets
+        #self.Sunrises     = sunrises
+        #self.Sunsets      = sunsets

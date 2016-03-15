@@ -1,185 +1,61 @@
-import pygame, time, math
-from time import strftime
-from AnimationManager import *
-from ScreenRedirector import *
-from Helpers import *
+import pygame
 
 class TimeScreen():
 
-	def __init__(self, windowres, fade_direction=""):
-		self.WindowRes = windowres
-		self.ScreenStatus = "FADING_IN"
-		self.fade_direction = fade_direction
+    def __init__(self, windowres):
+        self.WindowRes = windowres # NE PAS TOUCHER
+        self.ScreenStatus = "NONE" # NE PAS TOUCHER
 
-		self.CurrentSection_dic = ["ALARMS", "WORLDCLOCK", "TIMER"]
-		self.CurrentSection = 1
+        self.bigben_image = pygame.image.load("Images/bigben.png") # charger une image
+        self.barre_laterale = pygame.Surface((100, 480)).convert_alpha()
+        self.barre_laterale.fill((255, 255, 255, 120))
+        self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
 
-		self.show_swipe_info = True
-		self.swipe_color = 0
-		self.swipe_animation = AnimationManager()
+		# chargement des images correspondant aux horloges
+        self.Paris = pygame.Surface((305, 195)).convert_alpha()
+        self.Paris.fill((255, 255, 255, 60))
 
-		self.TimeFont = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 120, bold = True)
-		self.SwipeFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      15 )
-		self.CitiesFont  = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 25 )
-		self.DescriptionFont  = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 16)
+        self.Londres = pygame.Surface((305, 195)).convert_alpha()
+        self.Londres.fill((255, 255, 255, 60))
 
-		self.vertical_separator = pygame.image.load("Images/vertical_separator.png")
-		self.horizontal_separator = pygame.image.load("Images/horizontal_separator.png")
+        self.Sao_paulo = pygame.Surface((305, 195)).convert_alpha()
+        self.Sao_paulo.fill((255, 255, 255, 60))
 
-		self.swipearrow = SwipeArrow("LEFT", False)
+        self.Sidney = pygame.Surface((305, 195)).convert_alpha()
+        self.Sidney.fill((255, 255, 255, 60))
 
-		self.CitiesNames = ["Paris", "Sao Paulo", "Noumea", "Jakarta"]
+    def Update(self, InputEvents):
+        pass
 
+    def Draw(self, gameDisplay):
+        gameDisplay.blit(self.bigben_image, (0, -20)) # afficher une image
+        gameDisplay.blit(self.barre_laterale, (700, 0))
 
+		# positions des differentes horloges
+        gameDisplay.blit(self.Paris, (30, 30))
 
-		'''
-		modes :
-			ALARMS
-			WORLDTIME
-			STOPWATCH
-			TIMER
-		'''
-		self.display_mode = "ALARMS"
+        gameDisplay.blit(self.Londres, (365, 30))
 
-	def Update(self, InputEvents):
-		'''
-		Showing and hiding swipe hints, and managing input.
-		'''
-		if "RIGHT" in InputEvents:
-			self.ScreenStatus = "FADING_OUT_GOTO_" + ScreenRedirector().next_screen("TIMESCREEN", "RIGHT") + "_AND_DEAD"
-		if "UP" in InputEvents:
-			if self.CurrentSection > 0 and self.CurrentSection < len(self.CurrentSection_dic):
-				self.CurrentSection -= 1
-		if "DOWN" in InputEvents:
-			if self.CurrentSection > 0 and self.CurrentSection < len(self.CurrentSection_dic):
-				self.CurrentSection += 1
-		if "HANDS_ENTERED" in InputEvents:
-			self.show_swipe_info = True
-			self.swipe_animation.reset()
-		if "HANDS_LEFT" in InputEvents:
-			self.show_swipe_info = False
-			if self.swipe_color > 250:
-				self.swipe_animation.reset()
-		if "HANDS_LEFT" in InputEvents:
-			self.show_swipe_info = False
+        gameDisplay.blit(self.Sao_paulo, (30, 255))
 
-		if self.ScreenStatus == "FADING_IN":
-			animTime = self.swipe_animation.elapsed_time()
-			self.swipe_color = 255 / (1 + math.exp(-(2.5 -self.swipe_animation.elapsed_time()) / 0.1))
-			if animTime >= 3:
-				self.ScreenStatus = "RUNNING"
-				self.swipe_color = 0
+        gameDisplay.blit(self.Sidney, (365, 255))
 
-		else:
-			'''
-			Swipe info animations (showing when hand is detected)
-			'''
-			if self.show_swipe_info == True:
-				if self.swipe_animation.elapsed_time() < 5:
-					self.swipe_color = 255 / (1 + math.exp(-(self.swipe_animation.elapsed_time() - 0.5) / 0.1))
-			else:
-				if self.swipe_animation.elapsed_time() < 5:
-					self.swipe_color = 255 / (1 + math.exp(-(0.5 -self.swipe_animation.elapsed_time()) / 0.1))
+		# positions des fonctionnalites
+        self.AlarmeText = self.PostTitleFont.render("Alarme", True, (0, 0, 0))
+        gameDisplay.blit(self.AlarmeText, (750 - self.AlarmeText.get_rect().width/ 2, 80))
 
-			'''
+        self.HorlogesText = self.PostTitleFont.render("Horloges", True, (0, 0, 0))
+        gameDisplay.blit(self.HorlogesText, (750 - self.HorlogesText.get_rect().width/ 2, 180))
 
-			GENERAL UPDATES ACCORDING TO CURRENT SECTION.
+        self.ChronoText = self.PostTitleFont.render("Chrono", True, (0, 0, 0))
+        gameDisplay.blit(self.ChronoText, (750 - self.ChronoText.get_rect().width/ 2, 280))
 
-			'''
-			if self.CurrentSection_dic[self.CurrentSection] is "ALARMS":
-				pass
-			elif self.CurrentSection_dic[self.CurrentSection] is "TIMER":
-				pass
-			elif self.CurrentSection_dic[self.CurrentSection] is "WORLDCLOCK":
-				pass
+        self.MinuteurText = self.PostTitleFont.render("Minuteur", True, (0, 0, 0))
+        gameDisplay.blit(self.MinuteurText, (750 - self.MinuteurText.get_rect().width/ 2, 380))
 
 
-	def Draw(self, gameDisplay):
-		'''
-		Show swipe gestures indications
-		'''
-		EditSwipeSurface = self.SwipeFont.render("EDIT", True, (self.swipe_color, self.swipe_color, self.swipe_color))
-		EditSwipeSurface = Helpers.rotate(EditSwipeSurface, 90)
-		gameDisplay.blit(EditSwipeSurface, (12, self.WindowRes[1] / 2 - EditSwipeSurface.get_rect().height / 2 + 1))
-		AlarmsSwipeSurface = self.SwipeFont.render("ALARMS", True, (self.swipe_color, self.swipe_color, self.swipe_color))
-		gameDisplay.blit(AlarmsSwipeSurface, (self.WindowRes[0] / 2 - AlarmsSwipeSurface.get_rect().width / 2, 12))
-		WTSwipeSurface = self.SwipeFont.render("WORLD TIME", True, (self.swipe_color, self.swipe_color, self.swipe_color))
-		gameDisplay.blit(WTSwipeSurface, (self.WindowRes[0] / 2 - WTSwipeSurface.get_rect().width / 2, \
-			self.WindowRes[1] - 10 - WTSwipeSurface.get_rect().height))
-		HomeSwipeSurface = self.SwipeFont.render("HOME", True, (self.swipe_color, self.swipe_color, self.swipe_color))
-		HomeSwipeSurface = Helpers.rotate(HomeSwipeSurface, -90)
-		gameDisplay.blit(HomeSwipeSurface, (self.WindowRes[0] - HomeSwipeSurface.get_rect().width  - 10, \
-			self.WindowRes[1] / 2 - HomeSwipeSurface.get_rect().height / 2))
+    def Quit(self):
+        pass
 
-
-		self.swipearrow.Draw(gameDisplay, (10, 218 - EditSwipeSurface.get_rect().height / 2 - 20), "LEFT", opacity=self.swipe_color)
-		self.swipearrow.Draw(gameDisplay, (10, 218 + EditSwipeSurface.get_rect().height / 2 + 20), "LEFT", opacity=self.swipe_color)
-
-		self.swipearrow.Draw(gameDisplay, (393 - AlarmsSwipeSurface.get_rect().width / 2 - 20, 15), "UP", opacity=self.swipe_color)
-		self.swipearrow.Draw(gameDisplay, (393 + AlarmsSwipeSurface.get_rect().width / 2 + 20, 15), "UP", opacity=self.swipe_color)
-
-		self.swipearrow.Draw(gameDisplay, (393 - WTSwipeSurface.get_rect().width / 2 - 20, self.WindowRes[1] - 30), "DOWN", opacity=self.swipe_color)
-		self.swipearrow.Draw(gameDisplay, (393 + WTSwipeSurface.get_rect().width / 2 + 20, self.WindowRes[1] - 30), "DOWN", opacity=self.swipe_color)
-		self.swipearrow.Draw(gameDisplay, (self.WindowRes[0] - 30, 218 - HomeSwipeSurface.get_rect().height / 2 - 20), "RIGHT", opacity=self.swipe_color)
-		self.swipearrow.Draw(gameDisplay, (self.WindowRes[0] - 30, 218 + HomeSwipeSurface.get_rect().height / 2 + 20), "RIGHT", opacity=self.swipe_color)
-
-		if self.CurrentSection_dic[self.CurrentSection] is "WORLDCLOCK":
-			'''
-			Show vertical and horizontal separator
-			'''
-			gameDisplay.blit(self.vertical_separator, (self.WindowRes[0] / 2, 35))
-			gameDisplay.blit(self.horizontal_separator, (35, self.WindowRes[1] / 2))
-
-			'''
-			Show Cities Names
-			'''
-			city1Surface = self.CitiesFont.render(self.CitiesNames[0], True, (255, 255, 255))
-			city2Surface = self.CitiesFont.render(self.CitiesNames[1], True, (255, 255, 255))
-			city3Surface = self.CitiesFont.render(self.CitiesNames[2], True, (255, 255, 255))
-			city4Surface = self.CitiesFont.render(self.CitiesNames[3], True, (255, 255, 255))
-
-			gameDisplay.blit(city1Surface, (self.WindowRes[0] / 4 - city1Surface.get_rect().width / 2, \
-							30))
-			gameDisplay.blit(city2Surface, (self.WindowRes[0]*3/4 - city2Surface.get_rect().width / 2, \
-							30))
-			gameDisplay.blit(city3Surface, (self.WindowRes[0] / 4 - city3Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 15))
-			gameDisplay.blit(city4Surface, (self.WindowRes[0]*3/4 - city4Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 15))
-
-			'''
-			Showing Cities Times
-			'''
-			time1Surface  = self.TimeFont.render( strftime("%H:%M"), True, (255, 255, 255))
-			gameDisplay.blit(time1Surface, (self.WindowRes[0] / 4 - time1Surface.get_rect().width / 2, \
-							70))
-			gameDisplay.blit(time1Surface, (self.WindowRes[0]*3/4 - time1Surface.get_rect().width / 2, \
-							70))
-			gameDisplay.blit(time1Surface, (self.WindowRes[0] / 4 - time1Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 52))
-			gameDisplay.blit(time1Surface, (self.WindowRes[0]*3/4 - time1Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 52))
-
-			'''
-			Showing cities dates
-			'''
-			date1Surface = self.DescriptionFont.render(strftime("%A %d"), True, (255, 255, 255))
-			gameDisplay.blit(date1Surface, (self.WindowRes[0] / 4 - date1Surface.get_rect().width / 2, \
-							60))
-			gameDisplay.blit(date1Surface, (self.WindowRes[0]*3/4 - date1Surface.get_rect().width / 2, \
-							60))
-			gameDisplay.blit(date1Surface, (self.WindowRes[0] / 4 - date1Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 45))
-			gameDisplay.blit(date1Surface, (self.WindowRes[0]*3/4 - date1Surface.get_rect().width / 2, \
-							self.WindowRes[1] / 2 + 45))
-		elif self.CurrentSection_dic[self.CurrentSection] is "TIMER":
-			pass
-		elif self.CurrentSection_dic[self.CurrentSection] is "ALARMS":
-			pass
-
-
-	def Quit(self):
-		pass
-
-	def __str__(self):
-		return "TIMESCREEN"
+    def __str__(self):
+        return "SCREEN"
