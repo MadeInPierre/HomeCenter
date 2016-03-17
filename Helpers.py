@@ -4,9 +4,7 @@ from AnimationManager import *
 
 class SwipeArrow():
 
-    def __init__(self, is_animated, size = 40):
-        self.is_animated = is_animated
-
+    def __init__(self, size = 40):
         self.arrow_img = pygame.image.load("Images/arrow-UltraLight.png").convert_alpha()
         if size is not 40:
             self.arrow_img = pygame.transform.scale(self.arrow_img, (size, size))
@@ -17,11 +15,9 @@ class SwipeArrow():
         self.down_image  = Helpers.rotate(self.arrow_img, 90)
 
     def Update(self):
-        if self.is_animated:
-            pass
+        pass
 
     def Draw(self, gameDisplay, position, angle, opacity=255):
-
         if angle is "LEFT":
             Helpers.blit_alpha(gameDisplay, self.left_image, position, opacity)
             # gameDisplay.blit(self.left_image, position)

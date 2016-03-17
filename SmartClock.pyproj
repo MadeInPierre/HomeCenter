@@ -44,9 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationManager.py" />
-    <Compile Include="CalendarCollector.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CalendarScreen.py">
       <SubType>Code</SubType>
     </Compile>
@@ -55,6 +52,12 @@
     <Compile Include="HomeScreen.py" />
     <Compile Include="InputManager.py" />
     <Compile Include="MainSC.py" />
+    <Compile Include="ChronoScreen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TimerScreen.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewsCollector.py" />
     <Compile Include="NewsScreen.py" />
     <Compile Include="NewsWidget.py" />

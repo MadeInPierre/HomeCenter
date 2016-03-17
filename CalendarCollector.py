@@ -1,4 +1,4 @@
-'''
+﻿'''
 Classe prise du site de Google et modifiee qui donne les 50 prochains evenements de chaque
 calendrier de Pierre.
 '''
@@ -20,7 +20,7 @@ except ImportError:
     flags = None
 
 class CalendarCollector():
-    def __init__(self):
+    def get_events(self, start_year, start_month, start_day):
         """Shows basic usage of the Google Calendar API.
 
         Creates a Google Calendar API service object and outputs a list of the next
@@ -38,11 +38,11 @@ class CalendarCollector():
         http = credentials.authorize(httplib2.Http())
         service = discovery.build('calendar', 'v3', http=http)
 
-        controles_events = self.get_events_from_calendar(service, controles_calendar_id   )
-        divers_events    = self.get_events_from_calendar(service, diverslycee_calendar_id )
-        travail_events   = self.get_events_from_calendar(service, travail_calendar_id     )
-        arendre_events   = self.get_events_from_calendar(service, arendre_calendar_id     )
-        main_events      = self.get_events_from_calendar(service, main_calendar_id        )
+        controles_events = self.get_events_from_calendar(service, controles_calendar_id   , start_year, start_month, start_day)
+        divers_events    = self.get_events_from_calendar(service, diverslycee_calendar_id , start_year, start_month, start_day)
+        travail_events   = self.get_events_from_calendar(service, travail_calendar_id     , start_year, start_month, start_day)
+        arendre_events   = self.get_events_from_calendar(service, arendre_calendar_id     , start_year, start_month, start_day)
+        main_events      = self.get_events_from_calendar(service, main_calendar_id        , start_year, start_month, start_day)
 
         return [("CONTROLES", controles_events),
                 ("ARENDRE",   arendre_events),
@@ -85,17 +85,16 @@ class CalendarCollector():
             print('Storing credentials to ' + credential_path)
         return credentials
 
-    def get_events_from_calendar(self, service, ID):
+    def get_events_from_calendar(self, service, ID, start_year, start_month, start_day):
         now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
         eventsAPI = service.events().list(calendarId = ID, timeMin = now, maxResults = 50, singleEvents = True, orderBy = 'startTime').execute()
 
-        return parse_events(eventsResult.get('items', []))
+        return self.parse_events(eventsAPI.get('items', []))
 
     def parse_events(self, events_source):
         parsed_events = []
-        for event in events:
+        for event in events_source:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
             parsed_events.append([event["summary"], start])
 
         return parsed_events

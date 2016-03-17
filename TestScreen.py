@@ -1,4 +1,4 @@
-﻿import pygame
+import pygame
 import math
 # import classe pour recuperer les infos de la meteo
 from InputManager import *
@@ -67,9 +67,10 @@ class TestScreen():
 
         gameDisplay.blit(self.TemperatureText, (550, 100))
 
-        # 1 - creer la police dans le init ci-dessus
-        # self.NOMDELIMAGE = self.NOMDELAPOLICE.render("Bonjour", True, (255, 255, 255))
-        # gameDisplay.blit(self.NOMDELIMAGE, (POSITIONX, POSITIONY))
+        # MODE DEMPLOI POUR AFFICHER UN TEXTE
+        # 1 - charger la police dans le init (ci-dessus)
+        # 2 - self.NOMDELIMAGE = self.NOMDELAPOLICE.render(str(self.onfos.current), True, (255, 255, 255))
+        # 3 - gameDisplay.blit(self.NOMDELIMAGE, (POSITIONX, POSITIONY))
         '''
         for i in range (0, 7):
             temps = WeatherManager.icone[i]

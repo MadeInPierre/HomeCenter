@@ -1,47 +1,31 @@
 import pygame
-from Helpers import *
+from AnimationManager import *
 
-class TimeScreen():
+class ChronoScreen():
 
     def __init__(self, windowres):
-        self.WindowRes = windowres # NE PAS TOUCHER
-        self.ScreenStatus = "NONE" # NE PAS TOUCHER
-        
+        self.WindowRes = windowres
+        self.ScreenStatus = "NONE"
+
         self.bigben_image = pygame.image.load("Images/bigben.png") # charger une image
         self.barre_laterale = pygame.Surface((100, 480)).convert_alpha()
         self.barre_laterale.fill((255, 255, 255, 120))
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
+        self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold=False)
+        self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
+        
+        self.chrono_image = pygame.image.load("Images/chrono.png") # charger une image
 
-		# chargement des images correspondant aux horloges
-        self.Paris = pygame.Surface((305, 195)).convert_alpha()
-        self.Paris.fill((255, 255, 255, 60))
+    def Update(self, ImputEvents):
+        # REMARQUE le jamais oublier les "self." des qu'on utilise des variables ou des fonctions.
+        self.LeTempsDuChrono = self.chrono.elapsed_time() 
 
-        self.Londres = pygame.Surface((305, 195)).convert_alpha()
-        self.Londres.fill((255, 255, 255, 60))
-
-        self.Sao_paulo = pygame.Surface((305, 195)).convert_alpha()
-        self.Sao_paulo.fill((255, 255, 255, 60))
-
-        self.Sidney = pygame.Surface((305, 195)).convert_alpha()
-        self.Sidney.fill((255, 255, 255, 60))
-
-    def Update(self, InputEvents):
-        pass
-    
     def Draw(self, gameDisplay):
-        Helpers.blit_alpha(gameDisplay, self.bigben_image, (0, -20), 200) # afficher une image
+        gameDisplay.blit(self.bigben_image, (0, -20)) # afficher une image
         gameDisplay.blit(self.barre_laterale, (700, 0))
+        gameDisplay.blit(self.chrono_image, (300, 200))
 
-		# positions des differentes horloges
-        gameDisplay.blit(self.Paris, (30, 30))
 
-        gameDisplay.blit(self.Londres, (365, 30))
-
-        gameDisplay.blit(self.Sao_paulo, (30, 255))
-
-        gameDisplay.blit(self.Sidney, (365, 255))
-
-		# positions des fonctionnalites
         self.AlarmeText = self.PostTitleFont.render("Alarme", True, (0, 0, 0))
         gameDisplay.blit(self.AlarmeText, (750 - self.AlarmeText.get_rect().width/ 2, 80))
 
@@ -53,6 +37,12 @@ class TimeScreen():
 
         self.MinuteurText = self.PostTitleFont.render("Minuteur", True, (0, 0, 0))
         gameDisplay.blit(self.MinuteurText, (750 - self.MinuteurText.get_rect().width/ 2, 380))
+
+
+        self.temps_text = self.PostTitleFont2.render(str(self.LeTempsDuChrono), True, (0, 0, 0))
+                                    # on met des guillemets quand on veut mettre manuellement du texte,
+                                    # et on  n'en met pas quand le texte vient d'une variable, comme ici
+        gameDisplay.blit(self.temps_text, (200, 200)) # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
 
 
     def Quit(self):
