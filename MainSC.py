@@ -45,7 +45,7 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = WeatherScreen(WindowRes)
+currentScreen = CalendarScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True

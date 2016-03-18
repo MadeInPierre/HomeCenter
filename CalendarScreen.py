@@ -11,6 +11,7 @@ class CalendarScreen():
         self.MonthsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",  24)
         self.DaysTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 15)
         self.EventsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 14)
+        self.DayPannelTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 16)
         self.now = datetime.datetime.now()
         self.arrow = SwipeArrow(40)
 
@@ -60,7 +61,7 @@ class CalendarScreen():
                 for week in range(0, 5):
                     for day in range(0, 7):
                         if Helpers.is_in_rect(mousepos, [30 + 530/7 * day, 60 + 390/5 * week, 530 / 7, 390 / 5]):
-                            self.selected_day = [day, week]
+                            self.selected_day = [week, day]
 
     def Draw(self, gameDisplay):
         gameDisplay.fill((30, 30, 30)) # TEMPORAIRE un p'tit fond plus joli
@@ -130,7 +131,7 @@ class CalendarScreen():
                 '''
                 On rend la case selectionnee un peu plus claire
                 '''
-                if self.selected_day[0] == day and self.selected_day[1] == week:
+                if self.selected_day[1] == day and self.selected_day[0] == week:
                     s = pygame.Surface((530 / 7 + 1, 390 / 5 + 1)).convert_alpha()
                     s.fill((255, 255, 255, 100))
                     gameDisplay.blit(s, (30 + day * 530/7, 60 + week * 390/5))
@@ -181,6 +182,13 @@ class CalendarScreen():
         Ligne separatrice sous le titre/jour du panneau journalier
         '''
         self.draw_line(gameDisplay, 605, 90                    , 150, 1  , (255, 255, 255))
+
+        '''
+        Titre du panneau journalier, qui reporte le jour selectionne (par exemple "Mercredi 29 Janvier")
+        '''
+        day, i = self.get_day_number_at_pos(self.selected_day[0], self.selected_day[1])
+        dayPannelTitleSurface = self.DayPannelTitleFont.render(str(self.DayNames[self.selected_day[1]]) + " " + str(day) + " " + self.MonthNames[self.selected_month], True, (255, 255, 255))
+        gameDisplay.blit(dayPannelTitleSurface, (680 - dayPannelTitleSurface.get_rect().width / 2, 66))
 
     def get_day_number_at_pos(self, week, day):
         day_value = self.actual_month[week][day]
