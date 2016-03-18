@@ -14,10 +14,11 @@ class CalendarScreen():
         self.now = datetime.datetime.now()
         self.arrow = SwipeArrow(40)
 
-        self.selected_month = int(self.now.month)
+        self.selected_month = int(self.now.month - 1)
         self.selected_year = int(self.now.year)
         self.selected_day = [0, 0]
-        self.MonthNames =["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
+        self.MonthNames = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
+        self.DayNames =   ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 
         self.reset_calendars()
 
@@ -28,7 +29,7 @@ class CalendarScreen():
             for event in list[1]:
                 print event
             print "\n"
-        self.test = self.calendar_events[2][1][0][0] # 1=CT AR TR DI MA, 2=1, 3=event_number, 4=TITRE DATE
+        #self.test = self.calendar_events[2][1][0][0] # 1=CT AR TR DI MA, 2=1, 3=event_number, 4=TITRE DATE
 
 
 
@@ -40,13 +41,13 @@ class CalendarScreen():
                 '''
                 Si l'utilisateur clique sur les fleches pour changer le mois
                 '''
-                if Helpers.is_in_rect(mousepos, [30 + 550/2 - self.monthTitleSurface.get_rect().width / 2 - 40, 24, 40, 40]):
+                if Helpers.is_in_rect(mousepos, [30 + 530/2 - self.monthTitleSurface.get_rect().width / 2 - 40, 24, 40, 40]):
                     self.selected_month -= 1
                     if self.selected_month < 0:
                         self.selected_month = 11
                         self.selected_year -= 1
                     self.reset_calendars()
-                if Helpers.is_in_rect(mousepos, [30 + 550/2 + self.monthTitleSurface.get_rect().width / 2 + 20, 24, 40, 40]):
+                if Helpers.is_in_rect(mousepos, [30 + 530/2 + self.monthTitleSurface.get_rect().width / 2 + 20, 24, 40, 40]):
                     self.selected_month += 1
                     if self.selected_month > 11:
                         self.selected_month = 0
@@ -62,17 +63,13 @@ class CalendarScreen():
                             self.selected_day = [day, week]
 
     def Draw(self, gameDisplay):
-        gameDisplay.fill((30, 30, 30))
+        gameDisplay.fill((30, 30, 30)) # TEMPORAIRE un p'tit fond plus joli
 
         self.monthTitleSurface = self.MonthsTitleFont.render(self.MonthNames[self.selected_month] + " " + str(self.selected_year), True, (255, 255, 255))
-        gameDisplay.blit(self.monthTitleSurface, (30 + 550/2 - self.monthTitleSurface.get_rect().width / 2, 16))
-        self.arrow.Draw(gameDisplay, (30 + 550/2 - self.monthTitleSurface.get_rect().width / 2 - 40, 24), "LEFT")
-        self.arrow.Draw(gameDisplay, (30 + 550/2 + self.monthTitleSurface.get_rect().width / 2 + 20, 24), "RIGHT")
+        gameDisplay.blit(self.monthTitleSurface, (30 + 550/2 - self.monthTitleSurface.get_rect().width / 2, 6))
 
-        self.monthTitleSurface = self.EventsTitleFont.render("Bonjour", True, (30, 255, 30))
-        #gameDisplay.blit(self.monthTitleSurface, (40, 80))
-        #gameDisplay.blit(self.monthTitleSurface, (40, 100))
-        #gameDisplay.blit(self.monthTitleSurface, (40, 120))
+        self.arrow.Draw(gameDisplay, (30 + 550/2 - self.monthTitleSurface.get_rect().width / 2 - 40, 14), "LEFT")
+        self.arrow.Draw(gameDisplay, (30 + 550/2 + self.monthTitleSurface.get_rect().width / 2 + 20, 14), "RIGHT")
 
         '''
         On dessine les numeros des jours et les pastilles de couleur d'evenements
@@ -81,117 +78,96 @@ class CalendarScreen():
         for week in range(0, 5):
             for day in range(0, 7):
                 '''
-                On trouve le numero du jour correspondant
+                On trouve le numero du jour correspondant...
                 '''
-                day_value = self.actual_month[week][day]
-                is_from_actual_month = True
-                if day_value == 0 and week == 0:
-                    day_value = self.prev_month[len(self.prev_month) - 1][day]
-                    is_from_actual_month = False
-                if day_value == 0 and week == 4:
-                    day_value = self.next_month[0][day]
-                    is_from_actual_month = False
-
+                day_value, is_from_actual_month = self.get_day_number_at_pos(week, day)
+                
+                
                 '''
-                On le dessine
+                ... et on le dessine.
                 '''
                 if is_from_actual_month == True:
                     self.daySurface = self.DaysTitleFont.render(str(day_value), True, (255, 255, 255))
                 if is_from_actual_month == False:
                     self.daySurface = self.DaysTitleFont.render(str(day_value), True, (180, 180, 180))
-                gameDisplay.blit(self.daySurface, (35 + 530/7 * day, 60+ 390/5 * week))
+                gameDisplay.blit(self.daySurface, (36 + day * 530/7, 62 + week * 390/5))
 
+                
+                
+                
+                
+                
                 '''
-                On dessine les pastilles de chaque jour
+                On scanne tous les evenements pour voir s'il y en a qui correspondent a la case actuelle.
                 '''
-                cell_year = str(self.selected_year)
+                cell_year  = str(self.selected_year)
                 cell_month = str(self.selected_month + 1)
-                cell_day = str(day_value)
+                cell_day   = str(day_value)
 
-                for event in self.calendar_events[0][1]:
-                    event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-")
-                    if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                        (int(event_date_parsed[1]) == int(cell_month) ) and \
-                        (int(event_date_parsed[2]) == int(cell_day)   ):
-                        s = pygame.Surface((5, 5))
-                        s.fill((255, 0, 0))
-                        gameDisplay.blit(s, (35 + 530/7 * day + 5, 60+ 390/5 * week + 25))
+                for i in range(0, 5):
+                    for event in self.calendar_events[i][1]:
+                        '''
+                        on separe lannee, mois et jour de l'evenement pour le comparer ensuite
+                        '''
+                        event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-") 
 
-                for event in self.calendar_events[1][1]:
-                    event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-")
-                    if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                        (int(event_date_parsed[1]) == int(cell_month) ) and \
-                        (int(event_date_parsed[2]) == int(cell_day)   ):
-                        s = pygame.Surface((5, 5))
-                        s.fill((255, 145, 0))
-                        gameDisplay.blit(s, (35 + 530/7 * day + 5, 60+ 390/5 * week + 35))
-
-                for event in self.calendar_events[2][1]:
-                    event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-")
-                    if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                        (int(event_date_parsed[1]) == int(cell_month) ) and \
-                        (int(event_date_parsed[2]) == int(cell_day)   ):
-                        s = pygame.Surface((5, 5))
-                        s.fill((0, 98, 255))
-                        gameDisplay.blit(s, (35 + 530/7 * day + 5, 60+ 390/5 * week + 45))
-
-                for event in self.calendar_events[3][1]:
-                    event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-")
-                    if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                        (int(event_date_parsed[1]) == int(cell_month) ) and \
-                        (int(event_date_parsed[2]) == int(cell_day)   ):
-                        s = pygame.Surface((5, 5))
-                        s.fill((115, 255, 0))
-                        gameDisplay.blit(s, (35 + 530/7 * day + 5, 60+ 390/5 * week + 55))
-
-                for event in self.calendar_events[4][1]:
-                    event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-")
-                    if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                        (int(event_date_parsed[1]) == int(cell_month) ) and \
-                        (int(event_date_parsed[2]) == int(cell_day)   ):
-                        s = pygame.Surface((5, 5))
-                        s.fill((255, 0, 255))
-                        gameDisplay.blit(s, (35 + 530/7 * day + 5, 60+ 390/5 * week + 65))
+                        '''
+                        Si l'evenement a bien lieu au jour de la case actuelle, on dessine pastille de couleur et position correspondantes a 
+                        la categorie de l'evenement (controle, a rendre, travail...)
+                        '''
+                        if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
+                            (int(event_date_parsed[1]) == int(cell_month) ) and \
+                            (int(event_date_parsed[2]) == int(cell_day)   ):
+                            s = pygame.Surface((530/7 + 1, 11))
+                            if i == 0: color = (255,   0,   0)
+                            if i == 1: color = (255, 145,   0)
+                            if i == 2: color = (  0,  98, 255)
+                            if i == 3: color = (115, 255,   0)
+                            if i == 4: color = (255,   0, 255) 
+                            s.fill(color)
+                            gameDisplay.blit(s, (30 + day * 530/7, 60 + week * 390/5 + 24 + 11 * i))
 
                 '''
                 On rend la case selectionnee un peu plus claire
                 '''
                 if self.selected_day[0] == day and self.selected_day[1] == week:
-                    s = pygame.Surface((530 / 7, 390 / 5)).convert_alpha()
+                    s = pygame.Surface((530 / 7 + 1, 390 / 5 + 1)).convert_alpha()
                     s.fill((255, 255, 255, 100))
-                    gameDisplay.blit(s, (30 + (530/7) * day, 60 + (390/5) * week))
+                    gameDisplay.blit(s, (30 + day * 530/7, 60 + week * 390/5))
 
                 '''
                 La case d'aujourd'hui devient plus claire.
                 '''
-                if self.now.day == day_value and self.now.month == self.selected_month and self.now.year == self.selected_year:
+                if self.now.day == day_value and self.now.month == self.selected_month + 1 and self.now.year == self.selected_year:
                     s = pygame.Surface((530 / 7, 390 / 5)).convert_alpha()
                     s.fill((45, 45, 255, 100))
-                    gameDisplay.blit(s, (30 + (530/7) * day, 60 + (390/5) * week))
-
-
-        '''
-        On dessine le cadre externe du panneau mensuel
-        '''
-        self.draw_line(gameDisplay, 30 , 60                    , 530, 1  , (255, 255, 255))
-        self.draw_line(gameDisplay, 30 , self.windowres[1] - 31, 530, 1  , (255, 255, 255))
-        self.draw_line(gameDisplay, 30 , 60                    , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 560, 60                    , 1  , 390, (255, 255, 255))
+                    gameDisplay.blit(s, (30 + day * 530/7, 60 + week * 390/5))
 
         '''
-        On dessine les lignes separant les jours dans le panneau mensuel
+        On dessine les lignes horizontales de la grille mensuelle, puis les verticales.
         '''
-        self.draw_line(gameDisplay, 30 , 60 + 390/5 * 1        , 530, 1  , (255, 255, 255))
-        self.draw_line(gameDisplay, 30 , 60 + 390/5 * 2        , 530, 1  , (255, 255, 255))
-        self.draw_line(gameDisplay, 30 , 60 + 390/5 * 3        , 530, 1  , (255, 255, 255))
-        self.draw_line(gameDisplay, 30 , 60 + 390/5 * 4        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 0 * 390/5        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 1 * 390/5        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 2 * 390/5        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 3 * 390/5        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 4 * 390/5        , 530, 1  , (255, 255, 255))
+        self.draw_line(gameDisplay, 30 , 60 + 5 * 390/5        , 530, 1  , (255, 255, 255))
 
-        self.draw_line(gameDisplay, 30 + 530/7 * 1, 60         , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 30 + 530/7 * 2, 60         , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 30 + 530/7 * 3, 60         , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 30 + 530/7 * 4, 60         , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 30 + 530/7 * 5, 60         , 1  , 390, (255, 255, 255))
-        self.draw_line(gameDisplay, 30 + 530/7 * 6, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 0 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 1 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 2 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 3 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 4 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 5 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 6 * 530/7, 60         , 1  , 390, (255, 255, 255))
+        self.draw_line(gameDisplay, 30 + 7 * 530/7, 60         , 1  , 390, (255, 255, 255))
+
+        '''
+        On dessine les titres des colonnes du panneau mensuel (lundi, mardi...)
+        '''
+        for i in range(0, 7):
+            text = self.EventsTitleFont.render(self.DayNames[i], True, (255, 255, 255))
+            gameDisplay.blit(text, (30 + 530/7/2 + i * 530/7 - text.get_rect().width / 2, 40))
 
         '''
         On dessine le cadre externe du panneau journalier
@@ -205,6 +181,21 @@ class CalendarScreen():
         Ligne separatrice sous le titre/jour du panneau journalier
         '''
         self.draw_line(gameDisplay, 605, 90                    , 150, 1  , (255, 255, 255))
+
+    def get_day_number_at_pos(self, week, day):
+        day_value = self.actual_month[week][day]
+
+        is_from_actual_month = True
+        
+        
+        if day_value == 0 and week == 0:
+            day_value = self.prev_month[len(self.prev_month) - 1][day]
+            is_from_actual_month = False
+        if day_value == 0 and week == 4:
+            day_value = self.next_month[0][day]
+            is_from_actual_month = False
+
+        return day_value, is_from_actual_month
 
     def draw_line(self, gameDisplay, pX, pY, width, height, color):
         ligne = pygame.Surface((width, height))

@@ -1,4 +1,4 @@
-import pygame
+﻿import pygame
 from AnimationManager import *
 
 class TimerScreen():
@@ -27,10 +27,10 @@ class TimerScreen():
         gameDisplay.blit(self.barre_laterale, (700, 0))
 
 
-        self.AlarmeText = self.PostTitleFont.render("Alarme", True, (0, 0, 0))
+        self.AlarmeText = self.PostTitleFont.render("Horloges", True, (0, 0, 0))
         gameDisplay.blit(self.AlarmeText, (750 - self.AlarmeText.get_rect().width/ 2, 80))
 
-        self.HorlogesText = self.PostTitleFont.render("Horloges", True, (0, 0, 0))
+        self.HorlogesText = self.PostTitleFont.render("Alarmes", True, (0, 0, 0))
         gameDisplay.blit(self.HorlogesText, (750 - self.HorlogesText.get_rect().width/ 2, 180))
 
         self.ChronoText = self.PostTitleFont.render("Chrono", True, (0, 0, 0))

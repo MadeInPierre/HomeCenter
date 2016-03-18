@@ -1,4 +1,4 @@
-'''
+﻿'''
 This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.
@@ -45,7 +45,7 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = StartScreen(WindowRes)
+currentScreen = WeatherScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True

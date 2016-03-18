@@ -26,29 +26,37 @@ class CalendarCollector():
         Creates a Google Calendar API service object and outputs a list of the next
         10 events on the user's calendar.
         """
-        controles_calendar_id   = "jh1vplv3t8tvg5uecguginu1i0@group.calendar.google.com"
-        diverslycee_calendar_id = "iim4mi4h2p0sg4q2a63l6naaf0@group.calendar.google.com"
-        travail_calendar_id     = "tj4oifktmlmuc2qbmko318nmk4@group.calendar.google.com"
-        arendre_calendar_id     = "595q34j3kak6jb5nf97h90akko@group.calendar.google.com"
-        main_calendar_id        = "pielaclau@gmail.com"
+        try:
+            controles_calendar_id   = "jh1vplv3t8tvg5uecguginu1i0@group.calendar.google.com"
+            diverslycee_calendar_id = "iim4mi4h2p0sg4q2a63l6naaf0@group.calendar.google.com"
+            travail_calendar_id     = "tj4oifktmlmuc2qbmko318nmk4@group.calendar.google.com"
+            arendre_calendar_id     = "595q34j3kak6jb5nf97h90akko@group.calendar.google.com"
+            main_calendar_id        = "pielaclau@gmail.com"
 
 
 
-        credentials = self.get_credentials()
-        http = credentials.authorize(httplib2.Http())
-        service = discovery.build('calendar', 'v3', http=http)
+            credentials = self.get_credentials()
+            http = credentials.authorize(httplib2.Http())
+            service = discovery.build('calendar', 'v3', http=http)
 
-        controles_events = self.get_events_from_calendar(service, controles_calendar_id   , start_year, start_month, start_day)
-        divers_events    = self.get_events_from_calendar(service, diverslycee_calendar_id , start_year, start_month, start_day)
-        travail_events   = self.get_events_from_calendar(service, travail_calendar_id     , start_year, start_month, start_day)
-        arendre_events   = self.get_events_from_calendar(service, arendre_calendar_id     , start_year, start_month, start_day)
-        main_events      = self.get_events_from_calendar(service, main_calendar_id        , start_year, start_month, start_day)
+            controles_events = self.get_events_from_calendar(service, controles_calendar_id   , start_year, start_month, start_day)
+            divers_events    = self.get_events_from_calendar(service, diverslycee_calendar_id , start_year, start_month, start_day)
+            travail_events   = self.get_events_from_calendar(service, travail_calendar_id     , start_year, start_month, start_day)
+            arendre_events   = self.get_events_from_calendar(service, arendre_calendar_id     , start_year, start_month, start_day)
+            main_events      = self.get_events_from_calendar(service, main_calendar_id        , start_year, start_month, start_day)
 
-        return [("CONTROLES", controles_events),
-                ("ARENDRE",   arendre_events),
-                ("TRAVAIL",   travail_events),
-                ("DIVERS",    divers_events),
-                ("MAIN",      main_events)]
+            return [("CONTROLES", controles_events),
+                    ("ARENDRE",   arendre_events),
+                    ("TRAVAIL",   travail_events),
+                    ("DIVERS",    divers_events),
+                    ("MAIN",      main_events)]
+        except:
+            
+            return [("CONTROLES", []),
+                    ("ARENDRE",   []),
+                    ("TRAVAIL",   []),
+                    ("DIVERS",    []),
+                    ("MAIN",      [])]
 
     def get_credentials(self):
         """Gets valid user credentials from storage.

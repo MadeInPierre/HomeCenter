@@ -8,7 +8,9 @@ class WeatherScreen():
     def __init__(self, WindowRes):
         self.windowres = WindowRes
         self.infos_meteo = WeatherCollector()
+
         self.ScreenStatus = "RUNNING"
+
         self.sunny_icon = pygame.image.load("Images/Icones_Meteo/weather-clear-2.png").convert_alpha()
         self.sunny_cloud_icon = pygame.image.load("Images/Icones_Meteo/weather-few-clouds-2.png").convert_alpha()
         self.cloud_icon = pygame.image.load("Images/Icones_Meteo/weather-overcast-2.png").convert_alpha()
@@ -16,40 +18,88 @@ class WeatherScreen():
         self.heavy_rain_icon = pygame.image.load("Images/Icones_Meteo/weather-showers-2.png").convert_alpha()
         self.storm_icon = pygame.image.load("Images/Icones_Meteo/weather-storm-2.png").convert_alpha()
         self.snow_icon = pygame.image.load("Images/Icones_Meteo/weather-snow-2.png").convert_alpha()
+       
         self.thermometre_icon = pygame.image.load("Images/Icones_Meteo/thermometre.jpg").convert_alpha()
         self.humidite_icon = pygame.image.load("Images/Icones_Meteo/Goutte.png").convert_alpha()
-        self.WallPaper = pygame.image.load("Images/Icones_Meteo/sun_sky.jpg").convert_alpha()
         self.RainProb_icon = pygame.image.load("Images/Icones_Meteo/probapluie.jpg").convert_alpha()
+
+        self.WallPaperSun = pygame.image.load("Images/Icones_Meteo/sun_sky.jpg").convert_alpha()
+        self.WallPaperCloudandsun = pygame.image.load("Images/Icones_Meteo/cloudandsun_sky.jpg").convert_alpha()
+        self.WallPaperCloud = pygame.image.load("Images/Icones_Meteo/cloud_sky.jpg").convert_alpha()
+        self.WallPaperLightrain = pygame.image.load("Images/Icones_Meteo/lightrain_sky.jpg").convert_alpha()
+        self.WallPaperHeavyrain = pygame.image.load("Images/Icones_Meteo/heavyrain_sky.jpg").convert_alpha()
+        self.WallPaperStorm = pygame.image.load("Images/Icones_Meteo/storm_sky.jpg").convert_alpha()
+        self.WallPaperSnow = pygame.image.load("Images/Icones_Meteo/snow_sky.jpg").convert_alpha()
 
         self.FontTemperature = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
         self.FontHumidite = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
         self.FontRainProb = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
         
-        self.barre_icon = pygame.Surface((800,100)).convert_alpha()
+        self.barre_icon = pygame.Surface((113,100)).convert_alpha()
 
         self.barre_icon.fill((255,255,255,100))
+            
+        self.currentday = 0
+
+        self.DayFont = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf",30)
+
 
     def Update(self, InputEvents):
-        pass
-
+        for event in InputEvents:
+            if "TOUCH" in event:
+                    mousepos = Helpers.get_message_x_y(event)
+                    if Helpers.is_in_rect(mousepos, [1.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 0
+                  
+                    if Helpers.is_in_rect(mousepos, [115.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 1
+                   
+                    if Helpers.is_in_rect(mousepos, [229.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 2
+                   
+                    if Helpers.is_in_rect(mousepos, [343.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 3
+                   
+                    if Helpers.is_in_rect(mousepos, [457.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 4
+                   
+                    if Helpers.is_in_rect(mousepos, [571.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 5
+                   
+                    if Helpers.is_in_rect(mousepos, [685.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
+                       self.currentday = 6
+                   
     def Draw(self, gameDisplay):
-        
-        gameDisplay.blit(self.WallPaper,(0,0))
 
-        if self.infos_meteo.CurrentWeather.Icon == "sun":
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "sun":
+             gameDisplay.blit(self.WallPaperSun,(0,0))
              gameDisplay.blit(self.sunny_icon, (20, 20))
-        if self.infos_meteo.CurrentWeather.Icon == "sun_cloud":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "sun_cloud":
+            gameDisplay.blit(self.WallPaperCloudandsun,(0,0))
             gameDisplay.blit(self.sunny_cloud_icon, (20, 20))
-        if self.infos_meteo.CurrentWeather.Icon == "cloud":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "cloud":
+            gameDisplay.blit(self.WallPaperCloud,(0,0))
             gameDisplay.blit(self.cloud_icon, (20, 20))
-        if self.infos_meteo.CurrentWeather.Icon == "light_rain":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "light_rain":
+            gameDisplay.blit(self.WallPaperLightrain,(0,0))
             gameDisplay.blit(self.light_rain_icon, (20,20))
-        if self.infos_meteo.CurrentWeather.Icon == "heavy_rain":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "heavy_rain":
+            gameDisplay.blit(self.WallPaperHeavyrain,(0,0))
             gameDisplay.blit(self.heavy_rain_icon, (20, 20))
-        if self.infos_meteo.CurrentWeather.Icon == "storm":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "storm":
+            gameDisplay.blit(self.WallPaperStorm,(0,0))
             gameDisplay.blit(self.storm_icon, (20, 20))
-        if self.infos_meteo.CurrentWeather.Icon == "snow":
+
+        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "snow":
+            gameDisplay.blit(self.WallPaperSnow,(0,0))
             gameDisplay.blit(self.snow_icon, (20, 20))
+
+
 
         gameDisplay.blit(self.thermometre_icon, (220, 20))
 
@@ -58,16 +108,45 @@ class WeatherScreen():
         gameDisplay.blit(self.humidite_icon, (620, 20))
 
 
-        self.Temperature = self.FontTemperature.render(str(self.infos_meteo.CurrentWeather.Temperature)+" C", True, (255,255,255))
+        self.Temperature = self.FontTemperature.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (255,255,255))
         gameDisplay.blit(self.Temperature, (220, 250))
 
-        self.Humidite = self.FontHumidite.render(str(self.infos_meteo.CurrentWeather.Humidity)+"%", True, (255,255,255))
+        self.Humidite = self.FontHumidite.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
         gameDisplay.blit(self.Humidite, (620, 250))
 
-        self.RainProb = self.FontRainProb.render(str(self.infos_meteo.CurrentWeather.RainProb)+"%", True, (255,255,255))
+        self.RainProb = self.FontRainProb.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
         gameDisplay.blit(self.RainProb, (420, 250))
 
-        gameDisplay.blit(self.barre_icon, (0,380))
+        gameDisplay.blit(self.barre_icon, (1.5,380))
+        gameDisplay.blit(self.barre_icon, (115.5,380))
+        gameDisplay.blit(self.barre_icon, (229.5,380))
+        gameDisplay.blit(self.barre_icon, (343.5,380))
+        gameDisplay.blit(self.barre_icon, (457.5,380))
+        gameDisplay.blit(self.barre_icon, (571.5,380))
+        gameDisplay.blit(self.barre_icon, (685.5,380))
+
+        self.DayoneText = self.DayFont.render("Day 1", True, (0,0,0))
+        gameDisplay.blit(self.DayoneText, (1.5+30,380+30))
+
+        self.DaytwoText = self.DayFont.render("Day 2", True, (0,0,0))
+        gameDisplay.blit(self.DaytwoText, (115.5+30,380+30))
+
+        self.DaythreeText = self.DayFont.render("Day 3", True, (0,0,0))
+        gameDisplay.blit(self.DaythreeText, (229.5+30,380+30))
+
+        self.DayfourText = self.DayFont.render("Day 4", True, (0,0,0))
+        gameDisplay.blit(self.DayfourText, (343.5+30,380+30))
+
+        self.DayfiveText = self.DayFont.render("Day 5", True, (0,0,0))
+        gameDisplay.blit(self.DayfiveText, (457.5+30,380+30))
+
+        self.DaysixText = self.DayFont.render("Day 6", True, (0,0,0))
+        gameDisplay.blit(self.DaysixText, (571.5+30,380+30))
+
+        self.DaysevenText = self.DayFont.render("Day 7", True, (0,0,0))
+        gameDisplay.blit(self.DaysevenText, (685.5+30,380+30))
+
+
 
 
 

@@ -38,7 +38,7 @@ class TestScreen():
             if "TOUCH" in event:
                 mousepos = Helpers.get_message_x_y(event) # recupere la position ou la personne a clique
                 if Helpers.is_in_rect(mousepos, [50, 290, 25, 130]):
-                    self.ecranaafficher = 3 # (exemple pour Julien)
+                    self.a
                     pass # fait ce que tu veux :)
 
 
