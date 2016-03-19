@@ -1,9 +1,8 @@
-import pygame
+﻿import pygame
 import math
 # import classe pour recuperer les infos de la meteo
 from InputManager import *
 from AnimationManager import *
-from GifManager import *
 from Helpers import *
 
 

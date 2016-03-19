@@ -48,7 +48,6 @@
     <Compile Include="CalendarScreen.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GifManager.py" />
     <Compile Include="Helpers.py" />
     <Compile Include="HomeScreen.py" />
     <Compile Include="InputManager.py" />
