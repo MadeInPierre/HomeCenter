@@ -103,8 +103,6 @@ while gameRunning:
             fadingScreen.Quit()
             fadingScreen = Screen(WindowRes)
 
-        Input.EndUpdate()
-
 
         
         '''
@@ -123,6 +121,17 @@ while gameRunning:
         #    transp = int(fadingScreen.ScreenStatus.split()[1])
         #    Helpers.blit_alpha(gameDisplay, app_surface, (0, 0), transp)
         #else: gameDisplay.blit(app_surface, (0, 0))
+        if str(currentScreen) is not "HOMESCREEN":
+            s = pygame.Surface((30, 30)).convert_alpha()
+            s.fill((255, 255, 255, 150))
+            gameDisplay.blit(s, (0, 0))
+
+            for event in Input.events:
+                if Helpers.is_in_rect(pygame.mouse.get_pos(), [0, 0, 30, 30]):
+                    currentScreen = HomeScreen(WindowRes)
+
+
+        Input.EndUpdate()
 
         '''
         Envoie les dessins a pygame qui les affiche.
