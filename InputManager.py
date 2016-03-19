@@ -42,6 +42,8 @@ class InputManager():
 
                 if event.key == pygame.K_ESCAPE:
                     self.events.append("QUIT")
+                if event.key == pygame.K_h:
+                    self.events.append("HOME")
 
                 if event.key == pygame.K_LEFT:
                     self.events.append("LEFT")

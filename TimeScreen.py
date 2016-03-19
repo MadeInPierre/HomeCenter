@@ -18,6 +18,8 @@ class TimeScreen():
         Cette variable enregistre lequel des quatre ecrans est actif. On met 1 (soit le premier) par defaut/choix.
         '''
         self.ecran = 1
+
+        self.LeTempsDuChrono = 0.0
         
     def timeScreen_init(self):
         '''
@@ -53,25 +55,33 @@ class TimeScreen():
         self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
 
     def chronoScreen_init(self):
+        self.chrono_start = 0
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold=False)
+        self.PostTitleFont3 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 60, bold=False)
         self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
         
         self.chrono_image = pygame.image.load("Images/chrono.png") # charger une image
+        
+
+        self.bouton_start_image = pygame.image.load("Images/bouton_start.png")
+
 
     def alarmesScreen_init(self):
         pass
 
 
     #########################################################################################################################
-    ##############################################  PARTIE UPDATE  ##########################################################
+    ##############################################  PARTIE UPDATE
+    ##############################################  ##########################################################
     #########################################################################################################################
     def Update(self, InputEvents):
-        print self.ecran
+        
         for event in InputEvents:
             if "TOUCH" in event:
                 mousepos = Helpers.get_message_x_y(event) # recupere la position ou la personne a clique
-                if Helpers.is_in_rect(mousepos, [700,  30, 100, 100]):
+                if Helpers.is_in_rect(mousepos, [700,  30, 100, 100]): #Coordonne x du coin en haut a gauche, coordonnee y, longueur, hauteur
+
                     self.ecran = 1
                 if Helpers.is_in_rect(mousepos, [700, 130, 100, 100]):
                     self.ecran = 2
@@ -97,16 +107,30 @@ class TimeScreen():
         pass
     
     def minuteurScreen_update(self, InputEvents):
-        # REMARQUE le jamais oublier les "self." des qu'on utilise des variables ou des fonctions.
+        # REMARQUE le jamais oublier les "self." des qu'on utilise des
+        # variables ou des fonctions.
         self.LeTempsDuChrono = self.chrono.elapsed_time() # on demande au chrono combien de temps s'est ecoule
-                                                          # et on l'enregistre dans LeTempsDuChrono
+                                                          # et on l'enregistre
+                                                                                                                   # dans
+                                                                                                                   # LeTempsDuChrono
         self.TempsRestant = 30 - self.LeTempsDuChrono # On calcule, pour le timer, combien de temps il reste si on avait 30
                                                       # secondes.
 
     def chronoScreen_update(self, InputEvents):
-        # REMARQUE le jamais oublier les "self." des qu'on utilise des variables ou des fonctions.
-        self.LeTempsDuChrono = self.chrono.elapsed_time() 
+        # REMARQUE le jamais oublier les "self." des qu'on utilise des
+        # variables ou des fonctions.
+        
+        for event in InputEvents:
+            if "TOUCH" in event:
+               mousepos = Helpers.get_message_x_y(event) # recupere la position ou la personne a clique
+               if Helpers.is_in_rect(mousepos, [250, 300, 230, 79]):
+                   self.chrono_start = 2
 
+
+        if self.chrono_start == 2 :
+           self.LeTempsDuChrono = self.chrono.elapsed_time()
+
+               
     
 
 
@@ -114,11 +138,15 @@ class TimeScreen():
     #########################################################################################################################
     ################################################  PARTIE DRAW  ##########################################################
     #########################################################################################################################
-
     def Draw(self, gameDisplay):
-        # on affiche le fond d'ecran. On le met dans le Draw principal puisqu'il s'affiche peu importe l'ecran
-        Helpers.blit_alpha(gameDisplay, self.bigben_image, (0, -20), 200) # afficher une image avec un peu de transparence 
-                                                                          # pour qu'elle soit plus foncee
+        # on affiche le fond d'ecran.  On le met dans le Draw principal
+        # puisqu'il s'affiche peu importe l'ecran
+        Helpers.blit_alpha(gameDisplay, self.bigben_image, (0, -20), 200) # afficher une image avec un peu de transparence
+                                                                          # pour
+                                                                                                                                                   # qu'elle
+                                                                                                                                                   # soit
+                                                                                                                                                   # plus
+                                                                                                                                                   # foncee
         gameDisplay.blit(self.barre_laterale, (700, 0))
 
         if self.ecran == 1:
@@ -130,7 +158,8 @@ class TimeScreen():
         if self.ecran == 4:
             self.minuteurScreen_draw(gameDisplay)
 
-        # position de la barre laterale. On le met dans le Draw principal parce que on l'affiche dans tous les ecrans de toutes
+        # position de la barre laterale.  On le met dans le Draw principal
+        # parce que on l'affiche dans tous les ecrans de toutes
         # facons, pas besoin de le repeter 4 fois dans les sous-draws.
         self.AlarmeText = self.PostTitleFont.render("Horloges", True, (0, 0, 0))
         gameDisplay.blit(self.AlarmeText, (750 - self.AlarmeText.get_rect().width / 2, 80))
@@ -160,22 +189,27 @@ class TimeScreen():
 
     def minuteurScreen_draw(self, gameDisplay):
         self.temps_restant_text = self.PostTitleFont2.render(str(self.TempsRestant), True, (0, 0, 0))
-                                    # on met des guillemets quand on veut mettre manuellement du texte,
-                                    # et on  n'en met pas quand le texte vient d'une variable, comme ici
+                                    # on met des guillemets quand on veut
+                                    # mettre manuellement du texte,
+                                    # et on n'en met pas quand le texte vient
+                                    # d'une variable, comme ici
         gameDisplay.blit(self.temps_restant_text, (200, 200)) # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
 
 
     def chronoScreen_draw(self, gameDisplay):
-        gameDisplay.blit(self.chrono_image, (300, 200))
+        gameDisplay.blit(self.chrono_image, (275, 50))
 
         self.temps_text = self.PostTitleFont2.render(str(self.LeTempsDuChrono), True, (0, 0, 0))
-                                    # on met des guillemets quand on veut mettre manuellement du texte,
-                                    # et on  n'en met pas quand le texte vient d'une variable, comme ici
+                                    # on met des guillemets quand on veut
+                                    # mettre manuellement du texte,
+                                    # et on n'en met pas quand le texte vient
+                                    # d'une variable, comme ici
         gameDisplay.blit(self.temps_text, (200, 200)) # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
 
-
-
-
+        gameDisplay.blit(self.bouton_start_image, (250, 300))
+        
+        self.start_text = self.PostTitleFont3.render("START", True, (0, 0, 0))
+        gameDisplay.blit(self.start_text, (270, 301))
 
     def Quit(self):
         pass

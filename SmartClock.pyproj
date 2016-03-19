@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationManager.py" />
+    <Compile Include="CalendarCollector.py" />
     <Compile Include="CalendarScreen.py">
       <SubType>Code</SubType>
     </Compile>

@@ -24,23 +24,44 @@ class HomeScreen():
         '''
         self.bg_img = pygame.image.load("Images/landscape1.png").convert_alpha()
         self.horizontal_line = pygame.image.load("Images/horizontal_separator.png").convert_alpha()
-
-        '''
-        On charge les icones d'applications
-        '''
-        self.weatherapp_icon = pygame.image.load("Images/Icones_Apps/WeatherApp.png").convert_alpha()
         
         '''
         On charge les polices qui permettent d'afficher du texte
         '''
-        self.TimeFont      = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 180)
-        self.SecondsFont   = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 80 )
-        self.AppsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
-        self.DateFont      = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
+        self.TimeFont        = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 180)
+        self.SecondsFont     = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 80 )
+        self.AppsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
+        self.DateFont        = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
+        self.DescriptionFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
         
         self.WindowRes = windowres
         self.ScreenStatus = "FADING_IN"
+        self.fade_direction = "" # A ENLEVER, GARDER SELEMENT TRANSITIONDESTINATION
+        self.TransitionDestination = ""
         self.fade_origin = fadeorigin
+
+        '''
+        On charge les icones des applications pour les dessiner dans le panneau correspondant.
+        '''
+        self.app_icons = [pygame.image.load("Images/Icones_Apps/WeatherApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/CalendarApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/TimeApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/NewsApp.png").convert_alpha(),
+
+                          pygame.image.load("Images/Icones_Apps/CalculatorApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/StocksApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/SnakeApp.png").convert_alpha(),
+                          pygame.image.load("Images/Icones_Apps/AutomationApp.png").convert_alpha()]
+        self.app_descriptions = ["Meteo",
+                                 "Calendrier",
+                                 "Horloges",
+                                 "Actualites",
+
+                                 "Calculatrice",
+                                 "Bourse",
+                                 "Snake",
+                                 "Domotique",]
+
 
         '''
         On cree un chronometre qui nous permet de faire avancer des animations
@@ -94,7 +115,7 @@ class HomeScreen():
                 if self.ancrage < 2                    : self.ancrage = 0
 
         '''-------------------------------------------------------------------------------------------------------------
-        ----------------------------------------------PARTIE ANIMATIONS-------------------------------------------------
+        ----------------------------------------------PARTIE TRANSITIONS -----------------------------------------------
         -------------------------------------------------------------------------------------------------------------'''
         '''
         Si l'utilisateur a fait un swype (et uniquement pendant qu'il est sur le panel ecran d'acceuil),
@@ -110,6 +131,35 @@ class HomeScreen():
             self.fade_direction = "RIGHT"
             self.animation.reset()
 
+        for event in InputEvents:
+            if "TOUCH" in event:
+                for line in range(0, 2):
+                    for app in range(0, 4):
+                        if Helpers.is_in_rect(pygame.mouse.get_pos(), [50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage, 140, 140]):
+                            app_name = self.app_descriptions[app + line*4]
+                            print app_name
+                            self.ScreenStatus = "FADING_OUT"
+                            self.animation.reset()
+
+                            if app_name is "Meteo":
+                                self.TransitionDestination = "WEATHERSCREEN"
+                            if app_name is "Calendrier":
+                                self.TransitionDestination = "CALENDARSCREEN"
+                            if app_name is "Horloges":
+                                self.TransitionDestination = "TIMESCREEN"
+                            if app_name is "Actualites":
+                                self.TransitionDestination = "NEWSSCREEN"
+
+                            if app_name is "Calculatrice":
+                                self.TransitionDestination = "CALCULATORSCREEN"
+                            if app_name is "Bourse":
+                                self.TransitionDestination = "STOCKSSCREEN"
+                            if app_name is "Snake":
+                                self.TransitionDestination = "SNAKESCREEN"
+                            if app_name is "Domotique":
+                                self.TransitionDestination = "AUTOMATIONSCREEN"
+
+                
 
         if self.ScreenStatus is "FADING_IN":
             self.fade_in()
@@ -139,7 +189,7 @@ class HomeScreen():
         if self.ScreenStatus == "RUNNING":
             Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  affine)
         if "FADING" in self.ScreenStatus:
-            Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  self.bg_transp)
+            Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0),  affine)
 
 
         '''-------------------------------------------------------------------------------------------------------------
@@ -211,14 +261,18 @@ class HomeScreen():
         '''
         TEMPORAIRE On dessine une petite description sympa
         '''
-        AppsTitleSurface    = self.DateFont.render("No apps here yet. Download them in the store !", True, (255, 255, 255))
-        gameDisplay.blit(AppsTitleSurface, (self.WindowRes[0] / 2 - AppsTitleSurface.get_rect().width / 2,
-                                            230 + self.ancrage - self.WindowRes[1]))
+        #AppsTitleSurface    = self.DateFont.render("No apps here yet. Download them in the store !", True, (255, 255, 255))
+        #gameDisplay.blit(AppsTitleSurface, (self.WindowRes[0] / 2 - AppsTitleSurface.get_rect().width / 2, 230 + self.ancrage - self.WindowRes[1]))
         
         '''
         On dessine les icones d'applications et les descriptions.
         '''
-        #gameDisplay.blit(self.weatherapp_icon, (20, 100 - 450 + self.ancrage))
+        for line in range(0, 2):
+            for app in range(0, 4):
+                gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage))
+
+                description = self.DescriptionFont.render(self.app_descriptions[app + line*4], True, (255, 255, 255))
+                gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 180 - 450 + self.ancrage))
 
 
 
@@ -265,7 +319,11 @@ class HomeScreen():
         Envoie un texto quand l'ecran a fini de disparaitre, avec la destination (le nouvel ecran a faire apparaitre).
         '''
         if animTime > 1.5:
-            self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("HOMESCREEN", self.fade_direction) + "_AND_DEAD"
+            if self.fade_direction is not "":
+                self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("HOMESCREEN", self.fade_direction) + "_AND_DEAD"
+            else:
+                self.ScreenStatus = "GOTO_" + self.TransitionDestination + "_AND_DEAD"
+                print "sent goto " + self.TransitionDestination
 
 
     def Reset(self):

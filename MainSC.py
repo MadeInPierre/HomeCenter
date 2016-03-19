@@ -45,7 +45,7 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = CalendarScreen(WindowRes)
+currentScreen = StartScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 gameRunning = True
@@ -56,6 +56,8 @@ while gameRunning:
         Input.Update(pygame.event.get())
         if "QUIT" in Input.events:
             gameRunning = False
+        if "HOME" in Input.events:
+            currentScreen = HomeScreen(WindowRes)
         '''
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).
@@ -75,14 +77,19 @@ while gameRunning:
         status = fadingScreen.ScreenStatus
         if status is not "RUNNING":
             if "GOTO" in status:
-                if "GOTO_HOMESCREEN" in status:
+                if "GOTO_HOMESCREEN"  in status:
                     currentScreen = HomeScreen(WindowRes, str(fadingScreen))
                 if "GOTO_STARTSCREEN" in status:
                     currentScreen = StartScreen(WindowRes)
-                if "GOTO_NEWSSCREEN" in status:
+                if "GOTO_NEWSSCREEN"  in status:
                     currentScreen = NewsScreen(WindowRes)
-                if "GOTO_TIMESCREEN" in status:
-                    currentScreen = TimeScreenOld(WindowRes)
+                if "GOTO_TIMESCREEN"  in status:
+                    currentScreen = TimeScreen(WindowRes)
+                if "GOTO_CALENDARSCREEN" in status:
+                    currentScreen = CalendarScreen(WindowRes)
+                if "GOTO_WEATHERSCREEN" in status:
+                    currentScreen = WeatherScreen(WindowRes)
+                
 
                 if "DEAD" in fadingScreen.ScreenStatus:
                     print "killing " + str(fadingScreen)
@@ -99,7 +106,7 @@ while gameRunning:
         Input.EndUpdate()
 
 
-
+        
         '''
         Render Zone : dessine tous les ecrans actifs.
         '''
@@ -107,7 +114,15 @@ while gameRunning:
 
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
-        currentScreen.Draw(gameDisplay)
+
+        #app_surface = pygame.Surface(WindowRes).convert_alpha()
+        #app_surface.fill((0, 0, 0, 0))
+        currentScreen.Draw(gameDisplay) # app_surface
+
+        #if "TRANSP" in fadingScreen.ScreenStatus:
+        #    transp = int(fadingScreen.ScreenStatus.split()[1])
+        #    Helpers.blit_alpha(gameDisplay, app_surface, (0, 0), transp)
+        #else: gameDisplay.blit(app_surface, (0, 0))
 
         '''
         Envoie les dessins a pygame qui les affiche.

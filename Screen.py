@@ -1,11 +1,10 @@
-class Screen():
+﻿class Screen():
 
-	def __init__(self, windowres, fade_direction=""):
+	def __init__(self, windowres):
 		self.WindowRes = windowres
 		self.ScreenStatus = "NONE"
-		self.fade_direction = fade_direction
 
-	def Update(self, LeapEvents):
+	def Update(self, InputEvents):
 		pass
 
 	def Draw(self, gameDisplay):

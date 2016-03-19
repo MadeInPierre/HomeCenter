@@ -102,7 +102,16 @@ class CalendarScreen():
                 On scanne tous les evenements pour voir s'il y en a qui correspondent a la case actuelle.
                 '''
                 cell_year  = str(self.selected_year)
-                cell_month = str(self.selected_month + 1)
+
+                #on trouve le bon mois correspondant a la case selectionnee
+                if is_from_actual_month:
+                    cell_month = str(self.selected_month + 1)
+                else: 
+                    if day_value > 20:
+                        cell_month = str(self.selected_month)
+                    else: 
+                        cell_month = str(self.selected_month + 2)
+
                 cell_day   = str(day_value)
 
                 for i in range(0, 5):
@@ -190,6 +199,35 @@ class CalendarScreen():
         dayPannelTitleSurface = self.DayPannelTitleFont.render(str(self.DayNames[self.selected_day[1]]) + " " + str(day) + " " + self.MonthNames[self.selected_month], True, (255, 255, 255))
         gameDisplay.blit(dayPannelTitleSurface, (680 - dayPannelTitleSurface.get_rect().width / 2, 66))
 
+        '''
+        AFFICHAGE DES DETAILS DES EVENEMENTS (l'interieur du panneau journalier)
+        '''
+        y_offset = 0
+        for i in range(0, 5):
+            for event in self.calendar_events[i][1]:
+                '''
+                on separe lannee, mois et jour de l'evenement pour le comparer ensuite
+                '''
+                event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-") 
+                day, z = self.get_day_number_at_pos(self.selected_day[0], self.selected_day[1]) # z inutile
+
+                '''
+                Si l'evenement a bien lieu au jour de la case actuelle, on dessine le titre puis la description
+                de l'evenement.
+                '''
+                if  (int(event_date_parsed[0]) == int(self.selected_year)  ) and \
+                    (int(event_date_parsed[1]) == int(self.selected_month + 1) ) and \
+                    (int(event_date_parsed[2]) == int(day)):
+                    if i == 0: color = (255,   0,   0)
+                    if i == 1: color = (255, 145,   0)
+                    if i == 2: color = (  0,  98, 255)
+                    if i == 3: color = (115, 255,   0)
+                    if i == 4: color = (255,   0, 255)
+                    title_offset = self.render_text_in_zone(gameDisplay, event[0], self.EventsTitleFont, color, (600, 110 + y_offset), 760)
+                    y_offset += title_offset + 20
+
+
+
     def get_day_number_at_pos(self, week, day):
         day_value = self.actual_month[week][day]
 
@@ -209,6 +247,60 @@ class CalendarScreen():
         ligne = pygame.Surface((width, height))
         ligne.fill(color)
         gameDisplay.blit(ligne, (pX, pY))
+
+    def render_text_in_zone(self, gameDisplay, text, font, color, startpos, horizontal_size_limit):
+        s = font.render(text, True, color)
+        h_size = horizontal_size_limit - startpos[0]
+        vertical_size = 0
+        '''
+        Si le texte est trop long, on le coupe jusqu'a ce qu'il reste dans l'espace delimite
+        '''
+        if s.get_rect().width > h_size:
+            splitted_text = text.split()
+            words_imgs = []
+            final_lines = []
+
+            cropped_size = 0
+            done = False
+            for i in range(len(splitted_text) - 1, -1, -1): # on scanne toues les mots en partant du dernier
+                if not done:
+                    word_image = font.render(splitted_text[i], True, color)
+                    words_imgs.append(word_image)
+                
+                    cropped_size += word_image.get_rect().width + 4 # on ajoute 2 pour compter l'espace qui vient juste apres
+
+                    if s.get_rect().width - cropped_size < h_size:
+                        '''
+                        Render et ajouter la premiere ligne qui a ete coupee
+                        '''
+                        first_line_text = ""
+                        for word in splitted_text[0:i]:
+                            first_line_text += " " + word
+                        first_line = font.render(first_line_text, True, color)
+                        final_lines.append(first_line)
+                        
+                        '''
+                        Render et ajouter la deuxieme (le bout de la premiere)
+                        '''
+                        line_text = ""
+                        for word in range(i, len(splitted_text)):
+                            line_text += " " + splitted_text[word]
+                    
+                        final_line = font.render(line_text, True, color)
+                        final_lines.append(final_line)
+
+                        
+                        done = True
+
+            for linenumber in range(0, len(final_lines)):
+                gameDisplay.blit(final_lines[linenumber], (startpos[0], startpos[1] + 15 * linenumber))
+            vertical_size = 15 * len(final_lines)
+            
+        else:
+            gameDisplay.blit(s, startpos)
+            vertical_size = s.get_rect().height
+        return vertical_size # redonne la taille verticale qui a ete utilisee pour afficher ce texte.
+
 
     def reset_calendars(self):
         prev_y = self.selected_year
