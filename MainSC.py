@@ -39,6 +39,7 @@ Initialisation de l'ecouteur d'entrees : prepare la classe a capturer les entree
 (clavier, souris, leap motion, evenements pygame)
 '''
 Input = InputManager(use_leapmotion = False, mouse_visible = True)
+home_icon = pygame.image.load("Images/home.png")
 
 '''
 Creation de deux slots qui contiendront les ecrans a afficher.
@@ -122,9 +123,7 @@ while gameRunning:
         #    Helpers.blit_alpha(gameDisplay, app_surface, (0, 0), transp)
         #else: gameDisplay.blit(app_surface, (0, 0))
         if str(currentScreen) is not "HOMESCREEN":
-            s = pygame.Surface((30, 30)).convert_alpha()
-            s.fill((255, 255, 255, 150))
-            gameDisplay.blit(s, (0, 0))
+            gameDisplay.blit(home_icon, (0, 0))
 
             for event in Input.events:
                 if Helpers.is_in_rect(pygame.mouse.get_pos(), [0, 0, 30, 30]):
