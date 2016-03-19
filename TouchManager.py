@@ -1,4 +1,4 @@
-import math, pygame
+﻿import math, pygame
 
 class TouchGesturesManager():
 
@@ -43,7 +43,7 @@ class TouchGesturesManager():
 
 		if self.mouse_pressed == True:
 			frame_movement = [self.previous_mousepos[0] - mousepos[0], self.previous_mousepos[1] - mousepos[1]]
-			if not (frame_movement[0] == 0 and frame_movement[1] == 0):
+			if not (frame_movement[0] == 0 and frame_movement[1] == 0) and (frame_movement[0] < 100 and frame_movement[1] < 100) and (frame_movement[0] > -100 and frame_movement[1] > -100):
 				frame_events.append("SCROLL " + str(frame_movement[0]) + " " + str(frame_movement[1]))
 
 
