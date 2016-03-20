@@ -30,7 +30,7 @@ clock = pygame.time.Clock()
 Initialisation de la fenetre : definit la resolution, mode plein ecran, et titre du logiciel.
 '''
 WindowRes = (800, 480)
-gameDisplay = pygame.display.set_mode(WindowRes)#, pygame.FULLSCREEN)
+gameDisplay = pygame.display.set_mode(WindowRes, pygame.FULLSCREEN)
 pygame.display.set_caption('HomeCenter')
 
 '''

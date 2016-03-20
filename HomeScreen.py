@@ -269,10 +269,10 @@ class HomeScreen():
         '''
         for line in range(0, 2):
             for app in range(0, 4):
-                gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage))
+                gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 50  + line * 192 - 450 + self.ancrage))
 
                 description = self.DescriptionFont.render(self.app_descriptions[app + line*4], True, (255, 255, 255))
-                gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 180 - 450 + self.ancrage))
+                gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 192 - 450 + self.ancrage))
 
 
 
