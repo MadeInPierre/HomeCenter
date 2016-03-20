@@ -62,6 +62,18 @@ class CalendarScreen():
                     for day in range(0, 7):
                         if Helpers.is_in_rect(mousepos, [30 + 530/7 * day, 60 + 390/5 * week, 530 / 7, 390 / 5]):
                             self.selected_day = [week, day]
+            if "LEFT" in event:
+                self.selected_month += 1
+                if self.selected_month > 11:
+                    self.selected_month = 0
+                    self.selected_year += 1
+                self.reset_calendars()
+            if "RIGHT" in event:
+                self.selected_month -= 1
+                if self.selected_month < 0:
+                    self.selected_month = 11
+                    self.selected_year -= 1
+                self.reset_calendars()
 
     def Draw(self, gameDisplay):
         gameDisplay.fill((30, 30, 30)) # TEMPORAIRE un p'tit fond plus joli
