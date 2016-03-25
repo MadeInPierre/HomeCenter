@@ -9,7 +9,6 @@ from Helpers import *
 class TestScreen():
 
     def __init__(self, windowres):
-        self.rain = GifManager("Images/rain2.gif")
         # Charger une image
         self.sunny_icon = pygame.image.load("Images/weather_sunny_transparent.png").convert_alpha()
         # position image (seulement pour animation)
@@ -43,19 +42,18 @@ class TestScreen():
 
 
         if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1:
-            self.Aujourdhui_color=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1)))
+           self.Aujourdhui_color=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1)))
 
 
         if self.chrono.elapsed_time() > 1 and self.chrono.elapsed_time() < 3:
-            self.sunny_positionX=int(80 + 500 / (1 + math.exp(-(self.chrono.elapsed_time() - 2) / 0.2)))
+           self.sunny_positionX=int(80 + 500 / (1 + math.exp(-(self.chrono.elapsed_time() - 2) / 0.2)))
         if self.chrono.elapsed_time() > 1 and self.chrono.elapsed_time() < 3:
-            self.sunny_positionY=int(100 + 100 / (1 + math.exp(-(self.chrono.elapsed_time() - 2) / 0.2)))
+           self.sunny_positionY=int(100 + 100 / (1 + math.exp(-(self.chrono.elapsed_time() - 2) / 0.2)))
 
 
 
 
     def Draw(self, gameDisplay):
-        self.rain.render(gameDisplay, (0, 0))
 
 # Afficher une image (ici soleil)
 

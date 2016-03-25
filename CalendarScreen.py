@@ -12,6 +12,9 @@ class CalendarScreen():
         self.DaysTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 15)
         self.EventsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 14)
         self.DayPannelTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 16)
+
+        self.bg_img = pygame.image.load("Images/calendar2.jpg")
+
         self.now = datetime.datetime.now()
         self.arrow = SwipeArrow(40)
 
@@ -76,7 +79,7 @@ class CalendarScreen():
                 self.reset_calendars()
 
     def Draw(self, gameDisplay):
-        gameDisplay.fill((30, 30, 30)) # TEMPORAIRE un p'tit fond plus joli
+        Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0), 120)
 
         self.monthTitleSurface = self.MonthsTitleFont.render(self.MonthNames[self.selected_month] + " " + str(self.selected_year), True, (255, 255, 255))
         gameDisplay.blit(self.monthTitleSurface, (30 + 550/2 - self.monthTitleSurface.get_rect().width / 2, 6))
@@ -131,7 +134,7 @@ class CalendarScreen():
                         '''
                         on separe lannee, mois et jour de l'evenement pour le comparer ensuite
                         '''
-                        event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-") 
+                        event_date_parsed = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
 
                         '''
                         Si l'evenement a bien lieu au jour de la case actuelle, on dessine pastille de couleur et position correspondantes a 
@@ -184,6 +187,14 @@ class CalendarScreen():
         self.draw_line(gameDisplay, 30 + 6 * 530/7, 60         , 1  , 390, (255, 255, 255))
         self.draw_line(gameDisplay, 30 + 7 * 530/7, 60         , 1  , 390, (255, 255, 255))
 
+        s = pygame.Surface((530, 390)).convert_alpha()
+        s.fill((255, 255, 255, 35))
+        gameDisplay.blit(s, (30, 60))
+
+        s = pygame.Surface((180, 390)).convert_alpha()
+        s.fill((255, 255, 255, 35))
+        gameDisplay.blit(s, (590, 60))
+
         '''
         On dessine les titres des colonnes du panneau mensuel (lundi, mardi...)
         '''
@@ -220,7 +231,7 @@ class CalendarScreen():
                 '''
                 on separe lannee, mois et jour de l'evenement pour le comparer ensuite
                 '''
-                event_date_parsed = unicodedata.normalize('NFKD', event[1]).encode('ascii','ignore').split("-") 
+                event_date_parsed = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
                 day, z = self.get_day_number_at_pos(self.selected_day[0], self.selected_day[1]) # z inutile
 
                 '''

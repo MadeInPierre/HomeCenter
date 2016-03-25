@@ -51,7 +51,7 @@ class Helpers():
         return rot_image
 
     @staticmethod
-    def blit_alpha(gameDisplay, image, position, opacity):
+    def blit_alpha(gameDisplay, image, position, opacity=255):
         '''
         Fonction qui permet de changer l'opacite des images (par exemple, rendre un texte plus ou moins visible
         pour des animations)

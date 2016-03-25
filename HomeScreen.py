@@ -71,6 +71,7 @@ class HomeScreen():
         self.time_color = 0
         self.date_color = 0
         self.bg_transp = 20.0
+        self.widget_opacity = 0
         
         '''
         Variables pour gerer le swipe entre ecran d'acceuil et menu d'applications
@@ -241,7 +242,7 @@ class HomeScreen():
         gameDisplay.blit(self.horizontal_line, (35, self.off + self.ancrage))
 
 
-
+        self.widget_manager.Draw(gameDisplay, self.ancrage, self.widget_opacity)
 
         '''-------------------------------------------------------------------------------------------------------------
         ---------------------------------------------PANEL APPLICATIONS-------------------------------------------------
@@ -269,14 +270,14 @@ class HomeScreen():
         '''
         for line in range(0, 2):
             for app in range(0, 4):
-                gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 50  + line * 192 - 450 + self.ancrage))
+                gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage))
 
                 description = self.DescriptionFont.render(self.app_descriptions[app + line*4], True, (255, 255, 255))
-                gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 192 - 450 + self.ancrage))
+                gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 180 - 450 + self.ancrage))
 
 
 
-        self.widget_manager.Draw(gameDisplay, self.ancrage)
+        
 
 
     def fade_in(self):
@@ -299,6 +300,9 @@ class HomeScreen():
 
         if animTime > 0.75 and animTime < 1.75:
             self.date_color = 255 / (1 + math.exp(-(animTime - 1.25) / 0.1))
+
+        if animTime > 1.25 and animTime < 2.25:
+            self.widget_opacity = 255 / (1 + math.exp(-(animTime - 1.75) / 0.1))
 
         '''
         Envoie un texto qui signale au MainSC que la transition est finie, et donc qu'il peut supprimer

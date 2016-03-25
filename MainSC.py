@@ -30,7 +30,7 @@ clock = pygame.time.Clock()
 Initialisation de la fenetre : definit la resolution, mode plein ecran, et titre du logiciel.
 '''
 WindowRes = (800, 480)
-gameDisplay = pygame.display.set_mode(WindowRes, pygame.FULLSCREEN)
+gameDisplay = pygame.display.set_mode(WindowRes)#, pygame.FULLSCREEN)
 pygame.display.set_caption('HomeCenter')
 
 '''
@@ -58,7 +58,7 @@ while gameRunning:
         if "QUIT" in Input.events:
             gameRunning = False
         if "HOME" in Input.events:
-            currentScreen = HomeScreen(WindowRes)
+            currentScreen = CalendarScreen(WindowRes)
         '''
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).

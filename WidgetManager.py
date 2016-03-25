@@ -1,4 +1,4 @@
-import pygame, math
+﻿import pygame, math
 from WeatherWidget import *
 from NewsWidget import *
 from Helpers import *
@@ -24,7 +24,7 @@ class WidgetManager():
     def Update(self, InputEvents):
         for event in InputEvents:
             if "TOUCH" in event:
-                mousepos = Helpers.get_message_x_y(event)
+                mousepos = pygame.mouse.get_pos()
                 if Helpers.is_in_rect(mousepos, [50, 290, 25, 130]):
                     if self.FocusedWidgetIndex > 0:
                         self.FocusedWidgetIndex -= 1
@@ -38,12 +38,13 @@ class WidgetManager():
             widget.Update(InputEvents)
 
 
-    def Draw(self, gameDisplay, ancrage):
-        self.swipe_arrow.Draw(gameDisplay, (50, 345 + ancrage), "LEFT")
-        self.swipe_arrow.Draw(gameDisplay, (732, 345 + ancrage), "RIGHT")
+    def Draw(self, gameDisplay, ancrage, opacity):
         '''
         Dessiner le widget actif, ou les deux lorsqu'on est dans une transition
         '''
         widgetSurface = self.WidgetList[self.FocusedWidgetIndex].Draw(gameDisplay)
-        gameDisplay.blit(widgetSurface, (self.WindowRes[0] / 2 - widgetSurface.get_rect().width / 2,
-                                         290 + ancrage))
+        Helpers.blit_alpha(gameDisplay, widgetSurface, (self.WindowRes[0] / 2 - widgetSurface.get_rect().width / 2,
+                                                        290 + ancrage), opacity)
+        
+        self.swipe_arrow.Draw(gameDisplay, (50, 345 + ancrage), "LEFT")
+        self.swipe_arrow.Draw(gameDisplay, (732, 345 + ancrage), "RIGHT")
