@@ -58,7 +58,7 @@ while gameRunning:
         if "QUIT" in Input.events:
             gameRunning = False
         if "HOME" in Input.events:
-            currentScreen = CalendarScreen(WindowRes)
+            currentScreen = HomeScreen(WindowRes)
         '''
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).

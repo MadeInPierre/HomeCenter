@@ -235,9 +235,8 @@ class HomeScreen():
         De plus on la decale un petit peu en fonction de quel ecran on regarde pour constamment la cacher,
         sauf pendant qu'on scroll.
         '''
-        if self.ancrage == 0:
-            self.off = -1
-        elif self.ancrage == self.WindowRes[1]:
+        self.off = -1
+        if self.ancrage == self.WindowRes[1]:
             self.off = 0
         gameDisplay.blit(self.horizontal_line, (35, self.off + self.ancrage))
 

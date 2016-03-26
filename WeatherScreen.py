@@ -3,6 +3,7 @@ from AnimationManager import *
 from WeatherCollector import *
 from InputManager import *
 from Helpers import *
+#blabla
 
 class WeatherScreen():
     def __init__(self, WindowRes):
@@ -60,7 +61,7 @@ class WeatherScreen():
 #Barres transparentes
 
         self.barre_icon = pygame.Surface((113,100)).convert_alpha()
-        self.barre_icon.fill((255,255,255,100))
+        self.barre_icon.fill((255,255,255,150))
 
 #VARIABLES:
             
@@ -70,22 +71,30 @@ class WeatherScreen():
 #Variable qui appelle le chrono
 
         self.chrono = AnimationManager()
+        self.chrono2 = AnimationManager()
+        self.chrono1screen = AnimationManager()
 
 #Variable qui donne la transparence
 
         self.Transparence = 0
+        self.Transparence2 = 0
+        self.Transparence3 = 0
 
 #Variable qui donne la position Y (Utilisee dans des formules)
 
         self.PosY_Icone = 80
+        PosY_Temperature = 20
+        PosY_RainProb = 140
+        PosY_Humidite = 260
 
 #Variable qui correspond à l'ecran a faire apparaitre
 
         self.NewDay = 0
 
+
     def Update(self, InputEvents):
 
-#Ci-dessous: Si le clic est dans le carre delimite par les valeurs alors affiche l'ecran lie a la variable currentday
+#Ci-dessous: Si le clic est dans le carre delimite par les valeurs alors affiche l'ecran lie a la variable NewDay qui prendra ensuite la forme de currentday
         for event in InputEvents:
             if "TOUCH" in event:
                     mousepos = Helpers.get_message_x_y(event)
@@ -119,22 +128,50 @@ class WeatherScreen():
                         if Helpers.is_in_rect(mousepos, [685.5, 380, 113, 100]): 
                             self.NewDay = 6
                             self.chrono.reset()
+
+#Aniamation -> Fondu "apparaissant" du 1er écran, du currentscreen0 quand on lance l'application
+
+        if self.chrono1screen.elapsed_time() > 0 and self.chrono1screen < 1:
+            self.Transparence=int(255 / (1 + math.exp(-(self.chrono1screen.elapsed_time() - 2.5/2 ) / 0.05)))
                             
-#Animation -> Fondu "apparaissant" des ecrans
+#Animation -> Fondu "apparaissant" des ecrans. La condition avec le chrono1screen est necessaire pour ne pas engendrer un conflit entre les animations 
+#(celle que requiert le 1er ecran est differente de celle-ci)
 
-        if self.chrono.elapsed_time() > 1 and self.chrono.elapsed_time() < 3  :
-           self.currentday = self.NewDay
-           self.Transparence=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 2 ) / 0.1)))
+        if self.chrono1screen.elapsed_time() > 1:
+            if self.chrono.elapsed_time() > 1 and self.chrono.elapsed_time() < 3  :
+                self.currentday = self.NewDay
+                self.Transparence=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 2 ) / 0.1)))
 
-#Animation -> Fondu "disparaissant" des ecrans
+#Animation -> Fondu "disparaissant" des ecrans. La condition avec le chrono1screen est necessaire pour ne pas engendrer un conflit entre les animations 
+#(celle que requiert le 1er ecran est differente de celle-ci)
 
-        if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
-           self.Transparence=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+#Animation -> Fondu "apparaissant" des Icones et de leur valeur associee
+            if self.chrono.elapsed_time() > 3 and  self.chrono.elapsed_time() < 4:
+                self.Transparence2=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 6.5/2) / 0.05)))
+
+            if self.chrono.elapsed_time() > 4 and  self.chrono.elapsed_time() < 5:
+                self.Transparence3=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 8.5/2) / 0.05)))
+
+#Animation -> Fondu "disparraissant"  des Icones et de leur valeur associee
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence2=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence3=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
 
 #Varaible PosY_Icone est placee dans fonction sinusoidale pour faire "planer" textes/images
       
-        if self.chrono.elapsed_time() > 0:
-            self.PosY_Icone = 80 + 5*math.sin(2*math.pi/3*self.chrono.elapsed_time())
+        if self.chrono2.elapsed_time() > 0:
+            self.PosY_Icone = 80 + 5*math.sin(2*math.pi/3*self.chrono2.elapsed_time())
+            self.PosY_Temperature = 20 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time())
+            self.PosY_RainProb = 140 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time()) 
+            self.PosY_Humidite = 260 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time())
+
+
 #fct sinus: Amplitude*math.sin(2*math.pi/Periode*t)
 
     def Draw(self, gameDisplay):
@@ -172,27 +209,27 @@ class WeatherScreen():
 
 #Affiche les icones lies aux caracteristiques du temps
 
-        gameDisplay.blit(self.thermometre_icon, (450, 20))
-        gameDisplay.blit(self.RainProb_icon, (450, 140))
-        gameDisplay.blit(self.humidite_icon, (450, 260))
+        Helpers.blit_alpha(gameDisplay, self.thermometre_icon, (450, self.PosY_Temperature), self.Transparence2)
+        Helpers.blit_alpha(gameDisplay, self.RainProb_icon, (450, self.PosY_RainProb), self.Transparence2)
+        Helpers.blit_alpha(gameDisplay, self.humidite_icon, (450, self.PosY_Humidite), self.Transparence2)
 
 #Affiche les donnees liees a la temperature/humidite/pluie
 
         self.Temperature = self.FontTemperature.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (0,0,0,100))
-        gameDisplay.blit(self.Temperature, (601, 21))
+        Helpers.blit_alpha(gameDisplay, self.Temperature, (601, self.PosY_Temperature + 1), self.Transparence3)
         self.Temperature = self.FontTemperature.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (255,255,255))
-        gameDisplay.blit(self.Temperature, (600, 20))
+        Helpers.blit_alpha(gameDisplay, self.Temperature, (600, self.PosY_Temperature), self.Transparence3)
         
 
         self.Humidite = self.FontHumidite.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (0,0,0,100))
-        gameDisplay.blit(self.Humidite, (601, 141))
+        Helpers.blit_alpha(gameDisplay, self.Humidite, (601, self.PosY_Humidite + 1), self.Transparence3)
         self.Humidite = self.FontHumidite.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
-        gameDisplay.blit(self.Humidite, (600, 140))
+        Helpers.blit_alpha(gameDisplay, self.Humidite, (600, self.PosY_Humidite), self.Transparence3)
 
         self.RainProb = self.FontRainProb.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
-        gameDisplay.blit(self.RainProb, (601, 261))
+        Helpers.blit_alpha(gameDisplay, self.RainProb, (601, self.PosY_RainProb + 1), self.Transparence3)
         self.RainProb = self.FontRainProb.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
-        gameDisplay.blit(self.RainProb, (600, 260))
+        Helpers.blit_alpha(gameDisplay, self.RainProb, (600, self.PosY_RainProb), self.Transparence3)
 
 #Definie les cases de la barre du bas
 
@@ -353,8 +390,11 @@ class WeatherScreen():
 
 #Affiche la date
 
+        self.Date = self.FontDate.render("Lundi 21 Mars 2016", True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.Date, (41, 21), self.Transparence)
         self.Date = self.FontDate.render("Lundi 21 Mars 2016", True, (255,255,255))
-        gameDisplay.blit(self.Date, (40, 20))
+        Helpers.blit_alpha(gameDisplay, self.Date, (40, 20), self.Transparence)
+
         
             
     def Quit(self):
