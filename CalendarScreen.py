@@ -12,8 +12,10 @@ class CalendarScreen():
         self.DaysTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 15)
         self.EventsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 14)
         self.DayPannelTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 16)
+        self.SyncFont   = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 17, bold=True)
 
         self.bg_img = pygame.image.load("Images/calendar2.jpg")
+        self.sync_img = pygame.image.load("Images/cloud_sync.png")
 
         self.now = datetime.datetime.now()
         self.arrow = SwipeArrow(40)
@@ -26,18 +28,21 @@ class CalendarScreen():
 
         self.reset_calendars()
 
-
-        self.calendar_events = CalendarCollector().get_events(2015, 10, 1)
+        self.syncing = False
+        self.calendar_events = [("CONTROLES", []), ("ARENDRE",   []), ("TRAVAIL",   []), ("DIVERS",    []), ("MAIN",      [])] # evenements vides au demarrage
         for list in self.calendar_events:
             print list[0]
             for event in list[1]:
                 print event
             print "\n"
-        #self.test = self.calendar_events[2][1][0][0] # 1=CT AR TR DI MA, 2=1, 3=event_number, 4=TITRE DATE
 
 
 
     def Update(self, InputEvents):
+        if self.syncing == True:
+            self.calendar_events = CalendarCollector().get_events(2015, 10, 1)
+            self.syncing = False
+
         for event in InputEvents:
             if "TOUCH" in event:
                 mousepos = pygame.mouse.get_pos()
@@ -45,7 +50,7 @@ class CalendarScreen():
                 '''
                 Si l'utilisateur clique sur les fleches pour changer le mois
                 '''
-                if Helpers.is_in_rect(mousepos, [30 + 530/2 - self.monthTitleSurface.get_rect().width / 2 - 40, 24, 40, 40]):
+                if Helpers.is_in_rect(mousepos, [30 + 530/2 - self.monthTitleSurface.get_rect().width / 2 - 80, 19, 160, 50]):
                     self.selected_month -= 1
                     if self.selected_month < 0:
                         self.selected_month = 11
@@ -57,6 +62,13 @@ class CalendarScreen():
                         self.selected_month = 0
                         self.selected_year += 1
                     self.reset_calendars()
+
+                '''
+                Si l'utilisateur clique sur le bouton de synchronisation, initier la recherche d'evenements sur internet 
+                et changer l'icone sur l'interface pour prevenir (question de design et intuitivite)
+                '''
+                if Helpers.is_in_rect(mousepos, [685, 8, 90, 30]):
+                    self.syncing = True
 
                 '''
                 Si l'utilisateur clique sur un autre jour
@@ -148,15 +160,15 @@ class CalendarScreen():
                         '''
                         on separe lannee, mois et jour de l'evenement pour le comparer ensuite
                         '''
-                        event_date_parsed = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
+                        date = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
 
                         '''
                         Si l'evenement a bien lieu au jour de la case actuelle, on dessine pastille de couleur et position correspondantes a 
                         la categorie de l'evenement (controle, a rendre, travail...)
                         '''
-                        if  (int(event_date_parsed[0]) == int(cell_year)  ) and \
-                            (int(event_date_parsed[1]) == int(cell_month) ) and \
-                            (int(event_date_parsed[2]) == int(cell_day)   ):
+                        if  (int(date[0]) == int(cell_year)  ) and \
+                            (int(date[1]) == int(cell_month) ) and \
+                            (int(date[2]) == int(cell_day)   ):
                             s = pygame.Surface((530/7 + 1, 11))
                             if i == 0: color = (255,   0,   0)
                             if i == 1: color = (255, 145,   0)
@@ -231,16 +243,23 @@ class CalendarScreen():
                 '''
                 on separe lannee, mois et jour de l'evenement pour le comparer ensuite
                 '''
-                event_date_parsed = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
+                date = unicodedata.normalize('NFKD', event[1][:10]).encode('ascii','ignore').split("-") 
                 day, z = self.get_day_number_at_pos(self.selected_day[0], self.selected_day[1]) # z inutile
+
+                month = self.selected_month + 1
+                if not z:
+                    if day < 10:
+                        month -= 1
+                    elif day > 20:
+                        month += 1
 
                 '''
                 Si l'evenement a bien lieu au jour de la case actuelle, on dessine le titre puis la description
                 de l'evenement.
                 '''
-                if  (int(event_date_parsed[0]) == int(self.selected_year)      ) and \
-                    (int(event_date_parsed[1]) == int(self.selected_month + 1) ) and \
-                    (int(event_date_parsed[2]) == int(day)):
+                if  (int(date[0]) == int(self.selected_year)      ) and \
+                    (int(date[1]) == int(month) ) and \
+                    (int(date[2]) == int(day)):
                     if i == 0: color = (255,   0,   0)
                     if i == 1: color = (255, 145,   0)
                     if i == 2: color = (  0,  98, 255)
@@ -256,6 +275,18 @@ class CalendarScreen():
                     self.render_text_in_zone(gameDisplay, event[0], self.EventsTitleFont, (255, 255, 255), (600, 110 + y_offset), 760) # A OPTIMISER
                     
                     y_offset += title_offset + 20
+
+        if self.syncing == False:
+            text = self.SyncFont.render("SYNC", True, (255, 255, 255))
+            gameDisplay.blit(text, (690, 12))
+        else:
+            text = self.SyncFont.render("SYNCING...", True, (255, 255, 255))
+            gameDisplay.blit(text, (650, 12))
+        
+        gameDisplay.blit(self.sync_img, (740, 8))
+
+
+
 
 
 
