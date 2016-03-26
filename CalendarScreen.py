@@ -29,6 +29,7 @@ class CalendarScreen():
         self.reset_calendars()
 
         self.syncing = False
+        self.synced = False
         self.calendar_events = [("CONTROLES", []), ("ARENDRE",   []), ("TRAVAIL",   []), ("DIVERS",    []), ("MAIN",      [])] # evenements vides au demarrage
         for list in self.calendar_events:
             print list[0]
@@ -42,6 +43,15 @@ class CalendarScreen():
         if self.syncing == True:
             self.calendar_events = CalendarCollector().get_events(2015, 10, 1)
             self.syncing = False
+            self.synced = True
+
+        '''
+        Si on n'a pas encore synchronise, le faire a la prochaine frame.
+        On le fait pour que l'appli demarre rapidement (sans synchroniser) et qu'elle synchronise juste
+        apres avoir demarre. Le meilleur des deux mondes : demarrage rapide et les evenements apparaissent rapidement apres.
+        '''
+        if not self.synced:
+            self.syncing = True
 
         for event in InputEvents:
             if "TOUCH" in event:
@@ -249,9 +259,9 @@ class CalendarScreen():
                 month = self.selected_month + 1
                 if not z:
                     if day < 10:
-                        month -= 1
-                    elif day > 20:
                         month += 1
+                    elif day > 20:
+                        month -= 1
 
                 '''
                 Si l'evenement a bien lieu au jour de la case actuelle, on dessine le titre puis la description
