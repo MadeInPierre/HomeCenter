@@ -2,6 +2,8 @@
 Projet ISN : Un système d'exploitation complet et flexible adapté pour une utilisation dans la maison.
 Projet libre d'accès et modification pour tous.
 
+![Bonjour](GitHub/Bonjour.PNG)
+
 ## Installation
 Le système utilise plusieurs librairies utiles pour gérer l'interface, récupérer des informations sur internet et autres.
 
@@ -19,6 +21,9 @@ pip install --upgrade google-api-python-client
 ``` 
 
 ## Structure du projet
+
+![Image](GitHub/Apps.PNG)
+
 Tout commence dans le fichier `MainSC.py`, qui sert de hub général entre applications, écrans, et messages (tactile, transitions...). Il crée la fenêtre, gère la création/destruction/rafraichissement des bons écrans.
 **Pour lancer le système**, lancez ce fichier (qui appelera tous les autres automatiquement).
 
