@@ -1,5 +1,6 @@
 ﻿import pygame
 from Helpers import *
+from time import strftime
 
 class TimeScreen():
     def __init__(self, windowres):
@@ -26,9 +27,7 @@ class TimeScreen():
         On charge l'image de fond
         '''
         self.bigben_image = pygame.image.load("Images/bigben.png") # charger une image
-		
-		#J'aime Priscille c'est la meilleure elle boit son thé  ok ok ok  oui JTM 
-		
+        
         '''
         On cree la barre laterale blanche qui permet de selectionner l'ecran actif, on l'affichera dans le draw.
         '''
@@ -37,6 +36,8 @@ class TimeScreen():
 
 
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
+        self.TitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 100)
+        self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 50)
 
         # creation des images correspondant aux horloges
         self.Paris = pygame.Surface((305, 195)).convert_alpha()
@@ -51,13 +52,21 @@ class TimeScreen():
         self.Sidney = pygame.Surface((305, 195)).convert_alpha()
         self.Sidney.fill((255, 255, 255, 60))
 
+
     def minuteurScreen_init(self):
+        self.fleche1 = pygame.image.load("Images/fleche_minuteur.png").convert_alpha()
+        self.fleche2 = pygame.image.load("Images/fleche2_minuteur.png").convert_alpha()
+
+        self.tempsdonne = pygame.Surface((350, 120)).convert_alpha()
+        self.tempsdonne.fill((255, 255, 255, 60))
+
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold  = False)
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold = False)
         self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
 
     def chronoScreen_init(self):
         self.chrono_start = 0
+
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold=False)
         self.PostTitleFont3 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 60, bold=False)
@@ -139,15 +148,9 @@ class TimeScreen():
 
 
         if self.chrono_start == 2 :
-           self.LeTempsDuChrono = self.chrono.elapsed_time()
-        if self.chrono_start == 3 : 
-           self.LeTempsDuChrono = self.LeTempsDuChrono
-        
-           
-
-               
-    
-
+           self.LeTempsDuChrono += self.chrono.delta_elapsed_time()
+           #on rajoute le temps qu'on a "sauvegardé" a une fonction 
+           #qui va continuer de faire tourner le temps
 
 
     #########################################################################################################################
@@ -192,34 +195,54 @@ class TimeScreen():
         # positions des differentes horloges
         gameDisplay.blit(self.Paris, (30, 30))
         
-        self.paris_text = self.PostTitleFont2.render("PARIS", True, (0, 0, 0))
+        self.paris_text = self.TitleFont.render("PARIS", True, (250, 250, 250))
         gameDisplay.blit(self.paris_text, ((30 + 305/2) -(self.paris_text.get_rect().width/2), 150)) 
 
         gameDisplay.blit(self.Londres, (365, 30))
 
-        self.londres_text = self.PostTitleFont2.render("LONDRES", True, (0, 0, 0))
-        gameDisplay.blit(self.londres_text, ((30 + 305/2) -(self.londres_text.get_rect().width/2), 150))
-
+        self.londres_text = self.TitleFont.render("LONDRES", True, (250, 250, 250))
+        gameDisplay.blit(self.londres_text, ((365 + 305/2) -(self.londres_text.get_rect().width/2), 150))
+     
         gameDisplay.blit(self.Sao_paulo, (30, 255))
 
-        self.sao_paulo_text = self.PostTitleFont2.render("SAO PAULO", True, (0, 0, 0))
-        gameDisplay.blit(self.sao_paulo_text, ((30 + 305/2) -(self.sao_paulo_text.get_rect().width/2), 150))
+        self.sao_paulo_text = self.TitleFont.render("SAO PAULO", True, (250, 250, 250))
+        gameDisplay.blit(self.sao_paulo_text, ((30 + 305/2) -(self.sao_paulo_text.get_rect().width/2), 375))
 
         gameDisplay.blit(self.Sidney, (365, 255))
 
-        #self.sidney_text = self.PostTitleFont2.render("SIDNEY", True, (0, 0, 0))
-        #gameDisplay.blit(self.sidney_text, ((30 + 305/2) -(self.sidney_text.get_rect().width/2), 150))
+        self.londres_text = self.TitleFont.render("LONDRES", True, (250, 250, 250))
+        gameDisplay.blit(self.londres_text, ((365 + 305/2) -(self.londres_text.get_rect().width/2), 375))
+
+        self.timeSurface = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface, ((30 + 305/2) -(self.timeSurface.get_rect().width/2), 40))
+
+        self.timeSurface2 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface2, ((365 + 305/2) -(self.timeSurface.get_rect().width/2), 40))
+
+        self.timeSurface3 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface3, ((30 + 305/2) -(self.timeSurface.get_rect().width/2), 270))
+
+        self.timeSurface4 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface4, ((365 + 305/2) -(self.timeSurface.get_rect().width/2), 270))
+
+
 
     def alarmesScreen_draw(self, gameDisplay):
         pass
 
     def minuteurScreen_draw(self, gameDisplay):
+
         self.temps_restant_text = self.PostTitleFont2.render(str(self.TempsRestant), True, (0, 0, 0))
                                     # on met des guillemets quand on veut
                                     # mettre manuellement du texte,
                                     # et on n'en met pas quand le texte vient
                                     # d'une variable, comme ici
         gameDisplay.blit(self.temps_restant_text, (200, 200)) # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
+        
+        gameDisplay.blit(self.fleche1, (300, 70))
+        gameDisplay.blit(self.fleche2, (300, 300))
+
+        gameDisplay.blit(self.tempsdonne, (170, 175))
 
 
     def chronoScreen_draw(self, gameDisplay):

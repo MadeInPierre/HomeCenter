@@ -38,6 +38,11 @@ class WeatherScreen():
         self.thermometre_icon = pygame.image.load("Images/Icones_Meteo/thermometre.png").convert_alpha()
         self.humidite_icon = pygame.image.load("Images/Icones_Meteo/Goutte.png").convert_alpha()
         self.RainProb_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha()
+        self.wind_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha() #Vent
+        self.sunrise_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha() #sunrise
+        self.sunset_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha() #sunset
+
+
 
 #Fonds d'ecran en fonction du temps
 
@@ -51,11 +56,9 @@ class WeatherScreen():
 
 #Styles d'ecriture
 
-        self.FontTemperature = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
+        self.FontDatum = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 55)
         self.FontTemperatureMini = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 40)
-        self.FontHumidite = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
-        self.FontRainProb = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 80)
-        self.FontDate = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 40)
+        self.FontDate = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 45)
         self.DayFont = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf",30)
 
 #Barres transparentes
@@ -68,7 +71,7 @@ class WeatherScreen():
 #Variable qui sert à l'affichage du temps des jours selectionnes
         self.currentday = 0
 
-#Variable qui appelle le chrono
+#Variable qui appelle differents chrono
 
         self.chrono = AnimationManager()
         self.chrono2 = AnimationManager()
@@ -79,13 +82,16 @@ class WeatherScreen():
         self.Transparence = 0
         self.Transparence2 = 0
         self.Transparence3 = 0
+        self.Transparence4 = 0  
+        self.Transparence5 = 0
+        self.Transparence6 = 0
+        self.Transparence7 = 0
+
+
 
 #Variable qui donne la position Y (Utilisee dans des formules)
 
-        self.PosY_Icone = 80
-        PosY_Temperature = 20
-        PosY_RainProb = 140
-        PosY_Humidite = 260
+        self.PosY_Icone = 100
 
 #Variable qui correspond à l'ecran a faire apparaitre
 
@@ -149,11 +155,26 @@ class WeatherScreen():
                 self.Transparence=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
 
 #Animation -> Fondu "apparaissant" des Icones et de leur valeur associee
+
             if self.chrono.elapsed_time() > 3 and  self.chrono.elapsed_time() < 4:
                 self.Transparence2=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 6.5/2) / 0.05)))
 
             if self.chrono.elapsed_time() > 4 and  self.chrono.elapsed_time() < 5:
                 self.Transparence3=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 8.5/2) / 0.05)))
+
+            if self.chrono.elapsed_time() > 5 and  self.chrono.elapsed_time() < 6:
+                self.Transparence4=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 10.5/2) / 0.05)))
+
+            if self.chrono.elapsed_time() > 6 and  self.chrono.elapsed_time() < 7:
+                self.Transparence5=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 12.5/2) / 0.05)))
+
+            if self.chrono.elapsed_time() > 7 and  self.chrono.elapsed_time() < 8:
+                self.Transparence6=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 14.5/2) / 0.05)))
+
+            if self.chrono.elapsed_time() > 8 and  self.chrono.elapsed_time() < 9:
+                self.Transparence7=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 16.5/2) / 0.05)))
+
+
 
 #Animation -> Fondu "disparraissant"  des Icones et de leur valeur associee
 
@@ -163,15 +184,24 @@ class WeatherScreen():
             if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
                 self.Transparence3=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
 
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence4=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence5=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence6=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+                self.Transparence7=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
+
+
 #Varaible PosY_Icone est placee dans fonction sinusoidale pour faire "planer" textes/images
       
         if self.chrono2.elapsed_time() > 0:
-            self.PosY_Icone = 80 + 5*math.sin(2*math.pi/3*self.chrono2.elapsed_time())
-            self.PosY_Temperature = 20 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time())
-            self.PosY_RainProb = 140 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time()) 
-            self.PosY_Humidite = 260 + 5*math.sin(2*math.pi/2*self.chrono2.elapsed_time())
-
-
+            self.PosY_Icone = 100 + 5*math.sin(2*math.pi/3*self.chrono2.elapsed_time())
+            
 #fct sinus: Amplitude*math.sin(2*math.pi/Periode*t)
 
     def Draw(self, gameDisplay):
@@ -209,27 +239,46 @@ class WeatherScreen():
 
 #Affiche les icones lies aux caracteristiques du temps
 
-        Helpers.blit_alpha(gameDisplay, self.thermometre_icon, (450, self.PosY_Temperature), self.Transparence2)
-        Helpers.blit_alpha(gameDisplay, self.RainProb_icon, (450, self.PosY_RainProb), self.Transparence2)
-        Helpers.blit_alpha(gameDisplay, self.humidite_icon, (450, self.PosY_Humidite), self.Transparence2)
+        Helpers.blit_alpha(gameDisplay, self.thermometre_icon, (250, 70), self.Transparence2)
+        Helpers.blit_alpha(gameDisplay, self.RainProb_icon, (250, 175), self.Transparence4)
+        Helpers.blit_alpha(gameDisplay, self.humidite_icon, (490, 175), self.Transparence5)
+        Helpers.blit_alpha(gameDisplay, self.wind_icon, (490, 70), self.Transparence3)
+        Helpers.blit_alpha(gameDisplay, self.sunrise_icon, (250, 280), self.Transparence6)
+        Helpers.blit_alpha(gameDisplay, self.sunset_icon, (490, 280), self.Transparence7)
+
+
 
 #Affiche les donnees liees a la temperature/humidite/pluie
 
-        self.Temperature = self.FontTemperature.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.Temperature, (601, self.PosY_Temperature + 1), self.Transparence3)
-        self.Temperature = self.FontTemperature.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Temperature, (600, self.PosY_Temperature), self.Transparence3)
+        self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence2)
+        self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+" C", True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence2)
         
+        self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.Humidite, (581, 176), self.Transparence5)
+        self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.Humidite, (580, 175), self.Transparence5)
 
-        self.Humidite = self.FontHumidite.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.Humidite, (601, self.PosY_Humidite + 1), self.Transparence3)
-        self.Humidite = self.FontHumidite.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Humidite, (600, self.PosY_Humidite), self.Transparence3)
+        self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.RainProb, (341, 176), self.Transparence4)
+        self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.RainProb, (340, 175), self.Transparence4)
 
-        self.RainProb = self.FontRainProb.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.RainProb, (601, self.PosY_RainProb + 1), self.Transparence3)
-        self.RainProb = self.FontRainProb.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.RainProb, (600, self.PosY_RainProb), self.Transparence3)
+        self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.WindStrength, (581, 71), self.Transparence3)
+        self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.WindStrength, (580, 70), self.Transparence3)
+
+        self.Sunset = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunset[self.currentday]), True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.Sunset, (581, 281), self.Transparence7)
+        self.Sunset = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunset[self.currentday]), True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.Sunset, (580, 280), self.Transparence7)
+
+        self.Sunrise = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunrise[self.currentday]), True, (0,0,0,100))
+        Helpers.blit_alpha(gameDisplay, self.Sunrise, (341, 281), self.Transparence6)
+        self.Sunrise = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunrise[self.currentday]), True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.Sunrise, (340, 280), self.Transparence6)
 
 #Definie les cases de la barre du bas
 

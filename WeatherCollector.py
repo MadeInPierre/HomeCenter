@@ -46,11 +46,14 @@ class WeatherCollector():
         self.DailyWeather   = daily_weather  (["sun", "storm", "sun_cloud", "snow", "cloud", "light_rain", "heavy_rain", "light_rain", "heavy_rain", "storm", "snow", "snow"],
                                               [19   , 19   , 18         , 17         , 17     , 15          , 12          , 8           , 4           , 2      , -1    , -4    ],
                                               [9    , 17   , 32         , 43         , 57     , 68          , 76          , 85          , 100         , 100    , 100   , 100   ],
-                                              [0    , 0    , 5          , 13         , 39     , 60          , 70          , 78          , 90          , 100    , 90    , 80    ])
-
+                                              [0    , 0    , 5          , 13         , 39     , 60          , 70          , 78          , 90          , 100    , 90    , 80    ],
+                                              [20   , 120  , 100        , 80         , 60     , 70          , 0           , 140         , 40          , 75     , 55    , 0     ],
+                                              ["N-E","O"   , "E"        , "S"        , "N"    ,"S-O"        , "O"         ,""           ,""           , ""     , ""    , ""    ],
+                                              ["7h02","7h03","7h04"     ,"7h05"      ,"7h06"  ,"7h10"       ,"7h12"       ,"7h15"       ,""           , ""     ,""     ,""     ],
+                                              ["17h02","17h03","17h04"     ,"17h05"      ,"17h06"  ,"17h10"       ,"17h12"       ,"17h15"       ,""           , ""     ,""     ,""     ])
 
 class current_weather():
-    def __init__(self, icon, temp, hum, rain_prob):
+    def __init__(self, icon, temp, hum, rain_prob,):
         self.Icon         = icon
         self.Temperature  = temp
         self.Humidity     = hum
@@ -65,10 +68,12 @@ class hourly_weather():
 
 
 class daily_weather():
-    def __init__(self, icons, temps, hums, rain_probs):
+    def __init__(self, icons, temps, hums, rain_probs, wind_strength, wind_direction, sunrises, sunsets):
         self.Icons        = icons
         self.Temperatures = temps
         self.Humidities   = hums
         self.RainProbs    = rain_probs
-        #self.Sunrises     = sunrises
-        #self.Sunsets      = sunsets
+        self.Sunrise     = sunrises
+        self.Sunset     = sunsets
+        self.WindStrength  = wind_strength
+        self.WindDirection= wind_direction

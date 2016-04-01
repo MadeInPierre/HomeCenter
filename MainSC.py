@@ -1,4 +1,4 @@
-'''
+﻿'''
 This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.
@@ -49,8 +49,11 @@ global currentScreen
 currentScreen = StartScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
+chrono = AnimationManager() #DEBUG FPS
+
 gameRunning = True
 while gameRunning:
+        chrono.reset() #DEBUG FPS
         '''
         Handles pygame events such as quitting events.
         '''
@@ -138,6 +141,8 @@ while gameRunning:
         '''
         pygame.display.update()
         clock.tick(30)
+
+        print "FPS : " + str(1/ chrono.elapsed_time()) #DEBUG FPS
 
 '''
 Sortie du systeme : desinitialise pygame, les ecrans actifs et l'ecouteur d'entrees avant de quitter totalement.
