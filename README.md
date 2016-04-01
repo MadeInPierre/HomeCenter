@@ -38,4 +38,4 @@ Les fichiers `.pyc` sont à ignorer, ce ne sont que des fichiers générés auto
 
 P.S. : Le Projet est encore sous construction, nous avons déjà commenté les zones les plus importantes (normalement), mais c'est très incomplet par rapport à quoi s'attendre pour la version finale.
 
-P.S. : Me contacter à `pielaclau@gmail.com` ou par GitHub si vous avez des questions. Bonne consultation !
+P.S. : Me contacter à `pielaclau@gmail.com` ou par GitHub si vous avez des questions. Bonne consultation :+1: !
