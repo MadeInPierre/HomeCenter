@@ -52,12 +52,6 @@
     <Compile Include="HomeScreen.py" />
     <Compile Include="InputManager.py" />
     <Compile Include="MainSC.py" />
-    <Compile Include="ChronoScreen.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TimerScreen.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NewsCollector.py" />
     <Compile Include="NewsScreen.py" />
     <Compile Include="NewsWidget.py" />
@@ -68,7 +62,6 @@
     <Compile Include="TimeScreen.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TimeScreenOld.py" />
     <Compile Include="TouchManager.py" />
     <Compile Include="WeatherCollector.py" />
     <Compile Include="WeatherScreen.py" />

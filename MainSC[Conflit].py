@@ -43,7 +43,7 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = CalendarScreen(WindowRes)
+currentScreen = WeatherScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 chrono = AnimationManager() #DEBUG FPS
@@ -90,7 +90,7 @@ while gameRunning:
                     currentScreen = CalendarScreen(WindowRes)
                 if "GOTO_WEATHERSCREEN" in status:
                     currentScreen = WeatherScreen(WindowRes)
-
+                
 
                 if "DEAD" in fadingScreen.ScreenStatus:
                     print "killing " + str(fadingScreen)
@@ -105,7 +105,7 @@ while gameRunning:
             fadingScreen = Screen(WindowRes)
 
 
-
+        
         '''
         Render Zone : dessine tous les ecrans actifs.
         '''
@@ -113,8 +113,15 @@ while gameRunning:
 
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
-        currentScreen.Draw(gameDisplay)
 
+        #app_surface = pygame.Surface(WindowRes).convert_alpha()
+        #app_surface.fill((0, 0, 0, 0))
+        currentScreen.Draw(gameDisplay) # app_surface
+
+        #if "TRANSP" in fadingScreen.ScreenStatus:
+        #    transp = int(fadingScreen.ScreenStatus.split()[1])
+        #    Helpers.blit_alpha(gameDisplay, app_surface, (0, 0), transp)
+        #else: gameDisplay.blit(app_surface, (0, 0))
         if str(currentScreen) is not "HOMESCREEN":
             gameDisplay.blit(home_icon, (0, 0))
 
@@ -132,7 +139,7 @@ while gameRunning:
         pygame.display.update()
         clock.tick(30)
 
-        #print "FPS : " + str(1/ chrono.elapsed_time()) #DEBUG FPS
+        print "FPS : " + str(1/ chrono.elapsed_time()) #DEBUG FPS
 
 '''
 Sortie du systeme : desinitialise pygame, les ecrans actifs et l'ecouteur d'entrees avant de quitter totalement.

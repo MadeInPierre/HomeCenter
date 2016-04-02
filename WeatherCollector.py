@@ -43,7 +43,7 @@ class WeatherCollector():
                                               [9    , 17   , 32         , 43         , 57     , 68          , 76          , 85          , 100         , 100    , 100   , 100   ],
                                               [0    , 0    , 5          , 13         , 39     , 60          , 70          , 78          , 90          , 100    , 90    , 80    ])
 
-        self.DailyWeather   = daily_weather  (["sun", "storm", "sun_cloud", "snow", "cloud", "light_rain", "heavy_rain", "light_rain", "heavy_rain", "storm", "snow", "snow"],
+        self.DailyWeather   = daily_weather  (["sun", "storm", "sun_cloud", "snow", "heavy_rain", "light_rain", "cloud", "light_rain", "heavy_rain", "storm", "snow", "snow"],
                                               [19   , 19   , 18         , 17         , 17     , 15          , 12          , 8           , 4           , 2      , -1    , -4    ],
                                               [9    , 17   , 32         , 43         , 57     , 68          , 76          , 85          , 100         , 100    , 100   , 100   ],
                                               [0    , 0    , 5          , 13         , 39     , 60          , 70          , 78          , 90          , 100    , 90    , 80    ],
