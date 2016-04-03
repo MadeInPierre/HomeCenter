@@ -14,6 +14,7 @@ class CalendarScreen():
         self.MonthsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",  24)
         self.DaysTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 15)
         self.EventsTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 14)
+        self.EventsDescriptionFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 10)
         self.DayPannelTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 16)
         self.SyncFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 17, bold=True)
 
@@ -112,7 +113,7 @@ class CalendarScreen():
                             '''
                             ... si oui : on active l'animation d'ouverture et on ferme tous les autres.
                             '''
-                            cal_event.Open()
+                            cal_event.Revert()
                         else:
                             cal_event.Close()
 
@@ -223,6 +224,8 @@ class CalendarScreen():
         if not i:
             if day < 10:
                 month += 1
+                if month > 10:
+                    month = 0
             elif day > 20:
                 month -= 1
 
@@ -508,7 +511,7 @@ class CalendarScreen():
                 de l'evenement.
                 '''
                 if (int(date[0]) == int(self.selected_year)) and (int(date[1]) == int(month)) and (int(date[2]) == int(day)):
-                    self.evenements.append(Event(event + [i], self.EventsTitleFont))
+                    self.evenements.append(Event(event + [i], self.EventsTitleFont, self.EventsDescriptionFont))
 
     def Quit(self):
         pass
@@ -516,8 +519,12 @@ class CalendarScreen():
     def __str__(self):
         return "CALENDARSCREEN"
 
+
+
+
+
 class Event():
-    def __init__(self, event, titleFont):
+    def __init__(self, event, titleFont, descriptionFont):
         self.Title       = event[0]
         self.Date        = event[1]
         self.Description = event[2]
@@ -530,57 +537,108 @@ class Event():
         if event[3] == 4: self.color = (255,   0, 255)
 
         self.EventsTitleFont = titleFont
+        self.EventsDescriptionFont = descriptionFont
+
+        if self.Description is not '':
+            self.print_description = True
+        else:
+            self.print_description = False
 
         self.animation_state = "CLOSED"
         self.animation_progress = 0.0
         self.chrono = AnimationManager()
 
         self.vertical_space_used = 0
+        self.arrow = SwipeArrow(size = 10)
+        self.arrowtransp_progress = 255
+        self.arrow_direction = "DOWN"
+
+        self.pre_rendered = False
 
     def Update(self):
-        if self.animation_state is "OPENING":
-            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1:
-                self.animation_progress = 30 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1))
+        if "OPENING" in self.animation_state:
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 0.6:
+                self.animation_progress = self.total_offset / (1 + math.exp(-(self.chrono.elapsed_time() - 0.2) / 0.06))
 
-                if self.animation_progress > 29:
-                    self.animation_progress = 30
-                    self.animation_state = "OPENED"
+                if self.animation_progress > self.total_offset - 1:
+                    self.animation_progress = self.total_offset
 
-        if self.animation_state is "CLOSING":
-            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1:
-                self.animation_progress = 30 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1))
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 0.2:
+                self.arrowtransp_progress = 255 / (1 + math.exp(-(0.1 - self.chrono.elapsed_time()) / 0.02))
+                self.arrow_direction = "DOWN"
+            if self.chrono.elapsed_time() > 0.6 and self.chrono.elapsed_time() < 0.8:
+                self.arrowtransp_progress = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.7) / 0.02))
+                self.arrow_direction = "UP"
+
+            if self.chrono.elapsed_time() > 0.8:
+                self.animation_state = "OPENED"
+
+        if "CLOSING" in self.animation_state:
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 0.6:
+                self.animation_progress = self.total_offset / (1 + math.exp(-(0.2 - self.chrono.elapsed_time()) / 0.06))
 
                 if self.animation_progress < 1:
                     self.animation_progress = 0
-                    self.animation_state = "CLOSED"
+
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 0.2:
+                self.arrowtransp_progress = 255 / (1 + math.exp(-(0.1 - self.chrono.elapsed_time()) / 0.02))
+                self.arrow_direction = "UP"
+            if self.chrono.elapsed_time() > 0.6 and self.chrono.elapsed_time() < 0.8:
+                self.arrowtransp_progress = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.7) / 0.02))
+                self.arrow_direction = "DOWN"
+
+            if self.chrono.elapsed_time() > 0.8:
+                self.animation_state = "CLOSED"
 
 
     def Close(self):
-        if self.animation_state is not "CLOSED":
-            self.animation_state = "CLOSING"
-            self.chrono.reset()
+        if self.print_description is True:
+            if self.animation_state is not "CLOSED":
+                self.animation_state = "CLOSING"
+                self.chrono.reset()
 
     def Open(self):
-        if self.animation_state is not "OPENED":
-            self.animation_state = "OPENING"
-            self.chrono.reset()
+        if self.print_description is True:
+            if self.animation_state is not "OPENED":
+                self.animation_state = "OPENING"
+                self.chrono.reset()
 
+    def Revert(self):
+        if self.print_description is True:
+            if self.animation_state is "CLOSED":
+                self.Open()
+            if self.animation_state is "OPENED":
+                self.Close()
+
+    def pre_render(self, gameDisplay, y_offset):
+        s = pygame.Surface((1, 1))
+        self.title_offset       = self.render_text_in_zone(s, self.Title,       self.EventsTitleFont,       17, self.color,      (600, 110 + y_offset),       760)
+        self.description_offset = self.render_text_in_zone(s, self.Description, self.EventsDescriptionFont, 12, (255, 255, 255), (18, self.title_offset + 12), 160)
+        self.total_offset = self.description_offset + 10
 
     def Draw(self, gameDisplay, y_offset):
-        title_offset = self.render_text_in_zone(gameDisplay, self.Title, self.EventsTitleFont, self.color, (600, 110 + y_offset), 760)
+        if not self.pre_rendered:
+            self.pre_render(gameDisplay, y_offset)
+            self.pre_rendered = True
 
-        rect = pygame.Surface((179, title_offset + 10 + self.animation_progress)).convert_alpha()
+        rect = pygame.Surface((179, self.title_offset + 10 + self.animation_progress)).convert_alpha()
         rect.fill(self.color)
+
+        if self.print_description is True:
+            self.render_text_in_zone(rect, self.Description, self.EventsDescriptionFont, 12, (255, 255, 255), (18, self.title_offset + 12), 160)
+            self.arrow.Draw(rect, (rect.get_rect().width - 15, rect.get_rect().height - 12), self.arrow_direction, self.arrowtransp_progress)
 
         gameDisplay.blit(rect, (591, 110 + y_offset - 5))
 
-        self.render_text_in_zone(gameDisplay, self.Title, self.EventsTitleFont, (255, 255, 255), (600, 110 + y_offset), 760) # A OPTIMISER
-
-        self.vertical_space_used = title_offset + 20 + self.animation_progress
 
 
+        self.render_text_in_zone(gameDisplay, self.Title, self.EventsTitleFont, 17, (255, 255, 255), (600, 110 + y_offset), 760) # A OPTIMISER
 
-    def render_text_in_zone(self, gameDisplay, text, font, color, startpos, horizontal_size_limit): # parametres necessaires pour dessiner le texte multiligneS
+        self.vertical_space_used = self.title_offset + 20 + self.animation_progress
+
+
+
+    def render_text_in_zone(self, gameDisplay, text, font, line_spacing, color, startpos, horizontal_size_limit): # parametres necessaires pour dessiner le texte multiligneS
         s = font.render(text, True, color) # on dessine le texte une première fois pour avoir sa longueur
         h_size = horizontal_size_limit - startpos[0] # la limite en longueur que le texte ne doit pas depasser
         vertical_size = 0 # voir return en derniere ligne
@@ -590,59 +648,29 @@ class Event():
         '''
         if s.get_rect().width > h_size:
             splitted_text = text.split() # On separe la phrase entre chaque mot
-            final_lines = []
 
             cropped_size = 0
-            done = False
             for i in range(len(splitted_text) - 1, -1, -1): # on scanne toues les mots en partant du dernier
-                if not done:
-                    word_image = font.render(splitted_text[i], True, color) # on dessine le mot pour avoir
+                word_image = font.render(splitted_text[i], True, color) # on dessine le mot pour avoir
 
-                    cropped_size += word_image.get_rect().width + 4 # on compte ce mot en plus dans la largeur du texte qu'on est en train de
-                                                                    # couper
-                                                                    # on ajoute
-                                                                                                                                       # 4 pixels
-                                                                                                                                       # pour
-                                                                                                                                       # compter
-                                                                                                                                       # l'espace
-                                                                                                                                       # qui vient
-                                                                                                                                       # juste
-                                                                                                                                       # apres le
-                                                                                                                                       # mot dans
-                                                                                                                                       # la phrase
+                cropped_size += word_image.get_rect().width + 4 
 
-                    if s.get_rect().width - cropped_size < h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la
-                                                                   # limite
-                        '''
-                        On prepare le dessin en dessinant la premier ligne...
-                        '''
-                        first_line_text = ""
-                        for word in splitted_text[0:i]:
-                            first_line_text += " " + word
-                        first_line = font.render(first_line_text, True, color)
-                        final_lines.append(first_line)
+                if s.get_rect().width - cropped_size < h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la limite
+                    first_line_text = ""
+                    for word in splitted_text[0:i]:
+                        first_line_text += " " + word
+                    first_line = font.render(first_line_text, True, color)
+                    gameDisplay.blit(first_line, startpos)
 
-                        '''
-                        ... separement a la deuxieme (le bout de la premiere coupee)
-                        '''
-                        line_text = ""
-                        for word in range(i, len(splitted_text)):
-                            line_text += " " + splitted_text[word]
+                    
+                    line_text = ""
+                    for word in range(i, len(splitted_text)):
+                        line_text += " " + splitted_text[word]
 
-                        final_line = font.render(line_text, True, color)
-                        final_lines.append(final_line)
-
-                        done = True
-
-            '''
-            On dessine les lignes sur l'ecran, avec la bonne position
-            '''
-            for linenumber in range(0, len(final_lines)):
-                gameDisplay.blit(final_lines[linenumber], (startpos[0], startpos[1] + 17 * linenumber))
-            vertical_size = 17 * len(final_lines) # on enregistre l'espace vertical qui a ete utilise pour afficher le texte
-                                                  # (voir return en derniere ligne)
+                    line = self.render_text_in_zone(gameDisplay, line_text, font, line_spacing, color, (startpos[0], startpos[1] + line_spacing), horizontal_size_limit)
+                    return line + line_spacing
 
         else:
-            gameDisplay.blit(s, startpos) # si le titre n'est pas trop long, on le dessine simplement.
+            gameDisplay.blit(s, startpos) # si le titre n'est pas trop long, on le dessine directement sans transformations.
             vertical_size = s.get_rect().height
         return vertical_size # redonne la taille verticale qui a ete utilisee pour afficher ce texte (utile pour afficher les prochains titres en dessous).
