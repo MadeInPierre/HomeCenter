@@ -21,12 +21,45 @@ MODE D'EMPLOI :
 
 '''
 import pygame
+from pyowm import OWM # module meteo-internet
 
 class WeatherCollector():
     def __init__(self):
         '''
         A FAIRE : Tout le code qui recupere les infos d'internet et les range dans les classes 'current weather', 'daily weather' et 'hourly weather'
         '''
+        API = 'd71c3a62822470f2ecd05e06f214ecf5'
+        CITY = 'Saint-Gely-du-Fesc'
+
+        '''
+        Pour avoir les conditions actuelles
+        '''
+        owm = OWM(API, language = 'fr')
+        obs = owm.weather_at_id(2980033) # St Gely
+        w = obs.get_weather()
+        print "CONDITIONS EN CE MOMENT : "   + str(w.get_reference_time(timeformat='iso'))
+        print "    meteo :  " + str(w.get_status()) + " (img = " + str(w.get_weather_icon_name()) + ")"
+        print "    clouds : " + str(w.get_clouds())
+        print "    rain :   " + str(w.get_rain())
+        print "    wind :   "  + str(w.get_wind())
+        print "    hum :    "  + str(w.get_humidity())
+        print "    temp :   "  + str(w.get_temperature(unit='celsius'))
+
+        '''
+        Pour avoir les prochains jours
+        '''
+        fc = owm.daily_forecast('Saint-Gely-du-Fesc')
+        f = fc.get_forecast()
+
+        for w in f:
+            print "TIME : "   + str(w.get_reference_time(timeformat='iso'))
+            print "    meteo :  " + str(w.get_status()) + " (img = " + str(w.get_weather_icon_name()) + ")"
+            print "    clouds : " + str(w.get_clouds())
+            print "    rain :   " + str(w.get_rain())
+            print "    wind :   "  + str(w.get_wind())
+            print "    hum :    "  + str(w.get_humidity())
+            print "    temp :   "  + str(w.get_temperature(unit='celsius'))
+            
 
 
         '''

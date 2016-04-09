@@ -14,6 +14,7 @@ from NewsScreen import *
 from Screen import *
 from TestScreen import *
 from WeatherScreen import *
+from AutomationScreen import *
 from TimeScreen import *
 from CalendarScreen import *
 
@@ -43,7 +44,7 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = CalendarScreen(WindowRes)
+currentScreen = TimeScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
 
 chrono = AnimationManager() #DEBUG FPS
@@ -90,6 +91,8 @@ while gameRunning:
                     currentScreen = CalendarScreen(WindowRes)
                 if "GOTO_WEATHERSCREEN" in status:
                     currentScreen = WeatherScreen(WindowRes)
+                if "GOTO_AUTOMATIONSCREEN" in status:
+                    currentScreen = AutomationScreen(WindowRes)
 
 
                 if "DEAD" in fadingScreen.ScreenStatus:

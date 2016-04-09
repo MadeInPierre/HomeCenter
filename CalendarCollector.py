@@ -54,7 +54,8 @@ class CalendarCollector():
             
             return [("CONTROLES", [[u"PHY CT Em Epp Ec",   u"2016-03-25", u"test"], [u"MAT CT Integrales", u"2016-03-29", u""]]),
                     ("ARENDRE",   [[u"A rendre",           u"2016-04-05", ""],      [u"Autre",             u"2016-03-23", u""]]),
-                    ("TRAVAIL",   [[u"Exercices de maths", u"2016-03-10", u""],     [u"Physiques exos cordialement",   u"2016-03-30", u""]]),
+                    ("TRAVAIL",   [[u"Exercices de maths", u"2016-03-10", u""],     [u"Physiques exos cordialement",   u"2016-03-30", u""],
+                                   [u"MAT Ex 2, 3, 4 p540", u"2016-03-29", u"Rendre sur feuille, potentiellement rammasse"], [u"HG Finir croquis", u"2016-03-29", u""]]),
                     ("DIVERS",    [[u"Auto Ecole",         u"2016-03-08", u""],     [u"Journee portes ouvertes lycee", u"2016-03-25", u""]]),
                     ("MAIN",      [[u"AUTO ECOLE rdv",     u"2016-03-29", u""],     [u"Test",                          u"2016-03-25", u""]])]
 

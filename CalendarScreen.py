@@ -539,7 +539,10 @@ class Event():
         self.EventsTitleFont = titleFont
         self.EventsDescriptionFont = descriptionFont
 
-        if self.Description is not '':
+        '''
+        On desactive la fleche et les animations s'il n'y a pas de description.
+        '''
+        if self.Description is not '' and self.Description is not u"":
             self.print_description = True
         else:
             self.print_description = False
@@ -612,7 +615,15 @@ class Event():
 
     def pre_render(self, gameDisplay, y_offset):
         s = pygame.Surface((1, 1))
+
+        '''
+        Dessin du titre a blanc pour estimer sa taille verticale.
+        '''
         self.title_offset       = self.render_text_in_zone(s, self.Title,       self.EventsTitleFont,       17, self.color,      (600, 110 + y_offset),       760)
+
+        '''
+        On dessine la description a blanc pour estimer sa taille erticalement
+        '''
         self.description_offset = self.render_text_in_zone(s, self.Description, self.EventsDescriptionFont, 12, (255, 255, 255), (18, self.title_offset + 12), 160)
         self.total_offset = self.description_offset + 10
 

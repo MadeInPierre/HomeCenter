@@ -63,6 +63,8 @@ class TimeScreen():
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold  = False)
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold = False)
         self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
+        self.TempsDeDepart = 0
+        self.ecran = 1
 
     def chronoScreen_init(self):
         self.chrono_start = 0
@@ -124,8 +126,15 @@ class TimeScreen():
                                                           # et on l'enregistre
                                                                                                                    # dans
                                                                                                                    # LeTempsDuChrono
-        self.TempsRestant = 30 - self.LeTempsDuChrono # On calcule, pour le timer, combien de temps il reste si on avait 30
-                                                      # secondes.
+        self.TempsRestant = self.TempsDeDepart - self.LeTempsDuChrono # On calcule, pour le timer, combien de temps il reste si on avait 30
+        
+        for event in InputEvents:
+            if "TOUCH" in event:
+                mousepos = Helpers.get_message_x_y(event)
+                if Helpers.is_in_rect(mousepos, [300, 70, 100, 100]):
+                    self.TempsDeDepart += 1
+                if Helpers.is_in_rect(mousepos, [300, 300, 100, 100]):
+                    self.TempsDeDepart -= 1
 
     def chronoScreen_update(self, InputEvents):
         # REMARQUE le jamais oublier les "self." des qu'on utilise des
@@ -231,19 +240,25 @@ class TimeScreen():
         pass
 
     def minuteurScreen_draw(self, gameDisplay):
+        gameDisplay.blit(self.fleche1, (300, 70))
+        gameDisplay.blit(self.fleche2, (300, 300))
+        self.TempsDeDepart_text = self.PostTitleFont2.render(str(self.TempsDeDepart), True, (0, 0, 0))
+        gameDisplay.blit(self.TempsDeDepart_text, (200, 200))
+        
 
-        self.temps_restant_text = self.PostTitleFont2.render(str(self.TempsRestant), True, (0, 0, 0))
+
+        if self.ecran == 2 :
+            self.temps_restant_text = self.PostTitleFont2.render(str(self.TempsRestant), True, (0, 0, 0))
                                     # on met des guillemets quand on veut
                                     # mettre manuellement du texte,
                                     # et on n'en met pas quand le texte vient
                                     # d'une variable, comme ici
-        gameDisplay.blit(self.temps_restant_text, (200, 200)) # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
-        
-        gameDisplay.blit(self.fleche1, (300, 70))
-        gameDisplay.blit(self.fleche2, (300, 300))
-
-        gameDisplay.blit(self.tempsdonne, (170, 175))
-
+            gameDisplay.blit(self.temps_restant_text, (200, 200))
+                  # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
+            
+        if self.ecran == 1  :
+            self.TempsDeDepart_text = self.PostTitleFont2.render(str(self.TempsDeDepart), True, (0, 0, 0))
+            gameDisplay.blit(self.TempsDeDepart_text, (200, 200))
 
     def chronoScreen_draw(self, gameDisplay):
         gameDisplay.blit(self.chrono_image, (275, 50))
