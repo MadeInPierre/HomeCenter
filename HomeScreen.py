@@ -24,7 +24,7 @@ class HomeScreen():
         '''
         self.bg_img = pygame.image.load("Images/landscape1.png").convert_alpha()
         self.horizontal_line = pygame.image.load("Images/horizontal_separator.png").convert_alpha()
-        
+
         '''
         On charge les polices qui permettent d'afficher du texte
         '''
@@ -33,7 +33,7 @@ class HomeScreen():
         self.AppsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
         self.DateFont        = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
         self.DescriptionFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
-        
+
         self.WindowRes = windowres
         self.ScreenStatus = "FADING_IN"
         self.fade_direction = "" # A ENLEVER, GARDER SELEMENT TRANSITIONDESTINATION
@@ -72,7 +72,7 @@ class HomeScreen():
         self.date_color = 0
         self.bg_transp = 20.0
         self.widget_opacity = 0
-        
+
         '''
         Variables pour gerer le swipe entre ecran d'acceuil et menu d'applications
         '''
@@ -160,7 +160,7 @@ class HomeScreen():
                             if app_name is "Domotique":
                                 self.TransitionDestination = "AUTOMATIONSCREEN"
 
-                
+
 
         if self.ScreenStatus is "FADING_IN":
             self.fade_in()
@@ -263,7 +263,7 @@ class HomeScreen():
         '''
         #AppsTitleSurface    = self.DateFont.render("No apps here yet. Download them in the store !", True, (255, 255, 255))
         #gameDisplay.blit(AppsTitleSurface, (self.WindowRes[0] / 2 - AppsTitleSurface.get_rect().width / 2, 230 + self.ancrage - self.WindowRes[1]))
-        
+
         '''
         On dessine les icones d'applications et les descriptions.
         '''
@@ -276,7 +276,7 @@ class HomeScreen():
 
 
 
-        
+
 
 
     def fade_in(self):
@@ -309,10 +309,10 @@ class HomeScreen():
         '''
         if animTime > 3:
             self.ScreenStatus = "RUNNING"
-            
+
     def fade_out(self):
         animTime = self.animation.elapsed_time()
-        
+
         if animTime > 0 and animTime < 1:
             self.time_color = 255 / (1 + math.exp(-(0.5 - animTime) / 0.1))
         if animTime > 0.5 and animTime < 1:

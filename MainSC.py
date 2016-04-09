@@ -17,6 +17,7 @@ from WeatherScreen import *
 from AutomationScreen import *
 from TimeScreen import *
 from CalendarScreen import *
+from LockScreen import *
 
 '''
 Initialisations principales : demarrage de pygame et du chrono qui limite le systeme a 30 FPS.
@@ -44,8 +45,10 @@ Creation de deux slots qui contiendront les ecrans a afficher.
 Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l'instant.
 '''
 global currentScreen
-currentScreen = TimeScreen(WindowRes)
+LockScreen = SleepManager(WindowRes)
+currentScreen = StartScreen(WindowRes)
 fadingScreen = Screen(WindowRes)
+
 
 chrono = AnimationManager() #DEBUG FPS
 
@@ -64,6 +67,7 @@ while gameRunning:
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).
         '''
+        LockScreen.Update(Input.events)
         currentScreen.Update(Input.events)
         fadingScreen.Update(Input.events)
 
@@ -117,6 +121,7 @@ while gameRunning:
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
         currentScreen.Draw(gameDisplay)
+        LockScreen.Draw(gameDisplay)
 
         if str(currentScreen) is not "HOMESCREEN":
             gameDisplay.blit(home_icon, (0, 0))
