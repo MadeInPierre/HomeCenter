@@ -63,11 +63,13 @@ class TimeScreen():
     #ON CHARGE LES POLICES#
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold  = False)
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold = False)
+        self.TitleFont3 = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 50)
        
-    #ON DEFINIT LES VARIABLES#
+    #ON DEFINI LES VARIABLES#
         self.chrono2 = AnimationManager() #On cree un chrono qui va compter le temps
-        self.TempsDeDepart = 0
+        self.TempsDuMinuteur = 0
         self.minuteur = 0
+        
 
     def chronoScreen_init(self):
 
@@ -81,7 +83,7 @@ class TimeScreen():
         self.PostTitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 50, bold=False)
         self.PostTitleFont3 = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 60, bold=False)
 
-    #ON DEFINIT LES VARIABLES#
+    #ON DEFINI LES VARIABLES#
         self.pause_start = "START"
         self.chrono_start = 0
         self.chrono = AnimationManager() #On cree un chrono qui va compter le temps
@@ -129,19 +131,22 @@ class TimeScreen():
         self.chrono2.Update()
         # REMARQUE le jamais oublier les "self." des qu'on utilise des
         # variables ou des fonctions.
-        self.LeTempsDuChrono2 = self.chrono2.elapsed_time() # on demande au chrono combien de temps s'est ecoule
-                                                          # et on l'enregistre
-        self.TempsRestant2 = self.TempsDeDepart - self.LeTempsDuChrono2
-
+        
         for event in InputEvents:
             if "TOUCH" in event:
                 mousepos = Helpers.get_message_x_y(event)
                 if Helpers.is_in_rect(mousepos, [315, 60, 50, 50]):
-                    self.TempsDeDepart += 1
+                    self.TempsDuMinuteur += 1
                 if Helpers.is_in_rect(mousepos, [315, 260, 50, 50]):
-                    self.TempsDeDepart -= 1
+                    self.TempsDuMinuteur -= 1
                 if Helpers.is_in_rect(mousepos, [220, 330, 230, 79]):
                     self.minuteur = 1
+
+             #QUAND ON DEMARRE LE DECOMPTE#
+                   
+        if self.minuteur == 1:
+            self.TempsDuMinuteur = self.TempsDuMinuteur - self.chrono2.elapsed_time()
+
                     
 
     def chronoScreen_update(self, InputEvents):
@@ -252,19 +257,27 @@ class TimeScreen():
             
             gameDisplay.blit(self.fleche1, (315, 60))
             gameDisplay.blit(self.fleche2, (315, 260))
+            gameDisplay.blit(self.fleche1, (140, 60))
+            gameDisplay.blit(self.fleche2, (140, 260))
+            gameDisplay.blit(self.fleche1, (490, 60))
+            gameDisplay.blit(self.fleche2, (490, 260))
             gameDisplay.blit(self.bouton_start, (220, 330))
+            self.heure_text = self.TitleFont3.render("h", True, (0, 0, 0))
+            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 150))
+            self.minute_text = self.TitleFont3.render("min", True, (0, 0, 0))
+            gameDisplay.blit(self.minute_text, (425-((self.minute_text.get_rect().width)/2), 150))
             self.start_text = self.PostTitleFont3.render("START", True, (0, 0, 0))
             gameDisplay.blit(self.start_text, (235, 330))
-            self.TempsDeDepart_text = self.PostTitleFont2.render(str(self.TempsDeDepart), True, (0, 0, 0))
+            self.TempsDeDepart_text = self.PostTitleFont2.render(str(self.TempsDuMinuteur), True, (0, 0, 0))
             gameDisplay.blit(self.TempsDeDepart_text, (340-((self.TempsDeDepart_text.get_rect().width)/2), 160))
 
         if self.minuteur == 1 :
-            self.temps_restant2_text = self.PostTitleFont2.render(str(self.TempsRestant2), True, (0, 0, 0))
+            self.temps_du_minuteur_text = self.PostTitleFont2.render(str(self.TempsDuMinuteur), True, (0, 0, 0))
                                     # on met des guillemets quand on veut
                                     # mettre manuellement du texte,
                                     # et on n'en met pas quand le texte vient
                                     # d'une variable, comme ici
-            gameDisplay.blit(self.temps_restant2_text, (200, 200))
+            gameDisplay.blit(self.temps_du_minuteur_text, (200, 200))
                   # on affiche le texte une fois qu'il a ete cree (a la ligne au dessus)
             
 

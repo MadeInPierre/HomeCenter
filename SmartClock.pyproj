@@ -53,6 +53,7 @@
     <Compile Include="Helpers.py" />
     <Compile Include="HomeScreen.py" />
     <Compile Include="InputManager.py" />
+    <Compile Include="LockScreen.py" />
     <Compile Include="MainSC.py" />
     <Compile Include="NewsCollector.py" />
     <Compile Include="NewsScreen.py" />

@@ -309,24 +309,35 @@ class HomeScreen():
         '''
         if animTime > 3:
             self.ScreenStatus = "RUNNING"
+        print self.ancrage
 
     def fade_out(self):
         animTime = self.animation.elapsed_time()
+        
+        if self.ancrage > 430: # si on a clique sur un icone d'application, la lancer tout de suite
+            if animTime > 0.2:
+                if self.fade_direction is not "":
+                    self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("HOMESCREEN", self.fade_direction) + "_AND_DEAD"
+                else:
+                    self.ScreenStatus = "GOTO_" + self.TransitionDestination + "_AND_DEAD"
+                    print "sent goto " + self.TransitionDestination
 
-        if animTime > 0 and animTime < 1:
-            self.time_color = 255 / (1 + math.exp(-(0.5 - animTime) / 0.1))
-        if animTime > 0.5 and animTime < 1:
-            self.date_color = 255 / (1 + math.exp(-(0.75 - animTime) / 0.05))
 
-        '''
-        Envoie un texto quand l'ecran a fini de disparaitre, avec la destination (le nouvel ecran a faire apparaitre).
-        '''
-        if animTime > 1.5:
-            if self.fade_direction is not "":
-                self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("HOMESCREEN", self.fade_direction) + "_AND_DEAD"
-            else:
-                self.ScreenStatus = "GOTO_" + self.TransitionDestination + "_AND_DEAD"
-                print "sent goto " + self.TransitionDestination
+        else: # si on est sur le panneau principal, faire une animation sortante avant de changer de Screen.
+            if animTime > 0 and animTime < 1:
+                self.time_color = 255 / (1 + math.exp(-(0.5 - animTime) / 0.1))
+            if animTime > 0.5 and animTime < 1:
+                self.date_color = 255 / (1 + math.exp(-(0.75 - animTime) / 0.05))
+
+            '''
+            Envoie un texto quand l'ecran a fini de disparaitre, avec la destination (le nouvel ecran a faire apparaitre).
+            '''
+            if animTime > 1.5:
+                if self.fade_direction is not "":
+                    self.ScreenStatus = "GOTO_" + ScreenRedirector().next_screen("HOMESCREEN", self.fade_direction) + "_AND_DEAD"
+                else:
+                    self.ScreenStatus = "GOTO_" + self.TransitionDestination + "_AND_DEAD"
+                    print "sent goto " + self.TransitionDestination
 
 
     def Reset(self):

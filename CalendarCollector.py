@@ -65,7 +65,7 @@ class CalendarCollector():
         now = str(start_year) + "-" + str(start_month) + "-" + str(start_day) + "T00:00:00.000000Z" # on ecrit la date dans le format que l'API veut
         print(now)
 
-        eventsAPI = service.events().list(calendarId = ID, timeMin = now, maxResults = 50, singleEvents = True, orderBy = 'startTime').execute()
+        eventsAPI = service.events().list(calendarId = ID, timeMin = now, maxResults = 100, singleEvents = True, orderBy = 'startTime').execute()
 
         return self.parse_events(eventsAPI.get('items', []))
 

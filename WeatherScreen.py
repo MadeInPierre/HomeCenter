@@ -215,31 +215,35 @@ class WeatherScreen():
 #Afficher le fond d'ecran et l'icone correspondant a la case selectionnne et en lien avec les infos du WeatherCollector
 #Permet aussi de gerer la transparence et la position des elements a afficher
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "sun":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "01d" : 
             Helpers.blit_alpha(gameDisplay, self.WallPaperSun,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.sunny_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "sun_cloud":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "02d" : 
             Helpers.blit_alpha(gameDisplay, self.WallPaperCloudandsun,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.sunny_cloud_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "cloud":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "03d" : 
             Helpers.blit_alpha(gameDisplay, self.WallPaperCloud,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.cloud_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "light_rain":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "04d" : 
+            Helpers.blit_alpha(gameDisplay, self.WallPaperCloud,(0,0), self.Transparence)
+            Helpers.blit_alpha(gameDisplay, self.cloud_icon, (20, self.PosY_Icone), self.Transparence)
+
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "10d" : 
             Helpers.blit_alpha(gameDisplay, self.WallPaperLightrain,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.light_rain_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "heavy_rain":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "09d" :
             Helpers.blit_alpha(gameDisplay, self.WallPaperHeavyrain,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.heavy_rain_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "storm":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "11d" :
             Helpers.blit_alpha(gameDisplay, self.WallPaperStorm,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.storm_icon, (20, self.PosY_Icone), self.Transparence)
 
-        if self.infos_meteo.DailyWeather.Icons[self.currentday] == "snow":
+        if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "13d": 
             Helpers.blit_alpha(gameDisplay, self.WallPaperSnow,(0,0), self.Transparence)
             Helpers.blit_alpha(gameDisplay, self.snow_icon, (20, self.PosY_Icone), self.Transparence)
 
@@ -247,10 +251,10 @@ class WeatherScreen():
 
         Helpers.blit_alpha(gameDisplay, self.thermometre_icon, (250, 70), self.Transparence2)
         Helpers.blit_alpha(gameDisplay, self.RainProb_icon, (250, 175), self.Transparence4)
-        Helpers.blit_alpha(gameDisplay, self.humidite_icon, (490, 175), self.Transparence5)
-        Helpers.blit_alpha(gameDisplay, self.wind_icon, (490, 70), self.Transparence3)
+        Helpers.blit_alpha(gameDisplay, self.humidite_icon, (510, 175), self.Transparence5)
+        Helpers.blit_alpha(gameDisplay, self.wind_icon, (515, 70), self.Transparence3)
         Helpers.blit_alpha(gameDisplay, self.sunrise_icon, (250, 280), self.Transparence6)
-        Helpers.blit_alpha(gameDisplay, self.sunset_icon, (490, 280), self.Transparence7)
+        Helpers.blit_alpha(gameDisplay, self.sunset_icon, (510, 280), self.Transparence7)
 
 
 
@@ -261,232 +265,97 @@ class WeatherScreen():
         self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+chr(176)+"C", True, (255,255,255))
         Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence2)
         
-        self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.Humidite, (581, 176), self.Transparence5)
-        self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Humidite, (580, 175), self.Transparence5)
-
-        self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.RainProb, (341, 176), self.Transparence4)
-        self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.RainProb, (340, 175), self.Transparence4)
-
         self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.WindStrength, (581, 71), self.Transparence3)
+        Helpers.blit_alpha(gameDisplay, self.WindStrength, (601, 71), self.Transparence3)
         self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.WindStrength, (580, 70), self.Transparence3)
+        Helpers.blit_alpha(gameDisplay, self.WindStrength, (600, 70), self.Transparence3)
 
         self.Sunset = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunset[self.currentday]), True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.Sunset, (581, 281), self.Transparence7)
+        Helpers.blit_alpha(gameDisplay, self.Sunset, (601, 281), self.Transparence7)
         self.Sunset = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunset[self.currentday]), True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Sunset, (580, 280), self.Transparence7)
+        Helpers.blit_alpha(gameDisplay, self.Sunset, (600, 280), self.Transparence7)
 
         self.Sunrise = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunrise[self.currentday]), True, (0,0,0,100))
         Helpers.blit_alpha(gameDisplay, self.Sunrise, (341, 281), self.Transparence6)
         self.Sunrise = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunrise[self.currentday]), True, (255,255,255))
         Helpers.blit_alpha(gameDisplay, self.Sunrise, (340, 280), self.Transparence6)
 
+#Le site duquel on recupere les infos meteo ne donne plus d'info concernant la proba de pluie et l'humidite a partir du 6e jour, d'ou ce if, pour ne pas faire apparaitre "0%" pour le 5e et 6e jour
+
+        if self.currentday == 5 or self.currentday == 6 : 
+            self.Humidite = self.FontDatum.render("N/A %", True, (0,0,0,100))
+            Helpers.blit_alpha(gameDisplay, self.Humidite, (601, 176), self.Transparence5)
+            self.Humidite = self.FontDatum.render("N/A %", True, (255,255,255))
+            Helpers.blit_alpha(gameDisplay, self.Humidite, (600, 175), self.Transparence5)
+
+            self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
+            Helpers.blit_alpha(gameDisplay, self.RainProb, (341, 176), self.Transparence4)
+            self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
+            Helpers.blit_alpha(gameDisplay, self.RainProb, (340, 175), self.Transparence4)
+
+          
+        else:
+            self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (0,0,0,100))
+            Helpers.blit_alpha(gameDisplay, self.Humidite, (601, 176), self.Transparence5)
+            self.Humidite = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Humidities[self.currentday])+"%", True, (255,255,255))
+            Helpers.blit_alpha(gameDisplay, self.Humidite, (600, 175), self.Transparence5)
+
+            self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (0,0,0,100))
+            Helpers.blit_alpha(gameDisplay, self.RainProb, (341, 176), self.Transparence4)
+            self.RainProb = self.FontDatum.render(str(self.infos_meteo.DailyWeather.RainProbs[self.currentday])+"%", True, (255,255,255))
+            Helpers.blit_alpha(gameDisplay, self.RainProb, (340, 175), self.Transparence4)
+
 #Definie les cases de la barre du bas
 #La case selectionnee est plus claire 
 
-        if self.NewDay == 0:
-            gameDisplay.blit(self.barre2_icon, (1.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (1.5,380))
-        
-        if self.NewDay == 1:
-            gameDisplay.blit(self.barre2_icon, (115.5,380))
-        else:
-           gameDisplay.blit(self.barre_icon, (115.5,380))
-
-
-        if self.NewDay == 2:
-            gameDisplay.blit(self.barre2_icon, (229.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (229.5,380))
-
-        if self.NewDay == 3:
-            gameDisplay.blit(self.barre2_icon, (343.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (343.5,380))
-
-        if self.NewDay == 4:
-            gameDisplay.blit(self.barre2_icon, (457.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (457.5,380))
-
-
-        if self.NewDay == 5:
-            gameDisplay.blit(self.barre2_icon, (571.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (571.5,380))
-
-
-        if self.NewDay == 6:
-            gameDisplay.blit(self.barre2_icon, (685.5,380))
-        else:
-            gameDisplay.blit(self.barre_icon, (685.5,380))
-
+        for i in range (0,7):
+            if self.NewDay == i:
+                gameDisplay.blit(self.barre2_icon, (115.5+(i-1)*114,380))
+            if self.NewDay != i:
+                gameDisplay.blit(self.barre_icon, (115.5+(i-1)*114,380))
 
 #Affiche le texte dans les cases de la barre du bas
+        
+            self.DayText = self.DayFont.render(str(self.infos_meteo.DailyWeather.Week[i]), True, (0,0,0))
+            gameDisplay.blit(self.DayText, (115.5+(i-1)*114+20,380+60))
+       
+#Boucle qui identifie quel icone de temps a afficher suivant le jour selectionne et les informations qui l'accompagnent
 
-        self.DayoneText = self.DayFont.render("Day 1", True, (0,0,0))
-        gameDisplay.blit(self.DayoneText, (1.5+30,380+60))
-
-        self.DaytwoText = self.DayFont.render("Day 2", True, (0,0,0))
-        gameDisplay.blit(self.DaytwoText, (115.5+30,380+60))
-
-        self.DaythreeText = self.DayFont.render("Day 3", True, (0,0,0))
-        gameDisplay.blit(self.DaythreeText, (229.5+30,380+60))
-
-        self.DayfourText = self.DayFont.render("Day 4", True, (0,0,0))
-        gameDisplay.blit(self.DayfourText, (343.5+30,380+60))
-
-        self.DayfiveText = self.DayFont.render("Day 5", True, (0,0,0))
-        gameDisplay.blit(self.DayfiveText, (457.5+30,380+60))
-
-        self.DaysixText = self.DayFont.render("Day 6", True, (0,0,0))
-        gameDisplay.blit(self.DaysixText, (571.5+30,380+60))
-
-        self.DaysevenText = self.DayFont.render("Day 7", True, (0,0,0))
-        gameDisplay.blit(self.DaysevenText, (685.5+30,380+60))
-
-#Boucle qui identifie quel icone de temps a aficher suivant le jour selectionne et les informations qui l'accompagnent
-
-        for i in range (0,7):
-            if self.infos_meteo.DailyWeather.Icons[i] == "sun":
-                if i == 0:
-                    gameDisplay.blit(self.sunny_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.sunny_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.sunny_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.sunny_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.sunny_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.sunny_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.sunny_mini_icon,(685.5,380))   
-            if self.infos_meteo.DailyWeather.Icons[i] == "sun_cloud":
-                if i == 0:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.sunny_cloud_mini_icon,(685.5,380))         
-            if self.infos_meteo.DailyWeather.Icons[i] == "cloud":
-                if i == 0:
-                    gameDisplay.blit(self.cloud_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.cloud_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.cloud_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.cloud_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.cloud_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.cloud_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.cloud_mini_icon,(685.5,380))         
-            if self.infos_meteo.DailyWeather.Icons[i] == "light_rain":
-                if i == 0:
-                    gameDisplay.blit(self.light_rain_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.light_rain_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.light_rain_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.light_rain_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.light_rain_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.light_rain_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.light_rain_mini_icon,(685.5,380))         
-            if self.infos_meteo.DailyWeather.Icons[i] == "heavy_rain":
-                if i == 0:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.heavy_rain_mini_icon,(685.5,380))         
-            if self.infos_meteo.DailyWeather.Icons[i] == "storm":
-                if i == 0:
-                    gameDisplay.blit(self.storm_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.storm_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.storm_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.storm_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.storm_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.storm_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.storm_mini_icon,(685.5,380))         
-            if self.infos_meteo.DailyWeather.Icons[i] == "snow":
-                if i == 0:
-                    gameDisplay.blit(self.snow_mini_icon,(1.5,380))
-                if i == 1:    
-                    gameDisplay.blit(self.snow_mini_icon,(115.5,380))           
-                if i == 2:
-                    gameDisplay.blit(self.snow_mini_icon,(229.5,380))     
-                if i == 3:
-                    gameDisplay.blit(self.snow_mini_icon,(343.5,380))            
-                if i == 4:
-                    gameDisplay.blit(self.snow_mini_icon,(457.5,380))            
-                if i == 5:
-                    gameDisplay.blit(self.snow_mini_icon,(571.5,380))            
-                if i == 6:
-                    gameDisplay.blit(self.snow_mini_icon,(685.5,380))         
-
+            if self.infos_meteo.DailyWeather.Icons[i] == "01d":
+                gameDisplay.blit(self.sunny_mini_icon,(115.5+(i-1)*114,380))           
+            if self.infos_meteo.DailyWeather.Icons[i] == "02d":
+                gameDisplay.blit(self.sunny_cloud_mini_icon,(115.5+(i-1)*114,380))                    
+            if self.infos_meteo.DailyWeather.Icons[i] == "03d":
+                gameDisplay.blit(self.cloud_mini_icon,(115.5+(i-1)*114,380))              
+            if self.infos_meteo.DailyWeather.Icons[i] == "04d":               
+                gameDisplay.blit(self.cloud_mini_icon,(115.5+(i-1)*114,380))                   
+            if self.infos_meteo.DailyWeather.Icons[i] == "10d":   
+                gameDisplay.blit(self.light_rain_mini_icon,(115.5+(i-1)*114,380))                     
+            if self.infos_meteo.DailyWeather.Icons[i] == "09d":
+                gameDisplay.blit(self.heavy_rain_mini_icon,(115.5+(i-1)*114,380))                    
+            if self.infos_meteo.DailyWeather.Icons[i] == "11d":
+                gameDisplay.blit(self.storm_mini_icon,(115.5+(i-1)*114,380))                     
+            if self.infos_meteo.DailyWeather.Icons[i] == "13d":
+                gameDisplay.blit(self.snow_mini_icon,(115.5+(i-1)*114,380))
+                           
      
 #Affiche la temperature dans les cases du bas
 
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[0]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (62, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[1]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (176, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[2]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (290, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[3]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (403, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[4]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (517, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[5]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (631, 380))
-        self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.Temperatures[6]), True, (0,0,0))
-        gameDisplay.blit(self.TemperatureMini, (745, 380))
-
-#Affiche la date
-
-        self.Date = self.FontDate.render("Samedi 2 Avril 2016", True, (0,0,0,100))
+            if len(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])) == 1:
+                self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])+chr(176), True, (0,0,0))
+                gameDisplay.blit(self.TemperatureMini, (178+(i-1)*114, 380))
+            if len(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])) > 1:
+                self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])+chr(176), True, (0,0,0))
+                gameDisplay.blit(self.TemperatureMini, (169+(i-1)*114, 380))
+           
+#Affiche date en haut de l'écran
+  
+        self.Date = self.FontDate.render(self.infos_meteo.DailyWeather.Time[self.currentday], True, (0,0,0,100))
         Helpers.blit_alpha(gameDisplay, self.Date, (41, 21), self.Transparence)
-        self.Date = self.FontDate.render("Samedi 2 Avril 2016", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Date, (40, 20), self.Transparence)
-
-        
-            
+        self.Date = self.FontDate.render(self.infos_meteo.DailyWeather.Time[self.currentday], True, (255,255,255))
+        Helpers.blit_alpha(gameDisplay, self.Date, (40, 20), self.Transparence)      
+          
+           
     def Quit(self):
         pass
     def __str__(self):
