@@ -20,7 +20,7 @@ class SleepManager():
                 self.chrono.reset()
 
 
-        if self.chrono.elapsed_time() > 2 and self.lock_screen.ScreenStatus is "OUT":
+        if self.chrono.elapsed_time() > 60 and self.lock_screen.ScreenStatus is "OUT":
             self.launch_lockscreen()
         else:
             self.unlock_lockscreen()
@@ -77,6 +77,8 @@ class LockScreen():
         self.WarningFont     = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf",      12 )
 
         self.bg          = pygame.image.load("Images/lock_bg1.png")
+        self.digitcounter_whiteimg = pygame.image.load("Images/Numbers/round_square_white.png")
+        self.digitcounter_darkimg  = pygame.image.load("Images/Numbers/round_square_dark.png" )
         self.numbers_imgs = [   pygame.image.load("Images/Numbers/zero.png" ),
                                 pygame.image.load("Images/Numbers/one.png"  ),
                                 pygame.image.load("Images/Numbers/two.png"  ),
@@ -108,7 +110,7 @@ class LockScreen():
                 if self.PannelsStatus is "SLEEP":
                     self.PannelsStatus = "SLEEPTOLOCK"
                     self.chrono.reset()
-                if self.PannelsStatus is "LOCK":
+                if self.PannelsStatus is "LOCK" or self.PannelsStatus is "LOCK_FADING_IN":
                     '''
                     On regarde si on a clique sur une des touches. Si oui on verifie si le nouveau code est bon, etc.
                     '''
@@ -177,22 +179,21 @@ class LockScreen():
                 self.time_color  = 0
 
         if self.PannelsStatus == "SLEEPTOLOCK":
-            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 2:
-                self.general_transp = 255 / (1 + math.exp(-(1 - self.chrono.elapsed_time()) / 0.2))
-                self.time_color     = 160 / (1 + math.exp(-(1 - self.chrono.elapsed_time()) / 0.2))
-                self.date_color     = 160 / (1 + math.exp(-(1 - self.chrono.elapsed_time()) / 0.2))
-                self.swipe_color    = 130 / (1 + math.exp(-(1 - self.chrono.elapsed_time()) / 0.2))
-                self.bg_transp      = 100 / (1 + math.exp(-(self.chrono.elapsed_time() - 1) / 0.2))
+            self.time_color     = 160 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1))
+            self.date_color     = 160 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1))
+            self.swipe_color    = 130 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1))
+            self.bg_transp      = 100 / (1 + math.exp(-(self.chrono.elapsed_time() - 1) / 0.2))
 
-            if self.chrono.elapsed_time() > 2:
+            if self.chrono.elapsed_time() > 1:
                 self.PannelsStatus = "LOCK_FADING_IN"
                 self.chrono.reset()
 
         if self.PannelsStatus == "LOCK_FADING_IN":
-            self.keypad_transp  = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 1) / 0.2))
-            self.warning_transp = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 1) / 0.2))
+            self.keypad_transp  = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1))
+            self.warning_transp = 255 / (1 + math.exp(-(self.chrono.elapsed_time() - 0.5) / 0.1))
+            self.bg_transp      = 100 / (1 + math.exp(-(self.chrono.elapsed_time())   / 0.2))
 
-            if self.chrono.elapsed_time() > 3:
+            if self.chrono.elapsed_time() > 1:
                 self.PannelsStatus = "LOCK"
                 self.chrono.reset()
 
@@ -234,7 +235,7 @@ class LockScreen():
         '''
         --------------------------------------------------- PARTIE SLEEP -------------------------------------------------------
         '''
-        if self.PannelsStatus == "SLEEP":
+        if self.PannelsStatus == "SLEEP" or self.PannelsStatus == "SLEEPTOLOCK":
             '''
             Renders the Date and Time (date, Hours+Minutes, Seconds)
             '''
@@ -299,10 +300,9 @@ class LockScreen():
             s = pygame.Surface((15, 15))
             for i in range(4):
                 if len(self.InputCode) > i:
-                    s.fill((255, 255, 255))
+                    Helpers.blit_alpha(gameDisplay, self.digitcounter_whiteimg, (self.WindowRes[0] / 2 - 15 / 2 - 68 + i * 45, 94), self.keypad_transp)
                 else:
-                    s.fill((60, 60, 60))
-                Helpers.blit_alpha(gameDisplay, s, (self.WindowRes[0] / 2 - 15 / 2 - 68 + i * 45, 76), self.keypad_transp)
+                    Helpers.blit_alpha(gameDisplay, self.digitcounter_darkimg,  (self.WindowRes[0] / 2 - 15 / 2 - 68 + i * 45, 94), self.keypad_transp)
 
             self.WarningBanner_Update(gameDisplay)
 

@@ -4,6 +4,7 @@ import Screen
 from AnimationManager import *
 from NewsCollector import *
 from ScreenRedirector import *
+from Helpers import Helpers
 
 
 class NewsScreen():
@@ -14,6 +15,7 @@ class NewsScreen():
         self.fade_direction = fade_direction
 
         self.separator_image = pygame.image.load("Images/vertical_separator.png").convert_alpha()
+        self.bg = pygame.image.load("Images/news1.png")
 
         self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 25)
         self.WaitFont  = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 22)
@@ -56,6 +58,8 @@ class NewsScreen():
             self.fade_in()
         
     def Draw(self, gameDisplay):
+        Helpers.blit_alpha(gameDisplay, self.bg, (0, 0), 100)
+
         lemondeSurface = self.TitleFont.render("Le Monde", True, (255, 255, 255))
         fbSurface = self.TitleFont.render("Facebook", True, (255, 255, 255))
         redditSurface = self.TitleFont.render("Python Reddit", True, (255, 255, 255))
