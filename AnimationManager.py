@@ -15,7 +15,10 @@ class AnimationManager():
         return time.time() - self.start_time
 
     def delta_elapsed_time(self):
-        return self.time - self.prev_time
+        if self.time - self.prev_time != 0:
+            return self.time - self.prev_time
+        else:
+            return 1
 
     def reset(self):
         self.start_time = time.time()

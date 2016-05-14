@@ -54,6 +54,7 @@ chrono = AnimationManager() #DEBUG FPS
 
 gameRunning = True
 while gameRunning:
+        chrono.Update()
         '''
         Handles pygame events such as quitting events.
         '''
@@ -140,7 +141,7 @@ while gameRunning:
         pygame.display.update()
         clock.tick(30)
 
-        #print "FPS : " + str(1/ chrono.delta_welapsed_time()) #DEBUG FPS
+        print "FPS : " + str(1/ chrono.delta_elapsed_time()) #DEBUG FPS
 
 '''
 Sortie du systeme : desinitialise pygame, les ecrans actifs et l'ecouteur d'entrees avant de quitter totalement.
