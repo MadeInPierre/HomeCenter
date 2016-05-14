@@ -58,6 +58,7 @@
     <Compile Include="NewsCollector.py" />
     <Compile Include="NewsScreen.py" />
     <Compile Include="NewsWidget.py" />
+    <Compile Include="PushbulletManager.py" />
     <Compile Include="Screen.py" />
     <Compile Include="ScreenRedirector.py" />
     <Compile Include="StartScreen.py" />

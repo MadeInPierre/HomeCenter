@@ -5,6 +5,9 @@ it returns a list of lists, each one being a post/notification with the title, d
 
 import feedparser
 import unicodedata
+import io
+from urllib2 import urlopen
+import pygame
 
 class NewsCollector():
 
@@ -15,7 +18,24 @@ class NewsCollector():
 
     def get_lemonde_posts(self):
         pased_news = feedparser.parse(self.lemonde_url)
-        return self.parse(pased_news)
+        print "LeMonde Collected."
+        posts = self.parse(pased_news)
+        return posts
+        '''except:
+        posts = []
+        posts.append(["Item 1",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 2",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 3",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 4",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 5",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 6",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 7",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 8",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 9",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 10", "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        posts.append(["Item 11", "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
+        '''
+        return posts
 
     def get_python_reddit(self):
         pased_news = feedparser.parse(self.pythonReddit_url)
@@ -27,6 +47,7 @@ class NewsCollector():
 
     def parse(self, d):
         posts = []
+        count = 0
         for post in d.entries:
             '''
             Certains sites ne donnent pas l'heure de publication des articles, ce qui fait crasher notre systeme si on
@@ -62,9 +83,22 @@ class NewsCollector():
                 post_time = "99:99"
 
             '''
+            On recupere l'image de la news accociee et la transforme en format pygame.
+            '''
+            try:
+                post_image_url = post.enclosures[0].href
+                image_str = urlopen(post_image_url).read()
+                image_file = io.BytesIO(image_str)
+                image = pygame.image.load(image_file)
+            except:
+                image = pygame.image.load("Images/NewsScreen/NoNews.png")
+                print "News with no image found"
+
+            '''
             On ajoute l'article avec nos modifications d'heure et de date dans la liste principale.
             '''
-            posts.append([post.title, date, post_time, post.link])
+            posts.append([post.title, date, post_time, post.link, post.summary, image])#, post.enclosures[count].href])
+            count += 1
 
         return posts
 

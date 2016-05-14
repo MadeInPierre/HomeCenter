@@ -27,7 +27,8 @@ class WeatherCollector():
         self.Meteo = []
         self.Wind = []
         self.Hum = []
-        self.Temp = []
+        self.TempMax = []
+        self.TempMin = []
         self.Temp2 = []
         self.Rain = []
         self.Sunrise = []
@@ -45,11 +46,13 @@ class WeatherCollector():
             self.Week.append(self.Day + "/" + self.Month)
             print self.Week
             print "    meteo :  " + str(w.get_status()) + " (img = " + str(w.get_weather_icon_name()) + ")"
-            self.Meteo.append(str(w.get_weather_icon_name()))
-            print "    clouds : " + str(w.get_clouds())             
+            self.Meteo.append(str(w.get_weather_icon_name()))           
             print "    rain :   " + str(w.get_rain())
             try:
-                self.Rain.append(str(w.get_rain()['all']))
+                if str(w.get_rain()['all'])[2:3] == ".":
+                    self.Rain.append(str(w.get_rain()['all'])[0:2])
+                else:
+                    self.Rain.append(str(w.get_rain()['all']))
             except:
                 self.Rain.append("0")
             print "    wind :   "  + str(w.get_wind())
@@ -59,8 +62,10 @@ class WeatherCollector():
                 self.Wind.append(str(w.get_wind()['speed']*3.6)[0:3])
             print "    hum :    "  + str(w.get_humidity())
             self.Hum.append(str(w.get_humidity()))
+
             print "    temp :   "  + str(w.get_temperature(unit='celsius'))
-            self.Temp.append(str((w.get_temperature(unit='celsius')['day']))[0:4])
+            self.TempMax.append(str((w.get_temperature(unit='celsius')['max']))[0:4])
+            self.TempMin.append(str((w.get_temperature(unit='celsius')['min']))[0:4])
             
             if str((w.get_temperature(unit='celsius')['day']))[1:2] == ".":
                 self.Temp2.append(str((w.get_temperature(unit='celsius')['day']))[0:1])
@@ -75,7 +80,8 @@ class WeatherCollector():
      
         
         self.DailyWeather   = daily_weather  (self.Meteo,
-                                              self.Temp,
+                                              self.TempMax,
+                                              self.TempMin,
                                               self.Hum,
                                               self.Rain,
                                               self.Wind,
@@ -83,13 +89,14 @@ class WeatherCollector():
                                               self.Sunset,
                                               self.Time,
                                               self.Week,
-                                              self.Temp2)
+                                              self.Temp2) #Temperatures des cases du bas
 
 
 class daily_weather():
-    def __init__(self, icons, temps, hums, rain_probs, wind_strength, sunrises, sunsets, time, week, temp2):
+    def __init__(self, icons, tempmax, tempmin, hums, rain_probs, wind_strength, sunrises, sunsets, time, week, temp2):
         self.Icons        = icons
-        self.Temperatures = temps
+        self.TemperaturesMax = tempmax
+        self.TemperaturesMin = tempmin
         self.Humidities   = hums
         self.RainProbs    = rain_probs
         self.Sunrise     = sunrises

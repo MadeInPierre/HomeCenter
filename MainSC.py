@@ -1,4 +1,4 @@
-﻿'''
+'''
 This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.
@@ -66,7 +66,7 @@ while gameRunning:
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).
         '''
-        LockScreen.Update(Input.events)
+        #LockScreen.Update(Input.events)
         currentScreen.Update(Input.events)
         fadingScreen.Update(Input.events)
 
@@ -120,10 +120,11 @@ while gameRunning:
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
         currentScreen.Draw(gameDisplay)
-        LockScreen.Draw(gameDisplay)
+        #LockScreen.Draw(gameDisplay)
 
         if str(currentScreen) is not "HOMESCREEN":
-            gameDisplay.blit(home_icon, (0, 0))
+            if str(currentScreen) is not "NEWSSCREEN": # petite exception pour NewsScreen
+                gameDisplay.blit(home_icon, (0, 0))
 
             for event in Input.events:
                 if Helpers.is_in_rect(pygame.mouse.get_pos(), [0, 0, 30, 30]):

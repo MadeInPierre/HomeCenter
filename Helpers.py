@@ -97,3 +97,9 @@ class Helpers():
     def mathlerp(origine, destination, speed):
         value = (speed * origine) + ((1 - speed) * destination)
         return value
+
+    @staticmethod
+    def draw_line(gameDisplay, pX, pY, width, height, color):
+        ligne = pygame.Surface((width, height))
+        ligne.fill(color)
+        gameDisplay.blit(ligne, (pX, pY))

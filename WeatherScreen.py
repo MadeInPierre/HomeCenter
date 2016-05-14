@@ -37,13 +37,14 @@ class WeatherScreen():
        
 #Icones des parametres du temps de la grande fenetre
 
-        self.thermometre_icon = pygame.image.load("Images/Icones_Meteo/thermometre.png").convert_alpha()
+        self.thermometremax_icon = pygame.image.load("Images/Icones_Meteo/ThermometreMax.png").convert_alpha()
+        self.thermometremin_icon = pygame.image.load("Images/Icones_Meteo/ThermometreMin.png").convert_alpha()
         self.humidite_icon = pygame.image.load("Images/Icones_Meteo/Goutte.png").convert_alpha()
         self.RainProb_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha()
         self.wind_icon = pygame.image.load("Images/Icones_Meteo/Vent.png").convert_alpha() #Vent
         self.sunrise_icon = pygame.image.load("Images/Icones_Meteo/sunrise.png").convert_alpha() #sunrise
         self.sunset_icon = pygame.image.load("Images/Icones_Meteo/sunset.png").convert_alpha() #sunset
-
+        self.switch_icon = pygame.image.load("Images/Icones_Meteo/switch.png").convert_alpha()
 
 
 #Fonds d'ecran en fonction du temps
@@ -80,10 +81,12 @@ class WeatherScreen():
         self.chrono = AnimationManager()
         self.chrono2 = AnimationManager()
         self.chrono1screen = AnimationManager()
+        self.chronoswitch = AnimationManager()
 
 #Variable qui donne la transparence
 
         self.Transparence = 0
+        self.Transparence0 = 0
         self.Transparence2 = 0
         self.Transparence3 = 0
         self.Transparence4 = 0  
@@ -99,9 +102,9 @@ class WeatherScreen():
 
         self.NewDay = 0
 
-#Variable qui donne date
+#Variable qui sert a donner la temperature max ou min
 
-        #self.now = time.localtime()
+        self.tempswitch = 0
 
 
     def Update(self, InputEvents):
@@ -116,30 +119,49 @@ class WeatherScreen():
                         if Helpers.is_in_rect(mousepos, [1.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
                             self.chrono.reset()                            
                             self.NewDay = 0
+                            self.chronoswitch.reset()
+
                             
                         if Helpers.is_in_rect(mousepos, [115.5, 380, 113, 100]): 
                             self.chrono.reset()
                             self.NewDay = 1
+                            self.chronoswitch.reset()
+
                                               
                         if Helpers.is_in_rect(mousepos, [229.5, 380, 113, 100]):
                             self.chrono.reset()
                             self.NewDay = 2
+                            self.chronoswitch.reset()
+
                             
                         if Helpers.is_in_rect(mousepos, [343.5, 380, 113, 100]): 
                             self.NewDay = 3
                             self.chrono.reset()
+                            self.chronoswitch.reset()
+
                            
                         if Helpers.is_in_rect(mousepos, [457.5, 380, 113, 100]): 
                             self.NewDay = 4
                             self.chrono.reset()
+                            self.chronoswitch.reset()
+
                            
                         if Helpers.is_in_rect(mousepos, [571.5, 380, 113, 100]): 
                             self.NewDay = 5
                             self.chrono.reset()
+                            self.chronoswitch.reset()
+
                             
                         if Helpers.is_in_rect(mousepos, [685.5, 380, 113, 100]): 
                             self.NewDay = 6
                             self.chrono.reset()
+                            self.chronoswitch.reset()
+
+                    if Helpers.is_in_rect(mousepos, [205, 75, 65, 65]):
+                        if self.chronoswitch.elapsed_time > 2:
+                            self.tempswitch = self.tempswitch + 1
+                        self.chronoswitch.reset()
+
 
 #Aniamation -> Fondu "apparaissant" du 1er écran, du currentscreen0 quand on lance l'application
 
@@ -162,7 +184,7 @@ class WeatherScreen():
 
 #Animation -> Fondu "apparaissant" des Icones et de leur valeur associee
 
-            if self.chrono.elapsed_time() > 3 and  self.chrono.elapsed_time() < 4:
+            if self.chrono.elapsed_time() > 3 and  self.chrono.elapsed_time() < 4 :
                 self.Transparence2=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 6.5/2) / 0.05)))
 
             if self.chrono.elapsed_time() > 4 and  self.chrono.elapsed_time() < 5:
@@ -184,7 +206,7 @@ class WeatherScreen():
 
 #Animation -> Fondu "disparraissant"  des Icones et de leur valeur associee
 
-            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
+            if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1: 
                 self.Transparence2=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
 
             if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
@@ -209,6 +231,15 @@ class WeatherScreen():
             self.PosY_Icone = 100 + 5*math.sin(2*math.pi/3*self.chrono2.elapsed_time())
             
 #fct sinus: Amplitude*math.sin(2*math.pi/Periode*t)
+
+#Apparition/disparition de la temperature et du switch
+
+        if self.chronoswitch.elapsed_time() > 3 and self.chronoswitch.elapsed_time() < 4  :
+                self.Transparence0=int(255 / (1 + math.exp(-(self.chronoswitch.elapsed_time() - 6.5/2) / 0.05)))
+    
+        if self.chronoswitch.elapsed_time() > 0 and self.chronoswitch.elapsed_time() < 1 : 
+                self.Transparence0=int(self.Transparence0 / (1 + math.exp(-(0.5 - self.chronoswitch.elapsed_time()) / 0.1)))
+
 
     def Draw(self, gameDisplay):
 
@@ -249,7 +280,6 @@ class WeatherScreen():
 
 #Affiche les icones lies aux caracteristiques du temps
 
-        Helpers.blit_alpha(gameDisplay, self.thermometre_icon, (250, 70), self.Transparence2)
         Helpers.blit_alpha(gameDisplay, self.RainProb_icon, (250, 175), self.Transparence4)
         Helpers.blit_alpha(gameDisplay, self.humidite_icon, (510, 175), self.Transparence5)
         Helpers.blit_alpha(gameDisplay, self.wind_icon, (515, 70), self.Transparence3)
@@ -260,10 +290,21 @@ class WeatherScreen():
 
 #Affiche les donnees liees a la temperature/humidite/pluie
 
-        self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+chr(176)+"C", True, (0,0,0,100))
-        Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence2)
-        self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Temperatures[self.currentday])+chr(176)+"C", True, (255,255,255))
-        Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence2)
+        if self.chronoswitch.elapsed_time > 2:
+            if self.tempswitch % 2 == 0:
+                self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMax[self.currentday])+chr(176)+"C", True, (0,0,0,100))
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence0)
+                self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMax[self.currentday])+chr(176)+"C", True, (255,255,255))
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.thermometremax_icon, (250, 70), self.Transparence0)
+
+            else:
+                self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMin[self.currentday])+chr(176)+"C", True, (0,0,0,100))
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence0)
+                self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMin[self.currentday])+chr(176)+"C", True, (255,255,255))
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.thermometremin_icon, (250, 70), self.Transparence0)
+
         
         self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (0,0,0,100))
         Helpers.blit_alpha(gameDisplay, self.WindStrength, (601, 71), self.Transparence3)
@@ -354,6 +395,11 @@ class WeatherScreen():
         Helpers.blit_alpha(gameDisplay, self.Date, (41, 21), self.Transparence)
         self.Date = self.FontDate.render(self.infos_meteo.DailyWeather.Time[self.currentday], True, (255,255,255))
         Helpers.blit_alpha(gameDisplay, self.Date, (40, 20), self.Transparence)      
+
+#Bouton switch
+
+        Helpers.blit_alpha(gameDisplay, self.switch_icon, (205, 75), self.Transparence2)
+             
           
            
     def Quit(self):
