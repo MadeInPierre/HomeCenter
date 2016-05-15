@@ -2,6 +2,8 @@
 Projet ISN : Un système d'exploitation complet et flexible adapté pour une utilisation dans la maison.
 Projet libre d'accès et modification pour tous.
 
+__Projet réalisé par Julien REBOUL, Priscille VALLA et Pierre LACLAU au Lycée Jean Jaurès - St Clément de Rivière.__
+
 ![Bonjour](GitHub/Bonjour.PNG)
 
 ## Installation
@@ -10,7 +12,7 @@ Le système utilise plusieurs librairies utiles pour gérer l'interface, récup�
 Outils nécessaires :
   - Python 2.7 à télécharger sur le [site officiel](python.org) de Python.
   - Pygame, à télécharger et installer manuellement [ici](http://pygame.org/download.shtml) (télécharger la première version, "pygame-1.9.1.win32-py2.7.msi").
-  - Feedparser, Cet outil permet de récupérer les titres de tout feed RSS (Le Monde, Facebook, Forums...), et nous l'utilisons dans l'application Actualités. A installer avec l'outil **pip** avec la commande : 
+  - Feedparser, C+et outil permet de récupérer les titres de tout feed RSS (Le Monde, Facebook, Forums...), et nous l'utilisons dans l'application Actualités. A installer avec l'outil **pip** avec la commande : 
 ```
 pip install feedparser
 ```
