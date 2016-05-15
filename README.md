@@ -44,7 +44,7 @@ Voilà, le système est prêt à tourner ! Lancez l'exécution de `MainSC.py`, l
 Tout commence dans le fichier `MainSC.py`, qui sert de hub général entre applications, écrans, et messages (tactile, transitions...). Il crée la fenêtre, gère la création/destruction/rafraichissement des bons écrans.
 **Pour lancer le système**, lancez ce fichier (qui appelera tous les autres automatiquement).
 
-Les fichiers les plus importants sonts les fichiers `xxxxScreen.py`. Chacun d'eux est une de nos applications. A regarder :
+Les fichiers les plus importants sont les fichiers `xxxxScreen.py`. Chacun d'eux est une de nos applications. A regarder :
 ```
 StartScreen.py
 HomeScreen.py
@@ -56,7 +56,7 @@ Les fichiers `xxxxCollector.py` sont les récupérateurs d'informations sur inte
 
 Les autres fichiers sont soit des fichiers 'outils' (`Helpers.py`, `AnimationManager.py`, `TestScreen.py`, ), des fichiers faisant partie de la plateforme 'interne' du système (gérer les écrans avec `ScreenRedirector.py`, reconnaitres les gestes tactiles avec `TouchManager.py`, distribuer des messages entre applications avec `InputManager.py`...) ou des composants moins importants comme les fichiers `xxxxWidget.py` (Widgets pas encore construits, seule la structure première y est). 
 
-Les fichiers `.pyc` sont à ignorer, ce ne sont que des fichiers générés automatiquement par python lors du démarrage de l'aplication.
+Les fichiers `.pyc` sont à ignorer, ce ne sont que des fichiers générés automatiquement par python lors du démarrage de l'application.
 
 P.S. : Le Projet est encore sous construction, nous avons déjà commenté les zones les plus importantes (normalement), mais c'est très incomplet par rapport à quoi s'attendre pour la version finale.
 
