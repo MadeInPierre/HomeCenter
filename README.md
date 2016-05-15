@@ -20,6 +20,21 @@ pip install feedparser
 pip install --upgrade google-api-python-client
 ``` 
 
+  - PYOWM, un module qui permet de récupérer les prévisions météo depuis le site www.openweathermap.com. A installer avec l'outil **pip** avec la commande :
+```
+pip install pyowm
+```
+
+  - Pushbullet, un service qui permet d'envoyer et recevoir des notifications entre plusieurs appareils connectés à un même compte. Nous nous en servons dans l'applications Actualités, où l'utilisateur voit les principaux titres sur notre système et peut ouvrir d'un clic l'article complet sur son portable. A installer avec l'outil **pip** avec la commance :
+```
+pip install pushbullet.py
+```
+
+
+
+Voilà, le système est prêt à tourner ! Lancez l'exécution de `MainSC.py`, le fichier central, qui gérera l'exécution de tous les autres fichiers automatiquement.
+
+
 ## Structure du projet
 
 ![Image](GitHub/Apps.PNG)
