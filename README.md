@@ -48,9 +48,12 @@ Les fichiers les plus importants sont les fichiers `xxxxScreen.py`. Chacun d'eux
 ```
 StartScreen.py
 HomeScreen.py
+LockScreen.py
+
 WeatherScreen.py
 CalendarScreen.py
 TimeScreen.py
+NewsScreen.py
 ```
 Les fichiers `xxxxCollector.py` sont les récupérateurs d'informations sur internet, comme `CalendarCollector.py` pour la récupération d'événements.
 
