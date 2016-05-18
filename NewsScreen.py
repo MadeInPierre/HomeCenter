@@ -85,9 +85,9 @@ class NewsScreen():
                 self.ancrage -= scroll[1]
                 if self.ancrage > 0:
                     self.ancrage = 0
-                elif self.ancrage < 480 - 246 * int(len(self.lemonde_items) / 2) + 20: # CORRIGER LES VALEURS
-                    self.ancrage  = 480 - 246 * int(len(self.lemonde_items) / 2) + 20
-
+                elif self.ancrage < 480 - 220 * (int(len(self.lemonde_items) / 2) + len(self.lemonde_items) % 2) - 20: # CORRIGER LES VALEURS
+                    self.ancrage  = 480 - 220 * (int(len(self.lemonde_items) / 2) + len(self.lemonde_items) % 2) - 20
+                print int(len(self.lemonde_items) / 2) + len(self.lemonde_items) % 2
         '''
         On laisse chaque objet de la liste des articles se gérer (animations, entrees tactiles..)
         '''
@@ -119,7 +119,7 @@ class NewsScreen():
         '''
         On dessine tous les articles a la bonne position
         '''
-        offset = 200 + 20
+        offset = 200 + 20 # taille de chaque card et espace entre chaque
         count = 0
         for item in self.lemonde_items:
             drawpos = (80 + 349 * (count % 2 == 1), 20 + offset * int(count / 2) + self.ancrage)

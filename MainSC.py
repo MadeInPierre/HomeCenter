@@ -46,7 +46,7 @@ Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l
 '''
 global currentScreen
 LockScreen = SleepManager(WindowRes)
-currentScreen = NewsScreen(WindowRes) # ECRAN DE DEMARRAGE ICI
+currentScreen = TimeScreen(WindowRes) # ECRAN DE DEMARRAGE ICI
 fadingScreen = Screen(WindowRes)
 
 
@@ -141,7 +141,7 @@ while gameRunning:
         pygame.display.update()
         clock.tick(30)
 
-        print "FPS : " + str(1/ chrono.delta_elapsed_time()) #DEBUG FPS
+        #print "FPS : " + str(1/ chrono.delta_elapsed_time()) #DEBUG FPS
 
 '''
 Sortie du systeme : desinitialise pygame, les ecrans actifs et l'ecouteur d'entrees avant de quitter totalement.

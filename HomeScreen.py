@@ -33,6 +33,7 @@ class HomeScreen():
         self.AppsTitleFont   = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      22 )
         self.DateFont        = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
         self.DescriptionFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
+        self.DisponibleFont  = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      14 )
 
         self.WindowRes = windowres
         self.ScreenStatus = "FADING_IN"
@@ -52,6 +53,14 @@ class HomeScreen():
                           pygame.image.load("Images/Icones_Apps/StocksApp.png").convert_alpha(),
                           pygame.image.load("Images/Icones_Apps/SnakeApp.png").convert_alpha(),
                           pygame.image.load("Images/Icones_Apps/AutomationApp.png").convert_alpha()]
+
+        self.blackicons = [None, None, None, None, # TEMPORAIRE? ON GRISE LES APPLICATIONS QUI N4ONT PAS ENCORE ETE DEVELOPPEES
+                            pygame.image.load("Images/Icones_Apps/CalculatorAppblack.png").convert_alpha(),
+                            pygame.image.load("Images/Icones_Apps/StocksAppblack.png").convert_alpha(),
+                            pygame.image.load("Images/Icones_Apps/SnakeAppblack.png").convert_alpha(),
+                            pygame.image.load("Images/Icones_Apps/AutomationAppblack.png").convert_alpha()]
+
+
         self.app_descriptions = ["Meteo",
                                  "Calendrier",
                                  "Horloges",
@@ -267,6 +276,8 @@ class HomeScreen():
         '''
         On dessine les icones d'applications et les descriptions.
         '''
+        prochainement = self.DisponibleFont.render("Prochainement", True, (255, 255, 255))
+        disponible = self.DisponibleFont.render("disponible", True, (255, 255, 255))
         for line in range(0, 2):
             for app in range(0, 4):
                 gameDisplay.blit(self.app_icons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage))
@@ -274,7 +285,12 @@ class HomeScreen():
                 description = self.DescriptionFont.render(self.app_descriptions[app + line*4], True, (255, 255, 255))
                 gameDisplay.blit(description, (50 + (app + 1) * 700/4  - 700/8 - description.get_rect().width / 2, 45 + self.app_icons[app].get_rect().height - 5  + line * 180 - 450 + self.ancrage))
 
-
+                if line == 1:
+                    Helpers.blit_alpha(gameDisplay, self.blackicons[app + line*4], (50 + (app + 1) * 700/4  - 700/8 - self.app_icons[app].get_rect().width / 2, 45  + line * 180 - 450 + self.ancrage), 190)
+                    gameDisplay.blit(prochainement, (50 + (app + 1) * 700/4  - 700/8 - prochainement.get_rect().width / 2,
+                                                     70  + line * 180 - 450 + self.ancrage + self.app_icons[app].get_rect().width / 2 - prochainement.get_rect().width / 2))
+                    gameDisplay.blit(disponible,    (50 + (app + 1) * 700/4  - 700/8 - disponible.get_rect().width / 2,
+                                                     77  + line * 180 - 450 + self.ancrage + self.app_icons[app].get_rect().height / 2 - disponible.get_rect().width / 2))
 
 
 
@@ -313,7 +329,7 @@ class HomeScreen():
 
     def fade_out(self):
         animTime = self.animation.elapsed_time()
-        
+
         if self.ancrage > 430: # si on a clique sur un icone d'application, la lancer tout de suite
             if animTime > 0.2:
                 if self.fade_direction is not "":

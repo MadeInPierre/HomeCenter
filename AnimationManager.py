@@ -1,7 +1,15 @@
 ﻿import time
 
 class AnimationManager():
+    '''
+    Classe qui sert de chronometre au systeme entier.
+    On l'utilise partout : animations, chronometre dans TimeScreen, changements d'états après un certain temps...
 
+    Cette classe peut donner :
+        - Le temps ecoule depuis sa creation
+        - Le temps ecoule depuis la derniere fois qu'on a appele la fonction reset()
+        - Le temps ecoule depuis la derniere boucle qui a tourne dans le systeme
+    '''
     def __init__(self):
         self.start_time = time.time()
         self.prev_time = 0.0

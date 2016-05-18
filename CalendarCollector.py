@@ -1,5 +1,5 @@
 ﻿'''
-Classe prise du site de Google et modifiee qui donne les 50 prochains evenements de chaque
+Classe prise du site de Google et modifiee qui donne les 100 prochains evenements de chaque
 calendrier de Pierre.
 '''
 from __future__ import print_function
@@ -21,12 +21,14 @@ except ImportError:
 
 class CalendarCollector():
     def get_events(self, start_year, start_month, start_day):
-        """Shows basic usage of the Google Calendar API.
-
-        Creates a Google Calendar API service object and outputs a list of the next
-        10 events on the user's calendar.
-        """
+        '''
+        Partie qui va cherches tous les evenements et les renvoie au CalendarScreen.
+        Il y a 5 calendriers a recuperer : Controles, A Rendre, Travail, Divers Lycee, Personnel.
+        '''
         try:
+            '''
+            Adresses de chaque calendrier, a donner au module de Google.
+            '''
             controles_calendar_id   = "jh1vplv3t8tvg5uecguginu1i0@group.calendar.google.com"
             diverslycee_calendar_id = "iim4mi4h2p0sg4q2a63l6naaf0@group.calendar.google.com"
             travail_calendar_id     = "tj4oifktmlmuc2qbmko318nmk4@group.calendar.google.com"
@@ -34,11 +36,16 @@ class CalendarCollector():
             main_calendar_id        = "pielaclau@gmail.com"
 
 
-
+            '''
+            Initialisation et connexion du module Google Calendar API.
+            '''
             credentials = self.get_credentials()
             http = credentials.authorize(httplib2.Http())
             service = discovery.build('calendar', 'v3', http=http)
 
+            '''
+            Recuperation des evenements, avec mise en format adequat pour CalendarScreen (on recupere tout et range dans des listes)
+            '''
             controles_events = self.get_events_from_calendar(service, controles_calendar_id   , start_year, start_month, start_day)
             divers_events    = self.get_events_from_calendar(service, diverslycee_calendar_id , start_year, start_month, start_day)
             travail_events   = self.get_events_from_calendar(service, travail_calendar_id     , start_year, start_month, start_day)
@@ -51,7 +58,9 @@ class CalendarCollector():
                     ("DIVERS",    divers_events),
                     ("MAIN",      main_events)]
         except:
-            
+            '''
+            Si la connexion a echoue, on met des evenements-tests pour combler le vide.
+            '''
             return [("CONTROLES", [[u"PHY CT Em Epp Ec",   u"2016-03-25", u"test"], [u"MAT CT Integrales", u"2016-03-29", u""]]),
                     ("ARENDRE",   [[u"A rendre",           u"2016-04-05", ""],      [u"Autre",             u"2016-03-23", u""]]),
                     ("TRAVAIL",   [[u"Exercices de maths", u"2016-03-10", u""],     [u"Physiques exos cordialement",   u"2016-03-30", u""],
@@ -59,7 +68,7 @@ class CalendarCollector():
                     ("DIVERS",    [[u"Auto Ecole",         u"2016-03-08", u""],     [u"Journee portes ouvertes lycee", u"2016-03-25", u""]]),
                     ("MAIN",      [[u"AUTO ECOLE rdv",     u"2016-03-29", u""],     [u"Test",                          u"2016-03-25", u""]])]
 
-    
+
 
     def get_events_from_calendar(self, service, ID, start_year, start_month, start_day):
         now = str(start_year) + "-" + str(start_month) + "-" + str(start_day) + "T00:00:00.000000Z" # on ecrit la date dans le format que l'API veut
@@ -70,6 +79,10 @@ class CalendarCollector():
         return self.parse_events(eventsAPI.get('items', []))
 
     def parse_events(self, events_source):
+        '''
+        On a recupere les evenemts, mais nosu n'avons pas besoin de toutes ces informations.
+        Ici, on met en forme les donnees dans des listes, avec uniquement les infos nécessaires (titre, date, description)
+        '''
         parsed_events = []
         for event in events_source:
             start = event['start'].get('dateTime', event['start'].get('date'))
@@ -89,9 +102,9 @@ class CalendarCollector():
     '''
     Code de Google, repris d'internet
     '''
-
     def get_credentials(self):
-        """Gets valid user credentials from storage.
+        """
+        Gets valid user credentials from storage.
 
         If nothing has been stored, or if the stored credentials are invalid,
         the OAuth2 flow is completed to obtain the new credentials.

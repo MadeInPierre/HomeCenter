@@ -5,7 +5,6 @@ from AnimationManager import *
 from WeatherCollector import *
 from InputManager import *
 from Helpers import *
-#blabla
 
 class WeatherScreen():
     def __init__(self, WindowRes):
@@ -14,7 +13,7 @@ class WeatherScreen():
 
         self.ScreenStatus = "RUNNING"
 
-#Icones du temps de la grande fenetre
+#Icones meteo de la grande fenetre
 
         self.sunny_icon = pygame.image.load("Images/Icones_Meteo/weather-clear-2.png").convert_alpha()
         self.sunny_cloud_icon = pygame.image.load("Images/Icones_Meteo/weather-few-clouds-2.png").convert_alpha()
@@ -25,7 +24,7 @@ class WeatherScreen():
         self.snow_icon = pygame.image.load("Images/Icones_Meteo/weather-snow-2.png").convert_alpha()
 
 
-#Icones du temps des petites fenetres
+#Icones meteo des petites fenetres
 
         self.sunny_mini_icon = pygame.image.load("Images/Icones_Meteo/weather-clear-2-mini.png").convert_alpha()
         self.sunny_cloud_mini_icon = pygame.image.load("Images/Icones_Meteo/weather-few-clouds-2-mini.png").convert_alpha()
@@ -35,15 +34,15 @@ class WeatherScreen():
         self.storm_mini_icon = pygame.image.load("Images/Icones_Meteo/weather-storm-2-mini.png").convert_alpha()
         self.snow_mini_icon = pygame.image.load("Images/Icones_Meteo/weather-snow-2-mini.png").convert_alpha()
        
-#Icones des parametres du temps de la grande fenetre
+#Icones des parametres du temps de la grande fenetre (vent, temperature...)
 
         self.thermometremax_icon = pygame.image.load("Images/Icones_Meteo/ThermometreMax.png").convert_alpha()
         self.thermometremin_icon = pygame.image.load("Images/Icones_Meteo/ThermometreMin.png").convert_alpha()
         self.humidite_icon = pygame.image.load("Images/Icones_Meteo/Goutte.png").convert_alpha()
         self.RainProb_icon = pygame.image.load("Images/Icones_Meteo/probapluie.png").convert_alpha()
-        self.wind_icon = pygame.image.load("Images/Icones_Meteo/Vent.png").convert_alpha() #Vent
-        self.sunrise_icon = pygame.image.load("Images/Icones_Meteo/sunrise.png").convert_alpha() #sunrise
-        self.sunset_icon = pygame.image.load("Images/Icones_Meteo/sunset.png").convert_alpha() #sunset
+        self.wind_icon = pygame.image.load("Images/Icones_Meteo/Vent.png").convert_alpha() 
+        self.sunrise_icon = pygame.image.load("Images/Icones_Meteo/sunrise.png").convert_alpha() 
+        self.sunset_icon = pygame.image.load("Images/Icones_Meteo/sunset.png").convert_alpha() 
         self.switch_icon = pygame.image.load("Images/Icones_Meteo/switch.png").convert_alpha()
 
 
@@ -66,50 +65,49 @@ class WeatherScreen():
 
 #Barres transparentes
 
-        self.barre_icon = pygame.Surface((113,100)).convert_alpha()
-        self.barre_icon.fill((255,255,255,150))
-        self.barre2_icon = pygame.Surface((113,100)).convert_alpha()
-        self.barre2_icon.fill((255,255,255,225))
+        self.barre_icon = pygame.Surface((113,100)).convert_alpha() 
+        self.barre_icon.fill((255,255,255,150)) #Case des jours non choisis plus transparentes (150)
+        self.barre2_icon = pygame.Surface((113,100)).convert_alpha() 
+        self.barre2_icon.fill((255,255,255,225)) #Case du jour choisi qui est plus claire (225)
 
-#VARIABLES:
+#!!!!!!VARIABLES!!!!!!:
             
-#Variable qui sert à l'affichage du temps des jours selectionnes
+#Variable qui correspond à l'ecran qui EST affiche / EST apparu
+
         self.currentday = 0
 
-#Variable qui appelle differents chrono
-
-        self.chrono = AnimationManager()
-        self.chrono2 = AnimationManager()
-        self.chrono1screen = AnimationManager()
-        self.chronoswitch = AnimationManager()
-
-#Variable qui donne la transparence
-
-        self.Transparence = 0
-        self.Transparence0 = 0
-        self.Transparence2 = 0
-        self.Transparence3 = 0
-        self.Transparence4 = 0  
-        self.Transparence5 = 0
-        self.Transparence6 = 0
-        self.Transparence7 = 0
-
-#Variable qui donne la position Y (Utilisee dans des formules)
-
-        self.PosY_Icone = 100
-
-#Variable qui correspond à l'ecran a faire apparaitre
+#Variable qui correspond à l'ecran que l'on VEUT faire apparaitre
 
         self.NewDay = 0
 
-#Variable qui sert a donner la temperature max ou min
+#Variables qui appellent des chronos
+
+        self.chrono = AnimationManager() #Chrono de la majeur partie  des animations
+        self.chrono2 = AnimationManager() #Chrono de l'icone meteo de l'ecran principal
+        self.chrono1screen = AnimationManager() #Chrono du 1er ecran (quand on lance l'application)
+
+#Variables qui donnent la transparence (Permet un ordre d'apparition)
+
+        self.Transparence = 0  #Transparence de la date, de l'icone meteo et du fond d'ecran
+        self.Transparence2 = 0 #Transparence de la temperature, de son icone associe et du bouton "switch"
+        self.Transparence3 = 0 #Transparence du vent et de son icone associe
+        self.Transparence4 = 0 #Transparence du la proba de pluie et de son icone associe
+        self.Transparence5 = 0 #Transparence de l'humidite et de son icone associe
+        self.Transparence6 = 0 #Transparence du lever de soleil et de son icone associe
+        self.Transparence7 = 0 #Transparence du coucher de soleil et de son icone associe
+
+#Variable qui donne la position Y (Utilisee dans des formules pour faire "planer" textes/images...)
+
+        self.PosY_Icone = 100
+
+#Variable qui sert a donner la temperature max ou min (Pair = Max / Impair = Min)
 
         self.tempswitch = 0
 
-
     def Update(self, InputEvents):
 
-#Ci-dessous: Si le clic est dans le carre delimite par les valeurs alors affiche l'ecran lie a la variable NewDay qui prendra ensuite la forme de currentday
+#Ci-dessous: Si le clic est dans le carre delimite par les valeurs alors affiche l'ecran lie a la variable NewDay (La valeur du NewDay prendra ensuite la forme de currentday, cad )
+
         for event in InputEvents:
             if "TOUCH" in event:
                     mousepos = Helpers.get_message_x_y(event)
@@ -119,70 +117,58 @@ class WeatherScreen():
                         if Helpers.is_in_rect(mousepos, [1.5, 380, 113, 100]): #x, y, longueur cote x, longueur cote y
                             self.chrono.reset()                            
                             self.NewDay = 0
-                            self.chronoswitch.reset()
-
                             
                         if Helpers.is_in_rect(mousepos, [115.5, 380, 113, 100]): 
                             self.chrono.reset()
                             self.NewDay = 1
-                            self.chronoswitch.reset()
-
                                               
                         if Helpers.is_in_rect(mousepos, [229.5, 380, 113, 100]):
                             self.chrono.reset()
                             self.NewDay = 2
-                            self.chronoswitch.reset()
-
                             
                         if Helpers.is_in_rect(mousepos, [343.5, 380, 113, 100]): 
                             self.NewDay = 3
                             self.chrono.reset()
-                            self.chronoswitch.reset()
-
                            
                         if Helpers.is_in_rect(mousepos, [457.5, 380, 113, 100]): 
                             self.NewDay = 4
                             self.chrono.reset()
-                            self.chronoswitch.reset()
-
                            
                         if Helpers.is_in_rect(mousepos, [571.5, 380, 113, 100]): 
                             self.NewDay = 5
                             self.chrono.reset()
-                            self.chronoswitch.reset()
-
                             
                         if Helpers.is_in_rect(mousepos, [685.5, 380, 113, 100]): 
                             self.NewDay = 6
                             self.chrono.reset()
-                            self.chronoswitch.reset()
+
+#Permet de passer de la temperature max a min et inversement quand on clique sur le bouton "switch"
 
                     if Helpers.is_in_rect(mousepos, [205, 75, 65, 65]):
-                        if self.chronoswitch.elapsed_time > 2:
-                            self.tempswitch = self.tempswitch + 1
-                        self.chronoswitch.reset()
+                        self.tempswitch = self.tempswitch + 1
 
 
-#Aniamation -> Fondu "apparaissant" du 1er écran, du currentscreen0 quand on lance l'application
+#Aniamation -> Fondu "apparaissant" du 1er écran (currentscreen0) quand on lance l'application 
+#L'ecran apparait des que l'application est lancee
 
         if self.chrono1screen.elapsed_time() > 0 and self.chrono1screen < 1:
             self.Transparence=int(255 / (1 + math.exp(-(self.chrono1screen.elapsed_time() - 2.5/2 ) / 0.05)))
                             
-#Animation -> Fondu "apparaissant" des ecrans. La condition avec le chrono1screen est necessaire pour ne pas engendrer un conflit entre les animations 
-#(celle que requiert le 1er ecran est differente de celle-ci)
+#Animation -> Fondu "apparaissant" des ecrans (Apres le 1er). La condition avec le chrono1screen est necessaire pour ne pas engendrer un conflit entre les animations 
+#L'ecran apparait 1sec apres qu'on ait decide de changer d'ecran (il faut 1sec a l'ecran d'avant pour disparaitre)
 
         if self.chrono1screen.elapsed_time() > 1:
             if self.chrono.elapsed_time() > 1 and self.chrono.elapsed_time() < 3  :
-                self.currentday = self.NewDay
+                self.currentday = self.NewDay #Le jour que l'on a selectionne va apparaitre
                 self.Transparence=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 2 ) / 0.1)))
 
 #Animation -> Fondu "disparaissant" des ecrans. La condition avec le chrono1screen est necessaire pour ne pas engendrer un conflit entre les animations 
-#(celle que requiert le 1er ecran est differente de celle-ci)
 
             if self.chrono.elapsed_time() > 0 and self.chrono.elapsed_time() < 1 : 
                 self.Transparence=int(255 / (1 + math.exp(-(0.5 - self.chrono.elapsed_time()) / 0.1)))
 
 #Animation -> Fondu "apparaissant" des Icones et de leur valeur associee
+#Voir a quel element les transparences correspondent dans le init
 
             if self.chrono.elapsed_time() > 3 and  self.chrono.elapsed_time() < 4 :
                 self.Transparence2=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 6.5/2) / 0.05)))
@@ -201,8 +187,6 @@ class WeatherScreen():
 
             if self.chrono.elapsed_time() > 8 and  self.chrono.elapsed_time() < 9:
                 self.Transparence7=int(255 / (1 + math.exp(-(self.chrono.elapsed_time() - 16.5/2) / 0.05)))
-
-
 
 #Animation -> Fondu "disparraissant"  des Icones et de leur valeur associee
 
@@ -226,24 +210,15 @@ class WeatherScreen():
 
 
 #Varaible PosY_Icone est placee dans fonction sinusoidale pour faire "planer" textes/images
+#fct sinus: Amplitude*math.sin(2*math.pi/Periode*t)
       
         if self.chrono2.elapsed_time() > 0:
             self.PosY_Icone = 100 + 5*math.sin(2*math.pi/3*self.chrono2.elapsed_time())
             
-#fct sinus: Amplitude*math.sin(2*math.pi/Periode*t)
-
-#Apparition/disparition de la temperature et du switch
-
-        if self.chronoswitch.elapsed_time() > 3 and self.chronoswitch.elapsed_time() < 4  :
-                self.Transparence0=int(255 / (1 + math.exp(-(self.chronoswitch.elapsed_time() - 6.5/2) / 0.05)))
-    
-        if self.chronoswitch.elapsed_time() > 0 and self.chronoswitch.elapsed_time() < 1 : 
-                self.Transparence0=int(self.Transparence0 / (1 + math.exp(-(0.5 - self.chronoswitch.elapsed_time()) / 0.1)))
-
 
     def Draw(self, gameDisplay):
 
-#Afficher le fond d'ecran et l'icone correspondant a la case selectionnne et en lien avec les infos du WeatherCollector
+#Afficher le fond d'ecran et l'icone correspondant a la case selectionnne et en lien avec les infos du WeatherCollector ("01d"... sont les informations recuperees du site internet)
 #Permet aussi de gerer la transparence et la position des elements a afficher
 
         if str(self.infos_meteo.DailyWeather.Icons[self.currentday]) == "01d" : 
@@ -286,24 +261,22 @@ class WeatherScreen():
         Helpers.blit_alpha(gameDisplay, self.sunrise_icon, (250, 280), self.Transparence6)
         Helpers.blit_alpha(gameDisplay, self.sunset_icon, (510, 280), self.Transparence7)
 
-
-
 #Affiche les donnees liees a la temperature/humidite/pluie
+#Exception pour la temperature -> Affiche aussi LES icones de la temperature (Temp Max et Min)
 
-        if self.chronoswitch.elapsed_time > 2:
-            if self.tempswitch % 2 == 0:
+        if self.tempswitch % 2 == 0:
                 self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMax[self.currentday])+chr(176)+"C", True, (0,0,0,100))
-                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence2)
                 self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMax[self.currentday])+chr(176)+"C", True, (255,255,255))
-                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence0)
-                Helpers.blit_alpha(gameDisplay, self.thermometremax_icon, (250, 70), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence2)
+                Helpers.blit_alpha(gameDisplay, self.thermometremax_icon, (250, 70), self.Transparence2)
 
-            else:
+        else:
                 self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMin[self.currentday])+chr(176)+"C", True, (0,0,0,100))
-                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (341, 71), self.Transparence2)
                 self.Temperature = self.FontDatum.render(str(self.infos_meteo.DailyWeather.TemperaturesMin[self.currentday])+chr(176)+"C", True, (255,255,255))
-                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence0)
-                Helpers.blit_alpha(gameDisplay, self.thermometremin_icon, (250, 70), self.Transparence0)
+                Helpers.blit_alpha(gameDisplay, self.Temperature, (340, 70), self.Transparence2)
+                Helpers.blit_alpha(gameDisplay, self.thermometremin_icon, (250, 70), self.Transparence2)
 
         
         self.WindStrength = self.FontDatum.render(str(self.infos_meteo.DailyWeather.WindStrength[self.currentday])+"km/h", True, (0,0,0,100))
@@ -321,7 +294,7 @@ class WeatherScreen():
         self.Sunrise = self.FontDatum.render(str(self.infos_meteo.DailyWeather.Sunrise[self.currentday]), True, (255,255,255))
         Helpers.blit_alpha(gameDisplay, self.Sunrise, (340, 280), self.Transparence6)
 
-#Le site duquel on recupere les infos meteo ne donne plus d'info concernant la proba de pluie et l'humidite a partir du 6e jour, d'ou ce if, pour ne pas faire apparaitre "0%" pour le 5e et 6e jour
+#Le site duquel on recupere les infos meteo ne donne plus d'info concernant la proba de l'humidite a partir du 6e jour, d'ou ce "if", pour ne pas faire apparaitre "0%" pour le 5e et 6e jour
 
         if self.currentday == 5 or self.currentday == 6 : 
             self.Humidite = self.FontDatum.render("N/A %", True, (0,0,0,100))
@@ -360,7 +333,7 @@ class WeatherScreen():
             self.DayText = self.DayFont.render(str(self.infos_meteo.DailyWeather.Week[i]), True, (0,0,0))
             gameDisplay.blit(self.DayText, (115.5+(i-1)*114+20,380+60))
        
-#Boucle qui identifie quel icone de temps a afficher suivant le jour selectionne et les informations qui l'accompagnent
+#Boucle (voir au-dessus) qui identifie quel icone de temps a afficher suivant le jour selectionne et les informations qui l'accompagnent
 
             if self.infos_meteo.DailyWeather.Icons[i] == "01d":
                 gameDisplay.blit(self.sunny_mini_icon,(115.5+(i-1)*114,380))           
@@ -378,9 +351,9 @@ class WeatherScreen():
                 gameDisplay.blit(self.storm_mini_icon,(115.5+(i-1)*114,380))                     
             if self.infos_meteo.DailyWeather.Icons[i] == "13d":
                 gameDisplay.blit(self.snow_mini_icon,(115.5+(i-1)*114,380))
-                           
-     
+                         
 #Affiche la temperature dans les cases du bas
+#La position de la temperature n'est pas la meme suivant si elle est a 1 ou 2 chiffres
 
             if len(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])) == 1:
                 self.TemperatureMini = self.FontTemperatureMini.render(str(self.infos_meteo.DailyWeather.TemperaturesBas[i])+chr(176), True, (0,0,0))
@@ -399,9 +372,9 @@ class WeatherScreen():
 #Bouton switch
 
         Helpers.blit_alpha(gameDisplay, self.switch_icon, (205, 75), self.Transparence2)
-             
+
           
-           
+                   
     def Quit(self):
         pass
     def __str__(self):
