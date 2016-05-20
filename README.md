@@ -1,3 +1,8 @@
+# ATTENTION
+Notre projet est encore en cours de finalisation : le projet n'est pas encore à sa dernière version, et quelques dernières touches sont encore nécessaires au niveau du rapport inclus sur ce site.
+
+Nous sommes désolés pour cela, et terminerons le plus rapidement possible. Ce sera fait une fois que ce message aura disparu.
+
 # HomeCenter
 Projet ISN : Un système d'exploitation complet et flexible adapté pour une utilisation dans la maison.
 Projet libre d'accès et modification pour tous.
@@ -34,7 +39,8 @@ pip install pushbullet.py
 
 
 
-Voilà, le système est prêt à tourner ! Lancez l'exécution de `MainSC.py`, le fichier central, qui gérera l'exécution de tous les autres fichiers automatiquement.
+Voilà, le système est prêt à tourner ! 
+Vous pouvez maintenant télécharger le projet lui-même avec le bouton "Download" en haut à droite de cette page. Une fois le dossier téléchargé, lancez le fichier `MainSC.py` (avec IDLE par exemple), le fichier central, qui gérera l'exécution de tous les autres fichiers automatiquement.
 
 
 ## Structure du projet
@@ -61,7 +67,8 @@ Les autres fichiers sont soit des fichiers 'outils' (`Helpers.py`, `AnimationMan
 
 Les fichiers `.pyc` sont à ignorer, ce ne sont que des fichiers générés automatiquement par python lors du démarrage de l'application.
 
-P.S. : Le Projet est encore sous construction, nous avons déjà commenté les zones les plus importantes (normalement), mais c'est très incomplet par rapport à quoi s'attendre pour la version finale.
+# Nagivation
+Le rapport de notre projet se trouve également sur ce site. Pour y accéder, cliquez sur le lien "Wiki" en haut de cette page.
 
 P.S. : Si vous avez des questions, n'hésitez pas à nous contacter. Bonne consultation :+1: !
 
