@@ -11,9 +11,7 @@ class WeatherCollector():
         Pour avoir les conditions actuelles
         '''
         owm = OWM(API, language = 'fr')
-        obs = owm.weather_at_id(2980033) # St Gely
-        w = obs.get_weather()
-        
+
         '''
         Pour avoir les prochains jours
         '''

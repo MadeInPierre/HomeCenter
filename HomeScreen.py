@@ -34,12 +34,17 @@ class HomeScreen():
         self.DateFont        = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      25 )
         self.DescriptionFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
         self.DisponibleFont  = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      14 )
+        self.AppsHintFont    = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
 
         self.WindowRes = windowres
         self.ScreenStatus = "FADING_IN"
         self.fade_direction = "" # A ENLEVER, GARDER SELEMENT TRANSITIONDESTINATION
         self.TransitionDestination = ""
         self.fade_origin = fadeorigin
+        self.arrow = SwipeArrow()
+
+        self.hint_animation_activated = False
+        self.hint_chrono = AnimationManager()
 
         '''
         On charge les icones des applications pour les dessiner dans le panneau correspondant.
@@ -169,6 +174,24 @@ class HomeScreen():
                             if app_name is "Domotique":
                                 self.TransitionDestination = "AUTOMATIONSCREEN"
 
+                '''
+                Si quelqu'un clique sur le texte APPLICATIONS en haut, on déclenche une animation qui l'indique qu'on peut
+                glisser vers le bas.
+                '''
+                if Helpers.is_in_rect(pygame.mouse.get_pos(), [self.WindowRes[0] / 2 - 90, 0, 180, 35]):
+                    self.hint_animation_activated = True
+                    self.hint_chrono.reset()
+                    print "activated"
+
+        if self.hint_animation_activated is True:
+            x = self.hint_chrono.elapsed_time()
+            if x > 0 and x < 1:
+                s = 0.1
+                self.ancrage = 30 *  (1 / (s * math.sqrt(2 * math.pi))) * math.exp(- (((x - 0.5) ** 2) / (2 * (s ** 2))))
+                print "animation"
+            elif x >= 1:
+                self.hint_animation_activated = False
+                self.ancrage = 0
 
 
         if self.ScreenStatus is "FADING_IN":
@@ -249,6 +272,14 @@ class HomeScreen():
             self.off = 0
         gameDisplay.blit(self.horizontal_line, (35, self.off + self.ancrage))
 
+        '''
+        '''
+        appshint = self.AppsHintFont.render("APPLICATIONS", True, (255, 255, 255))
+        Helpers.blit_alpha(gameDisplay, appshint, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2, 10), self.widget_opacity)
+
+        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2 - 26, 13), "UP", self.widget_opacity - 60)
+        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 + appshint.get_rect().width / 2 + 10, 13), "UP", self.widget_opacity - 60)
+
 
         self.widget_manager.Draw(gameDisplay, self.ancrage, self.widget_opacity)
 
@@ -291,9 +322,6 @@ class HomeScreen():
                                                      70  + line * 180 - 450 + self.ancrage + self.app_icons[app].get_rect().width / 2 - prochainement.get_rect().width / 2))
                     gameDisplay.blit(disponible,    (50 + (app + 1) * 700/4  - 700/8 - disponible.get_rect().width / 2,
                                                      77  + line * 180 - 450 + self.ancrage + self.app_icons[app].get_rect().height / 2 - disponible.get_rect().width / 2))
-
-
-
 
     def fade_in(self):
         animTime = self.animation.elapsed_time()

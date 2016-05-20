@@ -46,7 +46,7 @@ Initialisation du premier ecran (StartScreen) et d'un ecran vide (Screen) pour l
 '''
 global currentScreen
 LockScreen = SleepManager(WindowRes)
-currentScreen = TimeScreen(WindowRes) # ECRAN DE DEMARRAGE ICI
+currentScreen = HomeScreen(WindowRes) # ECRAN DE DEMARRAGE ICI
 fadingScreen = Screen(WindowRes)
 
 

@@ -59,6 +59,8 @@ class TimeScreen():
         self.bouton_start = pygame.image.load("Images/bouton_start.png").convert_alpha()
         self.tempsdonne = pygame.Surface((350, 120)).convert_alpha()
         self.tempsdonne.fill((255, 255, 255, 60))
+        self.Start_surface = pygame.Surface((230, 79)).convert_alpha()
+        self.Start_surface.fill((255, 255, 255, 60))
 
     #ON CHARGE LES POLICES#
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold  = False)
@@ -71,6 +73,7 @@ class TimeScreen():
         self.chrono2 = AnimationManager() #On cree un chrono qui va compter le temps
         self.TempsDuMinuteur = 0
         self.minuteur = 0
+        self.redcolor = 0
         self.TempsSecondes = 0
         self.TempsHeures = 0
         self.TempsMin = 0
@@ -132,7 +135,26 @@ class TimeScreen():
 
 
     def timeScreen_update(self, InputEvents):
-        pass
+        self.heure_sao = int(strftime("%H")) - 5
+        self.heure_londres = int(strftime("%H")) - 1
+        self.heure_sidney = int(strftime("%H")) + 8
+        self.heure_paris = int(strftime("%H"))
+        if self.heure_paris < 10:
+            self.heure_paris = '0' + str(self.heure_paris)
+        if self.heure_sao < 10:
+            self.heure_sao = '0' + str(self.heure_sao)
+        if self.heure_sao < 0:
+            self.heure_sao += 24
+        if self.heure_londres < 10:
+            self.heure_londres = '0' + str(self.heure_londres)
+        if self.heure_londres < 0:
+            self.heure_londres += 24
+        if self.heure_sidney < 10:
+            self.heure_sidney = '0' + str(self.heure_sidney)
+        if self.heure_sidney < 0:
+            self.heure_sidney += 24
+
+
 
     def alarmesScreen_update(self, InputEvents):
         pass
@@ -141,24 +163,24 @@ class TimeScreen():
         self.chrono2.Update()
         # REMARQUE le jamais oublier les "self." des qu'on utilise des
         # variables ou des fonctions.
-
-        for event in InputEvents:
-            if "TOUCH" in event:
-                mousepos = Helpers.get_message_x_y(event)
-                if Helpers.is_in_rect(mousepos, [315, 60, 50, 50]): #chaque variable heure, minute, seconde prend
-                    self.TempsMin += 1                             #la valeur choisie par les clics de l'utilisateur
-                if Helpers.is_in_rect(mousepos, [315, 260, 50, 50]):
-                    self.TempsMin -= 1
-                if Helpers.is_in_rect(mousepos, [140, 60, 50, 50]):
-                    self.TempsHeures += 1
-                if Helpers.is_in_rect(mousepos, [140, 260, 50, 50]):
-                    self.TempsHeures -= 1
-                if Helpers.is_in_rect(mousepos, [490, 60, 50, 50]):
-                    self.TempsSecondes += 1
-                if Helpers.is_in_rect(mousepos, [490, 260, 50, 50]):
-                    self.TempsSecondes -= 1
-                if Helpers.is_in_rect(mousepos, [220, 330, 230, 79]):
-                    self.minuteur = 1
+        if self.minuteur == 0:
+            for event in InputEvents:
+                if "TOUCH" in event:
+                    mousepos = Helpers.get_message_x_y(event)
+                    if Helpers.is_in_rect(mousepos, [325, 60, 50, 50]): #chaque variable heure, minute, seconde prend
+                        self.TempsMin += 1                             #la valeur choisie par les clics de l'utilisateur
+                    if Helpers.is_in_rect(mousepos, [325, 260, 50, 50]):
+                        self.TempsMin -= 1
+                    if Helpers.is_in_rect(mousepos, [125, 60, 50, 50]):
+                        self.TempsHeures += 1
+                    if Helpers.is_in_rect(mousepos, [125, 260, 50, 50]):
+                        self.TempsHeures -= 1
+                    if Helpers.is_in_rect(mousepos, [525, 60, 50, 50]):
+                        self.TempsSecondes += 1
+                    if Helpers.is_in_rect(mousepos, [525, 260, 50, 50]):
+                        self.TempsSecondes -= 1
+                    if Helpers.is_in_rect(mousepos, [220, 330, 230, 79]):
+                        self.minuteur = 1
 
             #on ajoute ces 3 variables dans une seule qui a un temps en secondes
             self.TempsDuMinuteur = self.TempsSecondes + 60*self.TempsMin + 3600*self.TempsHeures
@@ -179,7 +201,9 @@ class TimeScreen():
                                                                                                 #restantes transfere en minutes
 
             self.SecondesRestantes = self.TempsDuMinuteur - (self.HeuresRestantes * 3600) - (self.MinutesRestantes * 60) #meme chose en retirant les heures et minutes restantes
-                                                                                                                        #converties en secondes
+
+        if self.TempsDuMinuteur < 0:
+                self.redcolor = 1                                                                                                                #converties en secondes
 
 
 
@@ -187,6 +211,17 @@ class TimeScreen():
         # REMARQUE le jamais oublier les "self." des qu'on utilise des
         # variables ou des fonctions.
         self.chrono.Update()
+        self.HeuresRestantes = int(self.LeTempsDuChrono / 3600)    #on recupere seulement la partie entiere du temps divisé par 3600
+                                                                    #ce qui revient a recuperer le nombre d'heures restantes
+                                                                    #ce qui est plus pratique pour l'utilisateur
+
+
+        self.MinutesRestantes = int(self.LeTempsDuChrono / 60) - (self.HeuresRestantes * 60) #pour obtenir le nombre de minutes restantes on reproduit
+                                                                                            #le meme principe que pour les heures mais en retirant le nombre d'heures
+                                                                                            #restantes transfere en minutes
+
+        self.SecondesRestantes = self.LeTempsDuChrono - (self.HeuresRestantes * 3600) - (self.MinutesRestantes * 60)
+
         for event in InputEvents:
             if "TOUCH" in event:
                mousepos = Helpers.get_message_x_y(event) # recupere la position ou la personne a clique
@@ -252,7 +287,7 @@ class TimeScreen():
         gameDisplay.blit(self.Paris, (30, 30))
 
         self.paris_text = self.TitleFont.render("PARIS", True, (250, 250, 250))
-        gameDisplay.blit(self.paris_text, ((30 + 305/2) -(self.paris_text.get_rect().width/2), 150))
+        gameDisplay.blit(self.paris_text, ((30+(305/2)) -(self.paris_text.get_rect().width/2), 150))
 
         gameDisplay.blit(self.Londres, (365, 30))
 
@@ -269,18 +304,17 @@ class TimeScreen():
         self.sidney_text = self.TitleFont.render("SIDNEY", True, (250, 250, 250))
         gameDisplay.blit(self.sidney_text, ((365 + 305/2) -(self.sidney_text.get_rect().width/2), 375))
 
-        self.timeSurface = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
+        self.timeSurface = self.TitleFont2.render (str(self.heure_paris)+strftime(":%M"), True, (250, 250, 250))
         gameDisplay.blit(self.timeSurface, ((30 + 305/2) -(self.timeSurface.get_rect().width/2), 40))
 
-        self.timeSurface2 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
-        gameDisplay.blit(self.timeSurface2, ((365 + 305/2) -(self.timeSurface.get_rect().width/2), 40))
+        self.timeSurface2 = self.TitleFont2.render (str(self.heure_londres)+strftime(":%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface2, ((365 + 305/2) -(self.timeSurface2.get_rect().width/2), 40))
 
-        self.timeSurface3 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
-        gameDisplay.blit(self.timeSurface3, ((30 + 305/2) -(self.timeSurface.get_rect().width/2), 270))
+        self.timeSurface3 = self.TitleFont2.render (str(self.heure_sao)+strftime(":%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface3, ((30 + 305/2) -(self.timeSurface3.get_rect().width/2), 265))
 
-        self.timeSurface4 = self.TitleFont2.render (strftime("%H:%M"), True, (250, 250, 250))
-        gameDisplay.blit(self.timeSurface4, ((365 + 305/2) -(self.timeSurface.get_rect().width/2), 270))
-
+        self.timeSurface4 = self.TitleFont2.render (str(self.heure_sidney)+strftime(":%M"), True, (250, 250, 250))
+        gameDisplay.blit(self.timeSurface4, ((365 + 305/2) -(self.timeSurface4.get_rect().width/2), 265))
 
 
     def alarmesScreen_draw(self, gameDisplay):
@@ -288,50 +322,69 @@ class TimeScreen():
 
     def minuteurScreen_draw(self, gameDisplay):
         if self.minuteur == 0 :
+            gameDisplay.blit(self.Start_surface, (350-((self.Start_surface.get_rect().width)/2), 330))
 
-            gameDisplay.blit(self.fleche1, (315, 60))
-            gameDisplay.blit(self.fleche2, (315, 260))
-            gameDisplay.blit(self.fleche1, (140, 60))
-            gameDisplay.blit(self.fleche2, (140, 260))
-            gameDisplay.blit(self.fleche1, (490, 60))
-            gameDisplay.blit(self.fleche2, (490, 260))
-            gameDisplay.blit(self.bouton_start, (220, 330))
+            gameDisplay.blit(self.fleche1, (325, 60))
+            gameDisplay.blit(self.fleche2, (325, 260))
+            gameDisplay.blit(self.fleche1, (125, 60))
+            gameDisplay.blit(self.fleche2, (125, 260))
+            gameDisplay.blit(self.fleche1, (525, 60))
+            gameDisplay.blit(self.fleche2, (525, 260))
+
             self.heure_text = self.TitleFont5.render("h", True, (255, 255, 255))
-            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 150))
+            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 163))
             self.minute_text = self.TitleFont5.render("min", True, (255, 255, 255))
-            gameDisplay.blit(self.minute_text, (425-((self.minute_text.get_rect().width)/2), 150))
+            gameDisplay.blit(self.minute_text, (445-((self.minute_text.get_rect().width)/2), 163))
             self.minute_text = self.TitleFont5.render("s", True, (255, 255, 255))
-            gameDisplay.blit(self.minute_text, (600-((self.minute_text.get_rect().width)/2), 150))
+            gameDisplay.blit(self.minute_text, (630-((self.minute_text.get_rect().width)/2), 163))
             self.start_text = self.TitleFont3.render("START", True, (255, 255, 255))
-            gameDisplay.blit(self.start_text, (235, 330))
+            gameDisplay.blit(self.start_text, (350-((self.start_text.get_rect().width)/2), 330))
             self.Minutes_text = self.TitleFont4.render(str(self.TempsMin), True, (255, 255, 255))
-            gameDisplay.blit(self.Minutes_text, (466-((self.Minutes_text.get_rect().width)/2), 120))
+            gameDisplay.blit(self.Minutes_text, (350-((self.Minutes_text.get_rect().width)/2), 120))
             self.Heures_text = self.TitleFont4.render(str(self.TempsHeures), True, (255, 255, 255))
-            gameDisplay.blit(self.Heures_text, (233-((self.Heures_text.get_rect().width)/2), 120))
+            gameDisplay.blit(self.Heures_text, (150-((self.Heures_text.get_rect().width)/2), 120))
             self.Secondes_text = self.TitleFont4.render(str(self.TempsSecondes), True, (255, 255, 255))
-            gameDisplay.blit(self.Secondes_text, (700-((self.Secondes_text.get_rect().width)/2), 120))
+            gameDisplay.blit(self.Secondes_text, (550-((self.Secondes_text.get_rect().width)/2), 120))
 
         if self.minuteur == 1 :
             self.heure_text = self.TitleFont5.render("h", True, (255, 255, 255))
-            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 150))
+            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 163))
             self.minute_text = self.TitleFont5.render("min", True, (255, 255, 255))
-            gameDisplay.blit(self.minute_text, (425-((self.minute_text.get_rect().width)/2), 150))
+            gameDisplay.blit(self.minute_text, (445-((self.minute_text.get_rect().width)/2), 163))
             self.minute_text = self.TitleFont5.render("s", True, (255, 255, 255))
-            gameDisplay.blit(self.minute_text, (600-((self.minute_text.get_rect().width)/2), 150))
-            self.Heures_text = self.TitleFont4.render(str(int(self.HeuresRestantes)), True, (0, 0, 0))
-            gameDisplay.blit(self.Heures_text, (170, 160))
-            self.Minutes_text = self.TitleFont4.render(str(int(self.MinutesRestantes)), True, (0, 0, 0))
-            gameDisplay.blit(self.Minutes_text, (340, 160))
-            self.Secondes_text = self.TitleFont4.render(str(int(self.SecondesRestantes)), True, (0, 0, 0))
-            gameDisplay.blit(self.Secondes_text, (520, 160))
+            gameDisplay.blit(self.minute_text, (630-((self.minute_text.get_rect().width)/2), 163))
+            self.Heures_text = self.TitleFont4.render(str(int(self.HeuresRestantes)), True, (255, 255, 255))
+            gameDisplay.blit(self.Heures_text, (150-((self.Heures_text.get_rect().width)/2), 120))
+            self.Minutes_text = self.TitleFont4.render(str(int(self.MinutesRestantes)), True, (255, 255, 255))
+            gameDisplay.blit(self.Minutes_text, (350-((self.Minutes_text.get_rect().width)/2), 120))
+            self.Secondes_text = self.TitleFont4.render(str(int(self.SecondesRestantes)), True, (255, 255, 255))
+            gameDisplay.blit(self.Secondes_text, (550-((self.Secondes_text.get_rect().width)/2), 120))
+
+        if self.redcolor == 1 :
+            self.heure_text = self.TitleFont5.render("h", True, (255, 0, 0))
+            gameDisplay.blit(self.heure_text, (227-((self.heure_text.get_rect().width)/2), 163))
+            self.minute_text = self.TitleFont5.render("min", True, (255, 0, 0))
+            gameDisplay.blit(self.minute_text, (445-((self.minute_text.get_rect().width)/2), 163))
+            self.minute_text = self.TitleFont5.render("s", True, (255, 0, 0))
+            gameDisplay.blit(self.minute_text, (630-((self.minute_text.get_rect().width)/2), 163))
+            self.Heures_text = self.TitleFont4.render(str(int(self.HeuresRestantes)), True, (255, 0, 0))
+            gameDisplay.blit(self.Heures_text, (150-((self.Heures_text.get_rect().width)/2), 120))
+            self.Minutes_text = self.TitleFont4.render(str(int(self.MinutesRestantes)), True, (255, 0, 0))
+            gameDisplay.blit(self.Minutes_text, (350-((self.Minutes_text.get_rect().width)/2), 120))
+            self.Secondes_text = self.TitleFont4.render(str(int(self.SecondesRestantes)), True, (255, 0, 0))
+            gameDisplay.blit(self.Secondes_text, (550-((self.Secondes_text.get_rect().width)/2), 120))
+
 
 
     def chronoScreen_draw(self, gameDisplay):
 
-        self.temps_text = self.PostTitleFont5.render(str(int(self.LeTempsDuChrono)), True, (255, 255, 255))
-        gameDisplay.blit(self.temps_text, ((350 - (self.temps_text.get_rect().width/2)), 130))
-        self.s_text = self.PostTitleFont6.render("s", True, (255, 255, 255))
-        gameDisplay.blit(self.s_text, (410, 175))
+
+        self.heure_text = self.TitleFont5.render("h", True, (255, 255, 255))
+        gameDisplay.blit(self.heure_text, (210-((self.heure_text.get_rect().width)/2), 163))
+        self.minute_text = self.TitleFont5.render("min", True, (255, 255, 255))
+        gameDisplay.blit(self.minute_text, (440-((self.minute_text.get_rect().width)/2), 163))
+        self.minute_text = self.TitleFont5.render("s", True, (255, 255, 255))
+        gameDisplay.blit(self.minute_text, (635-((self.minute_text.get_rect().width)/2), 163))
 
         gameDisplay.blit(self.Start_surface, (80, 300))
         gameDisplay.blit(self.Start_surface, (390, 300))
@@ -341,6 +394,15 @@ class TimeScreen():
 
         self.reset_text = self.PostTitleFont4.render("RESET", True, (255, 255, 255))
         gameDisplay.blit(self.reset_text, ((391 + (self.bouton_reset_image.get_rect().width)/2) - ((self.start_text.get_rect().width) / 2), 302))
+
+
+        self.Heures_text = self.TitleFont4.render(str(int(self.HeuresRestantes)), True, (255, 255, 255))
+        gameDisplay.blit(self.Heures_text, (150-((self.Heures_text.get_rect().width)/2), 120))
+        self.Minutes_text = self.TitleFont4.render(str(int(self.MinutesRestantes)), True, (255, 255, 255))
+        gameDisplay.blit(self.Minutes_text, (350-((self.Minutes_text.get_rect().width)/2), 120))
+        self.Secondes_text = self.TitleFont4.render(str(int(self.SecondesRestantes)), True, (255, 255, 255))
+        gameDisplay.blit(self.Secondes_text, (550-((self.Secondes_text.get_rect().width)/2), 120))
+
 
 
     def Quit(self):
