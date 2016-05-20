@@ -137,6 +137,7 @@ class HomeScreen():
         On envoie un texto comme quoi on commence a disparaitre et on enregistre la direction de l'utilisateur
         pour plus tard (voir fade_out()).
         '''
+        '''
         if "LEFT" in InputEvents and self.ancrage < 40:
             self.ScreenStatus = "FADING_OUT"
             self.fade_direction = "LEFT"
@@ -145,7 +146,7 @@ class HomeScreen():
             self.ScreenStatus = "FADING_OUT"
             self.fade_direction = "RIGHT"
             self.animation.reset()
-
+        '''
         for event in InputEvents:
             if "TOUCH" in event:
                 for line in range(0, 2):
@@ -183,6 +184,8 @@ class HomeScreen():
                     self.hint_chrono.reset()
                     print "activated"
 
+        '''
+        # Animation qu'on a retiree car trop moche, pour l'instant.
         if self.hint_animation_activated is True:
             x = self.hint_chrono.elapsed_time()
             if x > 0 and x < 1:
@@ -192,6 +195,7 @@ class HomeScreen():
             elif x >= 1:
                 self.hint_animation_activated = False
                 self.ancrage = 0
+        '''
 
 
         if self.ScreenStatus is "FADING_IN":
@@ -275,10 +279,13 @@ class HomeScreen():
         '''
         '''
         appshint = self.AppsHintFont.render("APPLICATIONS", True, (255, 255, 255))
-        Helpers.blit_alpha(gameDisplay, appshint, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2, 10), self.widget_opacity)
+        Helpers.blit_alpha(gameDisplay, appshint, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2, 10 + self.ancrage),
+                            self.widget_opacity)
 
-        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2 - 26, 13), "UP", self.widget_opacity - 60)
-        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 + appshint.get_rect().width / 2 + 10, 13), "UP", self.widget_opacity - 60)
+        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2 - 26, 13 + self.ancrage),
+                        "UP", self.widget_opacity - 60)
+        self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 + appshint.get_rect().width / 2 + 10, 13 + self.ancrage),
+                        "UP", self.widget_opacity - 60)
 
 
         self.widget_manager.Draw(gameDisplay, self.ancrage, self.widget_opacity)

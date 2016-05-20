@@ -69,6 +69,10 @@ class WeatherScreen():
         self.barre_icon.fill((255,255,255,150)) #Case des jours non choisis plus transparentes (150)
         self.barre2_icon = pygame.Surface((113,100)).convert_alpha() 
         self.barre2_icon.fill((255,255,255,225)) #Case du jour choisi qui est plus claire (225)
+        self.barre_switch = pygame.Surface((59,37)).convert_alpha()
+        self.barre_switch.fill((255,255,255,210))
+        self.barre2_switch = pygame.Surface((59,37)).convert_alpha()
+        self.barre2_switch.fill((255,255,255,150))
 
 #!!!!!!VARIABLES!!!!!!:
             
@@ -369,11 +373,18 @@ class WeatherScreen():
         self.Date = self.FontDate.render(self.infos_meteo.DailyWeather.Time[self.currentday], True, (255,255,255))
         Helpers.blit_alpha(gameDisplay, self.Date, (40, 20), self.Transparence)      
 
+#Fond du bouton switch
+
+        if self.tempswitch % 2 == 0:
+           Helpers.blit_alpha(gameDisplay, self.barre2_switch, (213, 95), self.Transparence2)
+        if self.tempswitch % 2 == 1:
+           Helpers.blit_alpha(gameDisplay, self.barre_switch, (213, 95), self.Transparence2)    
+
 #Bouton switch
 
         Helpers.blit_alpha(gameDisplay, self.switch_icon, (205, 75), self.Transparence2)
 
-          
+   
                    
     def Quit(self):
         pass
