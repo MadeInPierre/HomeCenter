@@ -40,7 +40,7 @@ pip install pushbullet.py
 
 
 Voilà, le système est prêt à tourner ! 
-Vous pouvez maintenant télécharger le projet lui-même avec le bouton "Download" en haut à droite de cette page. Une fois le dossier téléchargé, lancez le fichier `MainSC.py` (avec IDLE par exemple), le fichier central, qui gérera l'exécution de tous les autres fichiers automatiquement.
+Vous pouvez maintenant télécharger le projet lui-même avec le bouton "Download" puis "Download ZIP" en haut à droite de cette page. Une fois le dossier téléchargé, lancez le fichier `MainSC.py` (avec IDLE par exemple), le fichier central, qui gérera l'exécution de tous les autres fichiers automatiquement.
 
 
 ## Structure du projet
@@ -75,4 +75,4 @@ P.S. : Si vous avez des questions, n'hésitez pas à nous contacter. Bonne consu
 
 ---
 
-Julien REBOUL, Priscille VALLA et Pierre LACLAU, projet ISN au Lycée Jean Jaurès - St Clément de Rivière. 
+Pierre LACLAU, Priscille VALLA et Julien REBOUL, projet ISN au Lycée Jean Jaurès - St Clément de Rivière. 
