@@ -72,6 +72,7 @@ Le rapport de notre projet se trouve également sur ce site. Pour y accéder, cl
 
 P.S. : Si vous avez des questions, n'hésitez pas à nous contacter. Bonne consultation :+1: !
 
+P.S. 2 : Le projet est fait de 4023 lignes de code..
 
 ---
 
