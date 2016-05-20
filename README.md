@@ -1,7 +1,7 @@
 # ATTENTION
-Notre projet est encore en cours de finalisation : les fichiers ne son pas encore à leur dernière version, et quelques dernières touches sont encore nécessaires au niveau du rapport inclus sur ce site.
+Notre projet est encore en cours de finalisation : tout est finalisé et fonctionne sauf un problème de dernière minute dans l'application Horloges. Vous pouvez pour l'instant utiliser le tout le reste du système, seule l'application Horloges ne peut pas encore être lancée. 
 
-Nous sommes désolés pour cela, et terminerons le plus rapidement possible. Ce sera fait une fois que ce message aura disparu.
+Nous sommes désolés pour cela, et corrigerons le problème le plus rapidement possible. Ce sera fait une fois que ce message aura disparu : vous pouvez re-télécharger le projet et lancer les nouveaux fichiers de ce novueau dossier.
 
 # HomeCenter
 Projet ISN : Un système d'exploitation complet et flexible adapté pour une utilisation dans la maison.
