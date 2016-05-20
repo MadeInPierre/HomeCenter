@@ -1,5 +1,5 @@
 # ATTENTION
-Notre projet est encore en cours de finalisation : le projet n'est pas encore à sa dernière version, et quelques dernières touches sont encore nécessaires au niveau du rapport inclus sur ce site.
+Notre projet est encore en cours de finalisation : les fichiers ne son pas encore à leur dernière version, et quelques dernières touches sont encore nécessaires au niveau du rapport inclus sur ce site.
 
 Nous sommes désolés pour cela, et terminerons le plus rapidement possible. Ce sera fait une fois que ce message aura disparu.
 
