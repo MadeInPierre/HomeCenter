@@ -1,4 +1,4 @@
-'''
+﻿'''
 This is the entry point to the SmartClock interface.
 It initializes the window and manages the screens.
 It also updates the main modules, like the Leap Motion module, and distributes the data to the screens.

@@ -283,9 +283,9 @@ class HomeScreen():
                             self.widget_opacity)
 
         self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2 - 26, 13 + self.ancrage),
-                        "UP", self.widget_opacity - 60)
+                        "DOWN", self.widget_opacity - 60)
         self.arrow.Draw(gameDisplay, (self.WindowRes[0] / 2 + appshint.get_rect().width / 2 + 10, 13 + self.ancrage),
-                        "UP", self.widget_opacity - 60)
+                        "DOWN", self.widget_opacity - 60)
 
 
         self.widget_manager.Draw(gameDisplay, self.ancrage, self.widget_opacity)

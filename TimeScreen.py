@@ -22,7 +22,6 @@ class TimeScreen():
         self.LeTempsDuChrono = 0.0
 
     def timeScreen_init(self):
-
     #ON CHARGE LES IMAGES#
         '''
         On charge l'image de fond
@@ -54,6 +53,12 @@ class TimeScreen():
         self.PostTitleFont = pygame.font.Font("Fonts/HelveticaNeue-Medium.ttf", 17, bold=False)
         self.TitleFont2 = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 100)
         self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 50)
+
+    #ON CREE LES VARIABLES QUI CONTIENDRONT LES HEURES
+        self.heure_sao     = ""
+        self.heure_londres = ""
+        self.heure_sidney  = ""
+        self.heure_paris   = ""
 
 
     def minuteurScreen_init(self):
