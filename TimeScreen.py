@@ -55,10 +55,10 @@ class TimeScreen():
         self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf", 50)
 
     #ON CREE LES VARIABLES QUI CONTIENDRONT LES HEURES
-        self.heure_sao     = ""
-        self.heure_londres = ""
-        self.heure_sidney  = ""
-        self.heure_paris   = ""
+        self.heure_sao     = 0.0
+        self.heure_londres = 0.0
+        self.heure_sidney  = 0.0
+        self.heure_paris   = 0.0
 
 
     def minuteurScreen_init(self):
@@ -156,20 +156,24 @@ class TimeScreen():
         self.heure_paris = int(strftime("%H")) #le strftime permet de recuperer lheure du reseau
 
         #ON EFFECTUE LES ARRANGEMENTS#
-        if self.heure_paris < 10:                               #on affiche un 0 devant les heures a 1 chiffre
-            self.heure_paris = '0' + str(self.heure_paris)      #par soucis esthetique
-        if self.heure_sao < 10:
-            self.heure_sao = '0' + str(self.heure_sao)
+        
         if self.heure_sao < 0:                             #on evite en ajoutant 24h les heures négatives
             self.heure_sao += 24
         if self.heure_sao > 24:                             #on evite en ajoutant 24h les heures négatives
             self.heure_sao -= 24
+        
+        if self.heure_paris < 10:                               #on affiche un 0 devant les heures a 1 chiffre
+            self.heure_paris = '0' + str(self.heure_paris)      #par soucis esthetique
+        if self.heure_sao < 10:
+            self.heure_sao = '0' + str(self.heure_sao)
+
         if self.heure_londres < 10:
             self.heure_londres = '0' + str(self.heure_londres)
         if self.heure_londres < 0:
             self.heure_londres += 24
         if self.heure_londres > 24:
             self.heure_londres -= 24
+        
         if self.heure_sidney < 10:
             self.heure_sidney = '0' + str(self.heure_sidney)
         if self.heure_sidney < 0:
