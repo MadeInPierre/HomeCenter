@@ -410,7 +410,7 @@ class CalendarScreen():
         '''
         Si le texte est trop long, on le coupe jusqu'a ce qu'il reste dans l'espace delimite
         '''
-        if s.get_rect().width > h_size:
+        if s.get_rect().width >= h_size:
             splitted_text = text.split() # On separe la phrase entre chaque mot
             final_lines = []
 
@@ -423,17 +423,17 @@ class CalendarScreen():
                     cropped_size += word_image.get_rect().width + 4 # on compte ce mot en plus dans la largeur du texte qu'on est en train de
                                                                     # couper
                                                                     # on ajoute
-                                                                                                                                       # 4 pixels
-                                                                                                                                       # pour
-                                                                                                                                       # compter
-                                                                                                                                       # l'espace
-                                                                                                                                       # qui vient
-                                                                                                                                       # juste
-                                                                                                                                       # apres le
-                                                                                                                                       # mot dans
-                                                                                                                                       # la phrase
+                                                                    # 4 pixels
+                                                                    # pour
+                                                                    # compter
+                                                                    # l'espace
+                                                                    # qui vient
+                                                                    # juste
+                                                                    # apres le
+                                                                    # mot dans
+                                                                    # la phrase
 
-                    if s.get_rect().width - cropped_size < h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la
+                    if s.get_rect().width - cropped_size <= h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la
                                                                    # limite
                         '''
                         On prepare le dessin en dessinant la premier ligne...
@@ -649,7 +649,7 @@ class Event():
 
 
 
-    def render_text_in_zone(self, gameDisplay, text, font, line_spacing, color, startpos, horizontal_size_limit): # parametres necessaires pour dessiner le texte multiligneS
+    def render_text_in_zone(self, gameDisplay, text, font, line_spacing, color, startpos, horizontal_size_limit, deepness = 0): # parametres necessaires pour dessiner le texte multiligneS
         s = font.render(text, True, color) # on dessine le texte une première fois pour avoir sa longueur
         h_size = horizontal_size_limit - startpos[0] # la limite en longueur que le texte ne doit pas depasser
         vertical_size = 0 # voir return en derniere ligne
@@ -657,7 +657,7 @@ class Event():
         '''
         Si le texte est trop long, on le coupe jusqu'a ce qu'il reste dans l'espace delimite
         '''
-        if s.get_rect().width > h_size:
+        if s.get_rect().width >= h_size:
             splitted_text = text.split() # On separe la phrase entre chaque mot
 
             cropped_size = 0
@@ -666,7 +666,7 @@ class Event():
 
                 cropped_size += word_image.get_rect().width + 4 
 
-                if s.get_rect().width - cropped_size < h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la limite
+                if s.get_rect().width - cropped_size <= h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la limite
                     first_line_text = ""
                     for word in splitted_text[0:i]:
                         first_line_text += " " + word
@@ -677,9 +677,12 @@ class Event():
                     line_text = ""
                     for word in range(i, len(splitted_text)):
                         line_text += " " + splitted_text[word]
-
-                    line = self.render_text_in_zone(gameDisplay, line_text, font, line_spacing, color, (startpos[0], startpos[1] + line_spacing), horizontal_size_limit)
-                    return line + line_spacing
+                    if deepness < 10:
+                        line = self.render_text_in_zone(gameDisplay, line_text, font, line_spacing, color, (startpos[0], startpos[1] + line_spacing), horizontal_size_limit, deepness = deepness + 1)
+                        return line + line_spacing
+                    else:
+                        line_render = font.render(line_text, True, color)
+                        gameDisplay.blit(line_render, (startpos[0], startpos[1] + line_spacing))
 
         else:
             gameDisplay.blit(s, startpos) # si le titre n'est pas trop long, on le dessine directement sans transformations.
