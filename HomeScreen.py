@@ -285,6 +285,7 @@ class HomeScreen():
         gameDisplay.blit(self.horizontal_line, (35, self.off + self.ancrage))
 
         '''
+        Indication d'ou sont les applications
         '''
         appshint = self.AppsHintFont.render("APPLICATIONS", True, (255, 255, 255))
         Helpers.blit_alpha(gameDisplay, appshint, (self.WindowRes[0] / 2 - appshint.get_rect().width / 2, 10 + self.ancrage),

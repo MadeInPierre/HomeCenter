@@ -49,6 +49,6 @@ class WidgetManager():
         Helpers.blit_alpha(gameDisplay, widgetSurface, (self.WindowRes[0] / 2 - widgetSurface.get_rect().width / 2,
                                                         290 + ancrage), opacity)
 
-        self.swipe_arrow.Draw(gameDisplay, (50, 345), "LEFT", opacity   - 180 * (self.FocusedWidgetIndex == 0))
-        self.swipe_arrow.Draw(gameDisplay, (732, 345), "RIGHT", opacity - 180 * (self.FocusedWidgetIndex == 1))
+        self.swipe_arrow.Draw(gameDisplay, (50, 345 + ancrage), "LEFT", opacity   - 180 * (self.FocusedWidgetIndex == 0))
+        self.swipe_arrow.Draw(gameDisplay, (732, 345 + ancrage), "RIGHT", opacity - 180 * (self.FocusedWidgetIndex == 1))
         print "hello"

@@ -305,7 +305,7 @@ class CalendarScreen():
         On dessine les numeros des jours et les pastilles de couleur d'evenements
         de chaque case dans le panneau mensuel
         '''
-
+        temp = True
         for week in range(0, 5):
             for day in range(0, 7):
                 '''
@@ -326,11 +326,18 @@ class CalendarScreen():
                 '''
                 La case d'aujourd'hui devient plus claire.
                 '''
+                #TEMPORAIRE A RESOUDRE
+                '''
                 if self.now.day == day_value and self.now.month == self.selected_month + 1 and self.now.year == self.selected_year:
                     s = pygame.Surface((530 / 7, 390 / 5)).convert_alpha()
                     s.fill((0, 0, 255, 200))
                     gameDisplay.blit(s, (30 + day * 530 / 7, 60 + week * 390 / 5))
-
+                '''
+                if self.now.month == self.selected_month + 1 and temp == True:
+                    s = pygame.Surface((530 / 7, 390 / 5)).convert_alpha()
+                    s.fill((0, 0, 255, 200))
+                    gameDisplay.blit(s, (30 + 4 * 530 / 7, 60 + 4 * 390 / 5))
+                    temp = False
 
                 '''
                 ... et on le dessine.
