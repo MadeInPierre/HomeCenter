@@ -20,7 +20,7 @@ class SleepManager():
                 self.chrono.reset()
 
 
-        if self.chrono.elapsed_time() > 120 and self.lock_screen.ScreenStatus is "OUT":
+        if self.chrono.elapsed_time() > 90 and self.lock_screen.ScreenStatus is "OUT":
             self.launch_lockscreen()
         else:
             self.unlock_lockscreen()

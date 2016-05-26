@@ -67,7 +67,7 @@ while gameRunning:
         Update des ecrans actifs (currentScreen pour l'ecran actif et fadingScreen pour l'eventuel ecran qui est en
         train de faire sa transition sortante).
         '''
-        #LockScreen.Update(Input.events)
+        LockScreen.Update(Input.events)
         currentScreen.Update(Input.events)
         fadingScreen.Update(Input.events)
 
@@ -121,7 +121,7 @@ while gameRunning:
         if "FADING_OUT" in fadingScreen.ScreenStatus:
             fadingScreen.Draw(gameDisplay)
         currentScreen.Draw(gameDisplay)
-        #LockScreen.Draw(gameDisplay)
+        LockScreen.Draw(gameDisplay)
 
         if str(currentScreen) is not "HOMESCREEN":
             if str(currentScreen) is not "NEWSSCREEN": # petite exception pour NewsScreen
