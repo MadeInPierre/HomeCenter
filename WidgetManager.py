@@ -4,10 +4,13 @@ from NewsWidget import *
 from Helpers import *
 
 class WidgetManager():
+    '''
+    Classe qui gere l'affichage et animations des widgets dans HomeScreen.
+    '''
     def __init__(self, windowres):
         self.WindowRes = windowres
 
-        self.swipe_arrow = SwipeArrow(False)
+        self.swipe_arrow = SwipeArrow()
         '''
         Decider quels widgets afficher/charger
         '''
@@ -45,6 +48,7 @@ class WidgetManager():
         widgetSurface = self.WidgetList[self.FocusedWidgetIndex].Draw(gameDisplay)
         Helpers.blit_alpha(gameDisplay, widgetSurface, (self.WindowRes[0] / 2 - widgetSurface.get_rect().width / 2,
                                                         290 + ancrage), opacity)
-        
-        self.swipe_arrow.Draw(gameDisplay, (50, 345 + ancrage), "LEFT")
-        self.swipe_arrow.Draw(gameDisplay, (732, 345 + ancrage), "RIGHT")
+
+        self.swipe_arrow.Draw(gameDisplay, (50, 345), "LEFT", opacity   - 180 * (self.FocusedWidgetIndex == 0))
+        self.swipe_arrow.Draw(gameDisplay, (732, 345), "RIGHT", opacity - 180 * (self.FocusedWidgetIndex == 1))
+        print "hello"

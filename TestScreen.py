@@ -7,7 +7,11 @@ from Helpers import *
 
 
 class TestScreen():
-
+    '''
+    Ecran qui n'est jamais affiche, il a servi a tester des trucs au besoin.
+    Pas de commentaires necessaires, ce n'est qu'une 'sandbox' qu'on utilisait au avant d'implementer
+    notre test dans notre vraie application.
+    '''
     def __init__(self, windowres):
         # Charger une image
         self.sunny_icon = pygame.image.load("Images/weather_sunny_transparent.png").convert_alpha()
@@ -58,7 +62,7 @@ class TestScreen():
 # Afficher une image (ici soleil)
 
         gameDisplay.blit(self.sunny_icon, (self.sunny_positionX, self.sunny_positionY))
-#1er self = "nom" du texte; 2e self = police; 
+#1er self = "nom" du texte; 2e self = police;
         self.AujourdhuiText = self.TitleFont.render("Aujourd'hui", True, (255, 255, 255))
         gameDisplay.blit(self.AujourdhuiText, (55, 30))  # pos initiale : 55, 30
 

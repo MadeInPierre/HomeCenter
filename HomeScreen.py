@@ -17,6 +17,10 @@ from Helpers import Helpers
 from WidgetManager import *
 
 class HomeScreen():
+    '''
+    HOMESCREEN : C'est l'ecran d'accueil, qui affiche l'heure en grand, et la liste d'Applications
+    ainsi que les widgets.
+    '''
 
     def __init__(self, windowres, fadeorigin="APP"):
         '''
@@ -36,6 +40,9 @@ class HomeScreen():
         self.DisponibleFont  = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      14 )
         self.AppsHintFont    = pygame.font.Font("Fonts/HelveticaNeue-Light.ttf",      18 )
 
+        '''
+        Variables qui servent a la communication entre MainSC et l'application (transitions et animations)
+        '''
         self.WindowRes = windowres
         self.ScreenStatus = "FADING_IN"
         self.fade_direction = "" # A ENLEVER, GARDER SELEMENT TRANSITIONDESTINATION
@@ -43,6 +50,7 @@ class HomeScreen():
         self.fade_origin = fadeorigin
         self.arrow = SwipeArrow()
 
+        # A ENLEVER, A OUBLIER
         self.hint_animation_activated = False
         self.hint_chrono = AnimationManager()
 

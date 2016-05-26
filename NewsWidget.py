@@ -2,6 +2,9 @@ import pygame
 from Helpers import Helpers
 
 class NewsWidget():
+    '''
+    Widget vide pour l'instant, qui n'affiche qu'une frame vide.
+    '''
     def __init__(self):
         self.WidgetSurface = pygame.Surface((650, 130)).convert_alpha()
 

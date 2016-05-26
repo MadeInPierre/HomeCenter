@@ -71,6 +71,10 @@ class CalendarCollector():
 
 
     def get_events_from_calendar(self, service, ID, start_year, start_month, start_day):
+        '''
+        Fonction qui recupere, trie et classe les evenements d'un calendrier donne.
+        Retourne la liste classee d'evenements, utile pour CalendarScreen.
+        '''
         now = str(start_year) + "-" + str(start_month) + "-" + str(start_day) + "T00:00:00.000000Z" # on ecrit la date dans le format que l'API veut
         print(now)
 

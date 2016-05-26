@@ -2,8 +2,22 @@
 from time import strftime
 from AnimationManager import *
 
-class SwipeArrow():
+'''
+Classe-outil : contient plusieurs outils que nous utilisons tres frequemment partout dans notre systeme :
+affichage d'images avec une certaine opacite, savoir si un point donne se trouve dans une zone donnee...
 
+Les fonctions et la classe sont donc statiques : elles sont accessibles partout et sans avoir besoin de creer
+d'objet.
+'''
+
+
+class SwipeArrow():
+    '''
+    Classe qui s'occupe d'afficher une petite fleche blanche a la taille qu'on veut et dans le sens qu'on veut.
+
+    On a souvent utilise ces fleches partout dans le systeme pour faire notre interface graphique (c'est un
+    moyen simple de creer une itnerface intuitive, et inciter l'utilisateur a effectuer certaines actions).
+    '''
     def __init__(self, size = 40):
         self.arrow_img = pygame.image.load("Images/arrow-UltraLight.png").convert_alpha()
         if size is not 40:
@@ -33,7 +47,9 @@ class SwipeArrow():
 
 
 class Helpers():
-
+    '''
+    Classe qui contient tous les petits outils que nous utilisons frequemment.
+    '''
     @staticmethod
     def rotate(image, angle):
         '''
@@ -90,16 +106,28 @@ class Helpers():
 
     @staticmethod
     def get_message_x_y(message):
+        '''
+        La classe InputManager envoie des messages du type "SCROLL -3 6". Cette fonction
+        recupere le -3 et le 6 en les transformant en chiffres, au lieu de texte.
+        '''
         args = message.split()
         return [int(args[1]), int(args[2])]
 
     @staticmethod
     def mathlerp(origine, destination, speed):
+        '''
+        Fonction qui permet de faire un certain type d'animation, tres joli
+        (lancer le systeme et cliquer sur le titre d'un article dans NewsScreen pour voir ce
+        qu'elle permet de faire).
+        '''
         value = (speed * origine) + ((1 - speed) * destination)
         return value
 
     @staticmethod
     def draw_line(gameDisplay, pX, pY, width, height, color):
+        '''
+        Permet simplement d'afficher une ligne horizontale ou verticale de la couleur que l'on veut.
+        '''
         ligne = pygame.Surface((width, height))
         ligne.fill(color)
         gameDisplay.blit(ligne, (pX, pY))

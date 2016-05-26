@@ -10,32 +10,27 @@ from urllib2 import urlopen
 import pygame
 
 class NewsCollector():
-
+    '''
+    Classe utilisee par NewsScreen, qui recupere sur internet les articles (et les images correspondantes), les organise,
+    les trie et les donne a NewsScreen.
+    '''
     def __init__(self):
+        '''
+        Sites RSS qui contiennent les articles. On n'utilise que LeMonde pour le moment.
+        '''
         self.lemonde_url = "http://rss.lemonde.fr/c/205/f/3050/index.rss"
         self.PLFBNotifs_url = 'https://www.facebook.com/feeds/notifications.php?id=100000386870459&viewer=100000386870459&key=AWi1AKzYtLMWGIkO&format=rss20'
         self.pythonReddit_url = "http://www.reddit.com/r/python/.rss"
 
     def get_lemonde_posts(self):
-        pased_news = feedparser.parse(self.lemonde_url)
-        print "LeMonde Collected."
-        posts = self.parse(pased_news)
-        return posts
-        '''except:
-        posts = []
-        posts.append(["Item 1",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 2",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 3",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 4",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 5",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 6",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 7",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 8",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 9",  "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 10", "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        posts.append(["Item 11", "2016-04-05", "19:23", "http://www.google.com", u"La connexion a echoué. Veuillez vérifier votre connexion internet."])
-        '''
-        return posts
+        try:
+            pased_news = feedparser.parse(self.lemonde_url)
+            print "LeMonde Collected."
+            posts = self.parse(pased_news)
+            return posts
+        except:
+            posts = []
+            return posts
 
     def get_python_reddit(self):
         pased_news = feedparser.parse(self.pythonReddit_url)

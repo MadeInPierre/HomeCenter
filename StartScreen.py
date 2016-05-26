@@ -5,8 +5,16 @@ from ScreenRedirector import *
 from Helpers import Helpers
 
 class StartScreen():
-
+    '''
+    Ecran de demarrage, qui dit bonjour.
+    Il n'est la que pour faire joli, mais c'est le tout premier ecran developpe dans l'histoire
+    de notre systeme !
+    '''
     def __init__(self, windowres, fade_direction=""):
+        '''
+        Demarrage de l'ecran : chargement des images, polices d'ecriture, et variables globales (animations,
+        etat et communication avec MainSC).
+        '''
         self.bg_img = pygame.image.load("Images/landscape1.png")
 
         self.TitleFont = pygame.font.Font("Fonts/HelveticaNeue-UltraLight.ttf", 180)

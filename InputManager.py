@@ -1,16 +1,20 @@
-﻿'''
-InputManager.py
-
-'''
-import pygame
+﻿import pygame
 from Helpers import *
 from TouchManager import TouchGesturesManager
 
 class InputManager():
-
+    '''
+    Classe qui s'occupe de recuperer, trier, classer, transforme et distribuer toutes
+    les entrees utilisateur : clavier, souris, tactile, Leap Motion (qui n'est plus utilise aujourd'hui).
+    '''
     def __init__(self, use_leapmotion = True, mouse_visible = False):
         self.events = []
 
+        '''
+        Code qui n'est plus utilise : avant, on pouvait utiliser un Leap Montion comme entree utilisateur.
+        Nous avons cependant plus tard choisi le tactile : le code est toujours la, mais nous ne
+        l'utilisons plus.
+        '''
         self.use_leapmotion = use_leapmotion
         if use_leapmotion == True:
             from LeapCardinalGestures import LeapManager
@@ -19,6 +23,11 @@ class InputManager():
 
         pygame.mouse.set_visible(mouse_visible)
 
+        '''
+        Classe qui s'occupe exclusivement du tactile : reconnait les clics, les glissers, les scrolls.
+        Les met en forme (transformation en messages distribuables a tous les ecrans du systeme), et
+        les passe a cette classe pour que celle-ci les donne au MainSC.
+        '''
         self.TGM = TouchGesturesManager()
 
 
@@ -34,6 +43,9 @@ class InputManager():
             for gesture in touch_gestures:
                 self.events.append(gesture)
 
+        '''
+        Recuperation des evenements du clavier et mise en forme pour les messages systeme.
+        '''
         for event in pyevents:
             if event.type == pygame.QUIT:
                 self.events.append("QUIT")
@@ -71,11 +83,15 @@ class InputManager():
 
     def EndUpdate(self):
         '''
-        Cleans the Input and LeapMotion events after letting the screens use them.
+        A la fin de chaque boucle, le MainSC appelle cette fonction. Celle ci vide les evenements qui ont
+        eu lieu durant cette boucle pour preparer la prochaine.
         '''
         if len(self.events) > 0:
             self.events = []
 
     def quit(self):
+        '''
+        Extinction du systeme necessite la fermeture du service Leap Motion.
+        '''
         if self.use_leapmotion:
             self.leapManager.quit()

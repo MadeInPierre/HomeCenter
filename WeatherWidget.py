@@ -2,6 +2,9 @@
 from Helpers import Helpers
 
 class WeatherWidget():
+    '''
+    Widget vide pour l'instant, il n'affiche qu'une frame vide en attenddant son developpement.
+    '''
     def __init__(self):
         self.WidgetSurface = pygame.Surface((650, 130)).convert_alpha()
 

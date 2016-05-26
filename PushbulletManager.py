@@ -1,6 +1,11 @@
 ﻿from pushbullet import Pushbullet
 
 class PushbulletManager():
+    '''
+    Classe qui s'occupe du service Pushbullet (voir dans NewsScreen).
+    Elle initie la connexion avec le service, et permet l'envoi de liens et de textes au besoin,
+    par defaut vers le telephone de Pierre (Nexus 6P).
+    '''
     def __init__(self):
         API = 'o.NzPTn5UX6rCsuEB1gcYouTluy1GO2Wti'
 

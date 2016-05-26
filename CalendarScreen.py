@@ -7,7 +7,23 @@ from CalendarCollector import *
 from Helpers import *
 
 class CalendarScreen():
+    '''
+    CalendarScreen : application calendrier.
+
+    Celle-ci va chercher les evenements (devoirs, controles, choses a faire prises de l'agenda electronique
+    de Pierre), et les affiche de maniere organisee :
+        - Une grille mensuelle a gauche, ou les jours contenant des venements ont des pastilles de couleur
+        sur leur case, couleur qui change en fonction du type d'evenement.
+        - Un panneau vertical journalier a droite, qui montre les evements (titre et description) du jour selectionne
+        dans la grille en detail. Chaque evenement qui possede une description est egalement interactif et anime.
+
+    Application developpe par Pierre.
+    '''
     def __init__(self, WindowRes):
+        '''
+        Demarrage : initialisation des variables globales, debut des chronometres,
+        chargement des images et polices de texte, preparation a la recuperation des evenements..
+        '''
         self.windowres = WindowRes
         self.ScreenStatus = "RUNNING"
 
@@ -21,7 +37,7 @@ class CalendarScreen():
         self.bg_img = pygame.image.load("Images/calendar2.jpg")
         self.sync_img = pygame.image.load("Images/cloud_sync.png")
         self.arrow = SwipeArrow(40)
-        
+
         self.now = datetime.datetime.now()
 
         self.selected_month = int(self.now.month - 1)
@@ -55,10 +71,15 @@ class CalendarScreen():
         self.daypannel_click = False
 
         if self.syncing == True:
+            '''
+            Si on a besoin de rafraichir les evenements, on le fait puis redessine la grille mensuelle.
+            On ne fait pas cette dernière a tous les tours de boucle pour des raisons de performances et
+            optimisations.
+            '''
             self.calendar_events = CalendarCollector().get_events(2015, 10, 1)
             self.syncing = False
             self.synced = True
-            self.updateGrid = True
+            self.updateGrid = True # une fois recuperes, on demande de rafraihir la grille (question d'optimisations)
 
         '''
         Si on n'a pas encore synchronise, le faire a la prochaine frame.
@@ -69,7 +90,7 @@ class CalendarScreen():
             self.syncing = True
 
         '''
-        EVENEMENTS
+        EVENEMENTS MATERIELS : clics de souris
         '''
         for event in InputEvents:
             if "TOUCH" in event:
@@ -135,7 +156,10 @@ class CalendarScreen():
                             '''
                             self.update_evenements_list()
 
-
+            '''
+            Si l'utilisateur a glisse le doigt vers la droite ou vers la gauche, on change de mois et redessine
+            la grille mensuelle.
+            '''
             if "LEFT" in event:
                 self.selected_month += 1
                 if self.selected_month > 11:
@@ -164,6 +188,15 @@ class CalendarScreen():
 
 
     def Draw(self, gameDisplay):
+        '''
+        PARTIE DESSIN : Fonction qui dessine tous les elements graphiques en fonction de leur etat
+        par rappot au moment ou la fonction a ete appellee : par exemple, la fonction Update() calcule les positions d'une
+        animation, et la fonction Draw() dessine l'objet anime a la position aui vient d'etre calculee.
+        '''
+
+        '''
+        On dessine d'abord le fond d'ecran, en un peu plus fonce que l'original (question design, n'est-ce pas)
+        '''
         Helpers.blit_alpha(gameDisplay, self.bg_img, (0, 0), 120)
 
         self.monthTitleSurface = self.MonthsTitleFont.render(self.MonthNames[self.selected_month] + " " + str(self.selected_year), True, (255, 255, 255))
@@ -272,6 +305,7 @@ class CalendarScreen():
         On dessine les numeros des jours et les pastilles de couleur d'evenements
         de chaque case dans le panneau mensuel
         '''
+
         for week in range(0, 5):
             for day in range(0, 7):
                 '''
@@ -398,11 +432,20 @@ class CalendarScreen():
         return day_value, is_from_actual_month
 
     def draw_line(self, gameDisplay, pX, pY, width, height, color):
+        '''
+        Simple outil pour dessiner une ligne verticale ou horizontale.
+        '''
         ligne = pygame.Surface((width, height))
         ligne.fill(color)
         gameDisplay.blit(ligne, (pX, pY))
 
     def render_text_in_zone(self, gameDisplay, text, font, color, startpos, horizontal_size_limit): # parametres necessaires pour dessiner le texte multiligneS
+        '''
+        Fonction complexe, qui dessine un texte sur plusieurs lignes :
+            on donne le texte a afficher, la police et la taille, ainsi que la position et la limite horizontale
+            a ne pas depasser.
+            La focntion fait un retour a la ligne au besoin, jusqu'a ce que tout la texte ait ete affiche.
+        '''
         s = font.render(text, True, color) # on dessine le texte une première fois pour avoir sa longueur
         h_size = horizontal_size_limit - startpos[0] # la limite en longueur que le texte ne doit pas depasser
         vertical_size = 0 # voir return en derniere ligne
@@ -491,7 +534,7 @@ class CalendarScreen():
         On remplit une liste d'evenements correspondant a ce jour ci.
         '''
         self.evenements = []
-                            
+
         day, z = self.get_day_number_at_pos(self.selected_day[0], self.selected_day[1])
         month = self.selected_month + 1
         if not z:
@@ -524,6 +567,14 @@ class CalendarScreen():
 
 
 class Event():
+    '''
+    Sous-classe : c'est un evenements dans le panneau journalier.
+    Cet element est interactif, et chaque objet de la classe doit communiquer avec les autres :
+    quand un evenement est en train d'afficher sa description, il prend plus de place verticalement, et donc
+    les evenements places en dessous doivent se decaler vers le bas.
+    La classe principale s'occupe de cette communication, mais cette classe donne la taille verticale
+    qui a ete necessaire au dessin de l'evenement, justement pour que la classe maitre s'adapte.
+    '''
     def __init__(self, event, titleFont, descriptionFont):
         self.Title       = event[0]
         self.Date        = event[1]
@@ -664,7 +715,7 @@ class Event():
             for i in range(len(splitted_text) - 1, -1, -1): # on scanne toues les mots en partant du dernier
                 word_image = font.render(splitted_text[i], True, color) # on dessine le mot pour avoir
 
-                cropped_size += word_image.get_rect().width + 4 
+                cropped_size += word_image.get_rect().width + 4
 
                 if s.get_rect().width - cropped_size <= h_size: # on teste si le bout coupe est suffisant pour que le titre ne depasse pas la limite
                     first_line_text = ""
@@ -673,7 +724,7 @@ class Event():
                     first_line = font.render(first_line_text, True, color)
                     gameDisplay.blit(first_line, startpos)
 
-                    
+
                     line_text = ""
                     for word in range(i, len(splitted_text)):
                         line_text += " " + splitted_text[word]

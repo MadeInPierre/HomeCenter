@@ -1,7 +1,11 @@
 ﻿import math, pygame
 
 class TouchGesturesManager():
-
+	'''
+	Classe qui assure la reconnaissance des gestes faits au niveau tactile.
+	Elle reconnait, filtre, transforme, et envoie les messages finis au InputManager, qui renvoie tout ca
+	au MainSC, qui lui meme envoie tout ca aux applications du systeme.
+	'''
 	def __init__(self):
 		'''
 		This variable stores the gestures found with the mouse (e.g. when a mousePress happened but not
@@ -10,7 +14,7 @@ class TouchGesturesManager():
 		self.current_gesture = None
 
 		'''
-		Variables
+		Variables generales
 		'''
 		self.mouse_pressed = False
 		self.previous_mousepos = [0, 0]
@@ -106,6 +110,9 @@ class MouseGesture():
 				self.result_direction = "DOWN"
 
 		elif r < 20:
+			'''
+			si on n'a pas ou peu deplace notre doigt sur l'ecran, on considere l'action comme un simple clic.
+			'''
 			x, y = pygame.mouse.get_pos()
 			#DEBUG print "mouse touch : " + str(x) + " " + str(y)
 			self.result_direction = "TOUCH " + str(x) + " " + str(y)

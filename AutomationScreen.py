@@ -3,6 +3,11 @@ from AutomationController import *
 from Helpers import *
 
 class AutomationScreen():
+    '''
+    Application de Domotique, non developpee pour l'instant.
+    Ce n'est que la structure de base, liee a la classe AutomationController, qui affiche "Automation"
+    en gros au centre en attendant le developpement de l'application entiere.
+    '''
     def __init__(self, windowres):
         self.WindowRes = windowres
         self.ScreenStatus = "RUNNING"
